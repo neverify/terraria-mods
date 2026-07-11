@@ -1,0 +1,65 @@
+<Project>
+  <!-- Framework and Language Settings -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>14.0</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
+  <!-- Release Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- Don't generate .pdb files -->
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <!-- Code Analysis Settings -->
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- Local Assembly Reference Paths -->
+  <Import Project="Directory.Build.local.props" Condition="Exists('Directory.Build.local.props')" />
+
+  <!-- Assembly References -->
+  <ItemGroup>
+    <Reference Include="Terraria">
+      <HintPath>$(TerrariaExe)</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(HarmonyDll)</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework">
+      <HintPath>$(XnaFrameworkDll)</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game">
+      <HintPath>$(XnaFrameworkGameDll)</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    TerrariaModder Core project is referenced instead of the compiled assembly if present.
+    This allows Intellisense to display the XML documentation, since TerrariaModder does not ship it with the assembly.
+    The source is otherwise not needed for building mods, as with all other assemblies.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="$(TerrariaModderCoreProject)" Condition="Exists('$(TerrariaModderCoreProject)')">
+      <Private>false</Private>
+    </ProjectReference>
+    <Reference Include="TerrariaModder.Core" Condition="!Exists('$(TerrariaModderCoreProject)')">
+      <HintPath>$(TerrariaModderCoreDll)</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Shared Utilities -->
+  <ItemGroup Condition="'$(MSBuildProjectFile)' != 'Utils.csproj'">
+    <Compile Include="$(MSBuildThisFileDirectory)src\Utils\**\*.cs"></Compile>
+  </ItemGroup>
+</Project>

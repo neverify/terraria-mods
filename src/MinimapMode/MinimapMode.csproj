@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>MinimapMode</AssemblyName>
+    <ModId>minimap-mode</ModId>
+    <RootNamespace>MinimapMode</RootNamespace>
+  </PropertyGroup>
+</Project>

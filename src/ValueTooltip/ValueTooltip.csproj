@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ValueTooltip</AssemblyName>
+    <ModId>value-tooltip</ModId>
+    <RootNamespace>ValueTooltip</RootNamespace>
+  </PropertyGroup>
+</Project>

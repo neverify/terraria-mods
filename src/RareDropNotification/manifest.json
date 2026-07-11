@@ -1,0 +1,12 @@
+{
+  "id": "rare-drop-notification",
+  "name": "Rare Drop Notification",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Show a configurable chat message when a rare item is dropped.",
+  "homepage": "https://github.com/neverify/terraria-mods",
+
+  "entry_dll": "RareDropNotification.dll",
+  "framework_version": "0.4.0",
+  "terraria_version": "1.4.5"
+}

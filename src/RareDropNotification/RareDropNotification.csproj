@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>RareDropNotification</AssemblyName>
+    <ModId>rare-drop-notification</ModId>
+    <RootNamespace>RareDropNotification</RootNamespace>
+  </PropertyGroup>
+</Project>

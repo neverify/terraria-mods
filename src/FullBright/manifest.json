@@ -1,0 +1,12 @@
+{
+  "id": "full-bright",
+  "name": "Fullbright",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Force all tiles to render at a configured brightness.",
+  "homepage": "https://github.com/neverify/terraria-mods",
+
+  "entry_dll": "FullBright.dll",
+  "framework_version": "0.4.0",
+  "terraria_version": "1.4.5"
+}

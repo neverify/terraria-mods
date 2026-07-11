@@ -1,0 +1,21 @@
+{
+  "id": "settings-keybind",
+  "name": "Settings Keybind",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Add a configurable keybind to toggle the settings menu.",
+  "homepage": "https://github.com/neverify/terraria-mods",
+
+  "entry_dll": "SettingsKeybind.dll",
+  "framework_version": "0.4.0",
+  "terraria_version": "1.4.5",
+
+  "keybinds": [
+    {
+      "id": "toggle-settings",
+      "label": "Toggle Settings",
+      "description": "Toggle the settings menu.",
+      "default": "Escape"
+    }
+  ]
+}

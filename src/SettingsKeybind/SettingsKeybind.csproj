@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>SettingsKeybind</AssemblyName>
+    <ModId>settings-keybind</ModId>
+    <RootNamespace>SettingsKeybind</RootNamespace>
+  </PropertyGroup>
+</Project>

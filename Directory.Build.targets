@@ -1,0 +1,24 @@
+<Project>
+  <!-- Set the build directory to the mod's id. -->
+  <PropertyGroup Condition="'$(ModId)' != ''">
+    <OutDir>$(MSBuildThisFileDirectory)build\$(ModId)\</OutDir>
+  </PropertyGroup>
+
+  <!-- Copy manifest.json and icon.png (if present) into the mod's build folder. -->
+  <Target Name="CopyMetadata" AfterTargets="Build" Condition="'$(ModId)' != ''">
+    <ItemGroup>
+      <_ModMetadata Include="$(MSBuildProjectDirectory)\manifest.json" Condition="Exists('$(MSBuildProjectDirectory)\manifest.json')" />
+      <_ModMetadata Include="$(MSBuildProjectDirectory)\icon.png" Condition="Exists('$(MSBuildProjectDirectory)\icon.png')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_ModMetadata)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- Deploy the built mod to the TerrariaModder installation. -->
+  <Target Name="DeployToTerrariaModder" AfterTargets="CopyMetadata" Condition="'$(DeployToGame)' == 'true' and '$(DeployPath)' != '' and '$(ModId)' != ''">
+    <Message Text="Deploying mod '$(ModId)' to '$(DeployPath)'" Importance="high" />
+    <ItemGroup>
+      <_ModOutputFiles Include="$(OutDir)**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_ModOutputFiles)" DestinationFolder="$(DeployPath)\$(ModId)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
