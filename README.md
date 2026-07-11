@@ -73,6 +73,8 @@ Each mod has its own `README.md` file documenting the mod's logic.
 
 The script `build-all.ps1` builds all projects at once. This is mostly useful when all mods need to be rebuilt due to a common change.
 
+The script `zip-all.ps1` creates a versioned zip of all built projects. This is mostly useful for creating releases.
+
 ## Suggestions and contributing
 
 If you have any suggestions or mod requests, feel free to open an issue or contact me in the [TerrariaModder Discord](https://discord.gg/VvVD5EeYsK) (@neverify).
