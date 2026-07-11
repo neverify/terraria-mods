@@ -12,11 +12,11 @@ Enable the brightness override. This only works with the "color" lighting mode.
 
 The brightness at which to render tiles at.
 
-### Use Low Quality Light Smoothing
+### Disable Light Smoothing
 
-Use a low quality light smoothing algorithm.
+Disable vanilla light smoothing.
 
-Enabling this option when brightness override is enabled allows for a massive performance gain. This option has no visual impact when brightness override is on, since all tiles are the same brightness.
+Recommended with brightness override to improve performance. This option has no visual impact with brightness override on, since all tiles are the same brightness.
 
 ## Development
 

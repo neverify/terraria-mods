@@ -12,6 +12,6 @@ public class Config : ModConfig
     [Client, Label("Brightness"), Description("The brightness at which to render tiles at."), Range(0f, 1f)]
     public float Brightness { get; set; } = 0.5f;
 
-    [Client, Label("Use Low Quality Light Smoothing"), Description("Use a low quality light smoothing algorithm. Enabling this option when brightness override is enabled allows for a massive performance gain. This option has no visual impact when brightness override is on, since all tiles are the same brightness.")]
-    public bool LightingOptimization { get; set; } = true;
+    [Client, Label("Disable Light Smoothing"), Description("Recommended with brightness override to improve performance. This option has no visual impact with brightness override on, since all tiles are the same brightness.")]
+    public bool DisableLightSmoothing { get; set; } = true;
 }
