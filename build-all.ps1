@@ -1,10 +1,5 @@
 $srcPath = Join-Path $PSScriptRoot "src"
 
-if (-not (Test-Path $srcPath)) {
-    Write-Error "Could not find 'src' folder at: $srcPath"
-    exit 1
-}
-
 Get-ChildItem -Path $srcPath -Directory | ForEach-Object {
     $modId = $_.Name
     $csproj = Join-Path $_.FullName "$modId.csproj"
