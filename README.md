@@ -25,8 +25,8 @@ You can find all of the mods in the "Browse Nexus" section.
 
 ### Manually
 
-1. Download the [latest release](https://github.com/neverify/terraria-mods/releases/latest) of any mod or from [Nexus Mods](https://www.nexusmods.com/terraria).
-2. Extract the downloaded `.zip` files into `Terraria/TerrariaModder/mods/`.
+1. Download the [latest release](https://github.com/neverify/terraria-mods/releases) of any mod or from [Nexus Mods](https://www.nexusmods.com/terraria).
+2. Extract the downloaded .zip file and move the folder inside into `Terraria/TerrariaModder/mods/`.
 
 ## Development
 
@@ -75,14 +75,14 @@ The script `build-all.ps1` builds all projects at once. This is mostly useful wh
 
 The script `zip-all.ps1` creates a versioned zip of all built projects. This is mostly useful for creating releases.
 
-## Suggestions and contributing
+## Questions, Suggestions, Contributing and Bug Reports
 
-If you have any suggestions or mod requests, feel free to open an issue or contact me in the [TerrariaModder Discord](https://discord.gg/VvVD5EeYsK) (@neverify).
+If you have any questions, suggestions or have found a bug, feel free to open an issue or contact me in the [TerrariaModder Discord](https://discord.gg/VvVD5EeYsK) (@neverify). You can also report bugs in the `Bugs` tab of the Nexus Mods page of the respective mod.
 
-If you want to contribute, please contact me on Discord first :)
+If you want to contribute, please contact me on Discord first :​)
 
 ## Credits
 
-A massive thanks to Inidar1 for creating the TerrariaModder framework. It makes all of these mods possible and the wait for tModLoader 1.4.5 bearable :D
+A massive thanks to Inidar1 for creating the TerrariaModder framework. It makes all of these mods possible and the wait for tModLoader 1.4.5 bearable <​3
 
 Mod icons use Terraria assets.
