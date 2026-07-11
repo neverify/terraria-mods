@@ -8,7 +8,7 @@ The mod only shows notifications for drops with a 1/x chance. Drops that always 
 
 ### Show Notifications
 
-Show a chat message when the conditions are met.
+Show a chat message when a rare item is dropped.
 
 ### Notification Threshold
 
@@ -20,11 +20,11 @@ The format of the chat message. The following placeholders are available: `{item
 
 ### Low Rarity Notification Color
 
-The gradient edge for low rarity drops. This config option can't be edited in-game due to framework limitations.
+The gradient edge for low rarity drops. Hex color code. This config option can't be edited in-game due to framework limitations.
 
 ### High Rarity Notification Color
 
-The gradient edge for high rarity drops. This config option can't be edited in-game due to framework limitations.
+The gradient edge for high rarity drops. Hex color code. This config option can't be edited in-game due to framework limitations.
 
 ## Development
 
