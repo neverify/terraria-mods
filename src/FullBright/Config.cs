@@ -4,7 +4,7 @@ namespace FullBright;
 
 public class Config : ModConfig
 {
-    public override int Version => 1;
+    public override int Version => 2;
 
     [Client, Label("Brightness Override"), Description("Override the brightness of all tiles.")]
     public bool BrightnessOverride { get; set; } = true;

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-12
+
+### Added
+
+- Overriding the lighting of the map.
+- Configuration option for map lighting brightness.
+
 ## [1.0.1] - 2026-07-11
 
 ### Changed

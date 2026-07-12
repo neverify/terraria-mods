@@ -13,7 +13,7 @@ public class Mod : IMod
 {
     public string Id => "full-bright";
     public string Name => "Fullbright";
-    public string Version => "1.0.0";
+    public string Version => "1.1.0";
 
     internal static ILogger Log;
     internal static Config Config;
