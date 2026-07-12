@@ -14,4 +14,10 @@ public class Config : ModConfig
 
     [Client, Label("Disable Light Smoothing"), Description("Recommended with brightness override to improve performance. This option has no visual impact with brightness override on, since all tiles are the same brightness.")]
     public bool DisableLightSmoothing { get; set; } = true;
+
+    [Client, Label("Map Lighting Override"), Description("Override the brightness of map lighting.")]
+    public bool MapLightingOverride { get; set; } = true;
+
+    [Client, Label("Map Lighting Brightness"), Description("The brightness to set map tiles to."), Range(0f, 1f)]
+    public float MapLightingBrightness { get; set; } = 1f;
 }

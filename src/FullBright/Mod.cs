@@ -2,6 +2,7 @@ using FullBright.Features;
 using FullBright.Patches;
 using HarmonyLib;
 using Terraria.Graphics.Light;
+using Terraria.Map;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
 using Utils;
@@ -42,6 +43,12 @@ public class Mod : IMod
             typeof(LightingEngine),
             "GetColor",
             prefix: Patcher.GetHarmonyMethod(typeof(GetColorPatch), nameof(GetColorPatch.Prefix))
+        );
+
+        patcher.Patch(
+            typeof(WorldMap),
+            "UpdateLighting",
+            prefix: Patcher.GetHarmonyMethod(typeof(UpdateLightingPatch), nameof(UpdateLightingPatch.Prefix))
         );
 
         LightingQuality.SetQuality();
