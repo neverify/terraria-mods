@@ -10,7 +10,7 @@ Enable the brightness override. This only works with the "color" lighting mode.
 
 ### Brightness
 
-The brightness at which to render tiles at. Decimal number between `0` and `1`.
+The brightness at which to render tiles at. Decimal number between `0` and `1` (e.g. 0.1 = 10%).
 
 ### Disable Light Smoothing
 
@@ -24,7 +24,7 @@ Override the brightness of map lighting.
 
 ### Map Lighting Brightness
 
-The brightness to set map tiles to. Decimal number between `0` and `1`.
+The brightness to set map tiles to. Decimal number between `0` and `1` (e.g. 0.1 = 10%).
 
 ## Development
 
