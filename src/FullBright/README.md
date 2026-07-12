@@ -10,13 +10,21 @@ Enable the brightness override. This only works with the "color" lighting mode.
 
 ### Brightness
 
-The brightness at which to render tiles at.
+The brightness at which to render tiles at. Decimal number between `0` and `1`.
 
 ### Disable Light Smoothing
 
 Disable vanilla light smoothing.
 
 Recommended with brightness override to improve performance. This option has no visual impact with brightness override on, since all tiles are the same brightness.
+
+### Map Lighting Override
+
+Override the brightness of map lighting.
+
+### Map Lighting Brightness
+
+The brightness to set map tiles to. Decimal number between `0` and `1`.
 
 ## Development
 
@@ -69,6 +77,28 @@ This method updates the `private` `_workingProcessedArea` field, which is used i
 Instead a postfix patch is applied for this method, which uses reflection to obtain the updated value once, caching it for the `GetColor()` prefix.
 
 Why not prefix the method and cache the `area` argument directly? This is simply to prevent the mod breaking for future versions. If the logic for determining the area ever changes, it won't affect the mod. One reflection per 3 frames (the update interval) has effectively no performance impact.
+
+#### `Map.WorldMap.UpdateLighting()`
+
+```cs
+public bool UpdateLighting(int x, int y, byte light)
+{
+    MapTile mapTile = this._tiles[x, y];
+    if (light == 0 && mapTile.Light == 0)
+    {
+        return false;
+    }
+    MapTile mapTile2 = MapHelper.CreateMapTile(x, y, Math.Max(mapTile.Light, light), 0);
+    if (mapTile2.Equals(mapTile))
+    {
+        return false;
+    }
+    this._tiles[x, y] = mapTile2;
+    return true;
+}
+```
+
+This method updates the lighting of one tile on the map. A simple prefix overriding the `light` parameter would allow making the map brighter, but not dimmer. This is because of the statement `Math.Max(mapTile.Light, light)`, which disallows the lighting becoming dimmer. To get around this, we replace the method entirely instead. Since the `_tiles` field is `private`, we use the handy `public` setter method `SetTile()` instead of directly accessing the field.
 
 ### Other Features
 
