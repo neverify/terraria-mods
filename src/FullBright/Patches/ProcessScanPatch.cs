@@ -11,9 +11,7 @@ internal static class ProcessScanPatch
 
     internal static Rectangle CachedActiveProcessedArea { get; private set; }
 
-#pragma warning disable IDE1006 // Naming Styles
     internal static void Postfix(LightingEngine __instance)
-#pragma warning restore IDE1006 // Naming Styles
     {
         if (!Mod.Config.BrightnessOverride)
             return;

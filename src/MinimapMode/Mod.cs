@@ -31,9 +31,7 @@ public class Mod : IMod, IModLifecycle
 
     public void OnWorldUnload() { }
 
-#pragma warning disable CA1822 // Mark members as static
     public void OnConfigChanged() { }
-#pragma warning restore CA1822 // Mark members as static
 
     public void Unload() => Log.Info("Unloaded.");
 }

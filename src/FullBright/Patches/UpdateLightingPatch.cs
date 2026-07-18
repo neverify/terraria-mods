@@ -4,9 +4,7 @@ namespace FullBright.Patches;
 
 internal static class UpdateLightingPatch
 {
-#pragma warning disable IDE1006 // Naming Styles
     internal static bool Prefix(int x, int y, WorldMap __instance)
-#pragma warning restore IDE1006 // Naming Styles
     {
         if (!Mod.Config.MapLightingOverride)
             return true;

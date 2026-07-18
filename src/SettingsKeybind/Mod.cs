@@ -42,9 +42,7 @@ public class Mod : IMod
         );
     }
 
-#pragma warning disable CA1822 // Mark members as static
     public void OnConfigChanged() { }
-#pragma warning restore CA1822 // Mark members as static
 
     public void Unload()
     {

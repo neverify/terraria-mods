@@ -22,13 +22,17 @@ indent_size = 2
 # CA1012: Abstract types should not have public constructors
 dotnet_diagnostic.CA1012.severity = warning
 
-# CA1716: Identifiers should not match keywords
 # Prevent flagging class 'Mod' as VB Mod operator
+# CA1716: Identifiers should not match keywords
 dotnet_diagnostic.CA1716.severity = none
 
 # Prevent warning on float.ToString()
 # CA1305: Specify IFormatProvider
 dotnet_diagnostic.CA1305.severity = none
+
+# Prevent warning on IMod and IModLifecycle members
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = suggestion
 
 ########################
 ### Code style rules ###

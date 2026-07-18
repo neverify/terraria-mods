@@ -60,7 +60,5 @@ public class Mod : IMod
         Log.Info("Unloaded.");
     }
 
-#pragma warning disable CA1822 // Mark members as static
     public void OnConfigChanged() => LightingQuality.SetQuality();
-#pragma warning restore CA1822 // Mark members as static
 }
