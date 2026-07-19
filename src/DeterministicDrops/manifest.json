@@ -1,0 +1,12 @@
+{
+  "id": "deterministic-drops",
+  "name": "Deterministic Drops",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Reduce variance in item drops while preserving vanilla drop rates.",
+  "homepage": "https://github.com/neverify/terraria-mods",
+
+  "entry_dll": "DeterministicDrops.dll",
+  "framework_version": "0.4.0",
+  "terraria_version": "1.4.5"
+}

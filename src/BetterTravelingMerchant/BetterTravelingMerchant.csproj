@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>BetterTravelingMerchant</AssemblyName>
+    <ModId>better-traveling-merchant</ModId>
+    <RootNamespace>BetterTravelingMerchant</RootNamespace>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>DeterministicDrops</AssemblyName>
+    <ModId>deterministic-drops</ModId>
+    <RootNamespace>DeterministicDrops</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" ExcludeAssets="runtime" />
+  </ItemGroup>
+</Project>
