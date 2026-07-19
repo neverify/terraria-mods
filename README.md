@@ -6,14 +6,16 @@ All mods are built for Terraria 1.4.5 and require TerrariaModder 0.4.0.
 
 ## Mods
 
-|                                                                       |                                                                                                                               |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| <img src="src/FullBright/icon.png" alt="Fullbright Icon" width="100"> | [**Fullbright**](src/FullBright/) <br><br> Force all tiles to render at full brightness.                                      |
-| <img src="src/MinimapMode/icon.png" width="100">                      | [**Minimap Mode**](src/MinimapMode/) <br><br> Automatically set the minimap to the configured mode when loading into a world. |
-| <img src="src/RareDropNotification/icon.png" width="100">             | [**Rare Drop Notification**](src/RareDropNotification/) <br><br> Show a chat message when a rare item is dropped.             |
-| <img src="src/SelectOres/icon.png" width="100">                       | [**Select Ores**](src/SelectOres/) <br><br> Select which ores are generated in your world, independent of world seed.         |
-| <img src="src/SettingsKeybind/icon.png" width="100">                  | [**Settings Keybind**](src/SettingsKeybind/) <br><br> Add a configurable keybind to toggle the settings menu.                 |
-| <img src="src/ValueTooltip/icon.png" width="100">                     | [**Value Tooltip**](src/ValueTooltip/) <br><br> Display the sell value of items in their tooltip even outside of shops.       |
+|                                                              |                                                                                                                                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="src/BetterTravelingMerchant/icon.png" width="100"> | [**Better Traveling Merchant**](src/BetterTravelingMerchant/) <br><br> Increase the spawn rate of the Traveling Merchant and force certain items to always be sold. |
+| <img src="src/DeterministicDrops/icon.png"  width="100">     | [**Deterministic Drops**](src/DeterministicDrops/) <br><br> Reduce variance in item drops while preserving vanilla drop rates.                                      |
+| <img src="src/FullBright/icon.png" width="100">              | [**Fullbright**](src/FullBright/) <br><br> Force all tiles to render at full brightness.                                                                            |
+| <img src="src/MinimapMode/icon.png" width="100">             | [**Minimap Mode**](src/MinimapMode/) <br><br> Automatically set the minimap to the configured mode when loading into a world.                                       |
+| <img src="src/RareDropNotification/icon.png" width="100">    | [**Rare Drop Notification**](src/RareDropNotification/) <br><br> Show a chat message when a rare item is dropped.                                                   |
+| <img src="src/SelectOres/icon.png" width="100">              | [**Select Ores**](src/SelectOres/) <br><br> Select which ores are generated in your world, independent of world seed.                                               |
+| <img src="src/SettingsKeybind/icon.png" width="100">         | [**Settings Keybind**](src/SettingsKeybind/) <br><br> Add a configurable keybind to toggle the settings menu.                                                       |
+| <img src="src/ValueTooltip/icon.png" width="100">            | [**Value Tooltip**](src/ValueTooltip/) <br><br> Display the sell value of items in their tooltip even outside of shops.                                             |
 
 ## Installation
 
