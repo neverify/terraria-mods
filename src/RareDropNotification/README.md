@@ -61,9 +61,7 @@ private ItemDropAttemptResult ResolveRule(IItemDropRule rule, DropAttemptInfo in
 
 This method resolves an item drop rule and returns the result of the drop attempt. The mod applies a postfix patch onto this method in order to obtain the result of the drop attempt. The result is then passed on to the notification handler.
 
-### Other features
-
-#### `DropNotification`
+### Displaying Notifications
 
 The `DropNotification` class handles the logic for displaying the chat messages. The message format is parsed with Regex. The hex colors are parsed manually and converted to `Color`-objects, which are then linearly interpolated to obtain the final color based on the drop chance.
 

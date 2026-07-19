@@ -49,7 +49,7 @@ public Vector3 GetColor(int x, int y)
 
 This method is used to query the color of each tile.
 
-The mod applies a Prefix patch onto that method to skip it and instead return the configured brightness value.
+The mod applies a prefix patch onto that method to skip it and instead return the configured brightness value.
 
 However, as you can see from the method, there is a check: `!this._activeProcessedArea.Contains(x, y)`. This check is absolutely crucial, since this method is queried for tiles outside the rendered area. Bypassing this check would return a non-zero brightness value for those tiles as well, which causes the game to render a massive amount of off-screen tiles, causing a noticeable performance hit.
 
@@ -100,7 +100,7 @@ public bool UpdateLighting(int x, int y, byte light)
 
 This method updates the lighting of one tile on the map. A simple prefix overriding the `light` parameter would allow making the map brighter, but not dimmer. This is because of the statement `Math.Max(mapTile.Light, light)`, which disallows the lighting becoming dimmer. To get around this, we replace the method entirely instead. Since the `_tiles` field is `private`, we use the handy `public` setter method `SetTile()` instead of directly accessing the field.
 
-### Other Features
+### Performance Improvements
 
 With these patches alone, the performance is still not ideal. In fact, this has nothing to do with the mod!
 
