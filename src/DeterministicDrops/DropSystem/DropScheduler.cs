@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
 
 namespace DeterministicDrops.DropSystem;
 
@@ -20,9 +19,6 @@ internal static class DropScheduler
         dropState.AddProgress(progress);
 
         double dropPosition = GetDropPosition(drop.itemId, dropState.NextDropCycle);
-
-        string itemName = ContentSamples.ItemsByType[drop.itemId].Name;
-        Main.NewText($"[i:{drop.itemId}] {itemName} {dropState.DropProgress:F4}/{dropPosition:F4} (+{progress:F4})");
 
         if (dropState.DropProgress < dropPosition)
             return 0;
