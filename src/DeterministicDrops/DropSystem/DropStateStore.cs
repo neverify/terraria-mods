@@ -10,12 +10,12 @@ internal sealed class DropStateStore(string savePath)
 {
     private readonly string _savePath = savePath;
 
-    private readonly Dictionary<ulong, DropState> _dropStates = [];
+    private readonly Dictionary<string, DropState> _dropStates = [];
 
-    public DropState GetState(int dropId) => GetState((ulong)dropId);
-
-    public DropState GetState(ulong dropId)
+    public DropState GetState(int[] itemIds)
     {
+        string dropId = SerializeDropId(itemIds);
+
         if (!_dropStates.TryGetValue(dropId, out DropState state))
         {
             state = new DropState();
@@ -37,7 +37,7 @@ internal sealed class DropStateStore(string savePath)
         }
 
         string json = File.ReadAllText(path);
-        var dropStates = JsonConvert.DeserializeObject<Dictionary<ulong, DropState>>(json);
+        var dropStates = JsonConvert.DeserializeObject<Dictionary<string, DropState>>(json);
 
         if (dropStates is null)
             return;
@@ -66,6 +66,8 @@ internal sealed class DropStateStore(string savePath)
 
         Mod.Instance.Log.Info($"Saved drop states for world: {fileName}");
     }
+
+    private static string SerializeDropId(int[] itemIds) => string.Join(",", itemIds);
 }
 
 [method: JsonConstructor]
