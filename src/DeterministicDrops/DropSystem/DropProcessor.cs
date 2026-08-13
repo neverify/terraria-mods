@@ -24,7 +24,7 @@ internal static class DropProcessor
     private static IEnumerable<DropResult> ProcessCommonDrop(CommonDrop drop, DropStateStore store, DropChance.LuckType luckType, int chanceRollCount = 1)
     => ProcessDrop(
         new DropContext(
-            itemIds: (short)drop.itemId,
+            itemId: (short)drop.itemId,
             chanceNumerator: drop.chanceNumerator,
             chanceDenominator: drop.chanceDenominator,
             chanceRollCount: chanceRollCount,
@@ -36,14 +36,14 @@ internal static class DropProcessor
     public static IEnumerable<DropResult> ProcessFromOptionsWithoutRepeatsDropRule(FromOptionsWithoutRepeatsDropRule drop, DropStateStore store)
     => ProcessDrop(
         new DropContext(
-            itemIds: drop.dropIds.Select(id => (short)id).ToArray(),
+            itemIds: [.. drop.dropIds.Select(id => (short)id)],
             dropAttemptCount: drop.dropCount),
         store);
 
     public static IEnumerable<DropResult> ProcessOneFromOptionsNotScaledWithLuckDropRule(OneFromOptionsNotScaledWithLuckDropRule drop, DropStateStore store)
     => ProcessDrop(
         new DropContext(
-            itemIds: drop.dropIds.Select(id => (short)id).ToArray(),
+            itemIds: [.. drop.dropIds.Select(id => (short)id)],
             chanceNumerator: drop.chanceNumerator,
             chanceDenominator: drop.chanceDenominator),
         store);
@@ -51,7 +51,7 @@ internal static class DropProcessor
     public static IEnumerable<DropResult> ProcessOneFromOptionsDropRule(OneFromOptionsDropRule drop, DropStateStore store)
     => ProcessDrop(
         new DropContext(
-            itemIds: drop.dropIds.Select(id => (short)id).ToArray(),
+            itemIds: [.. drop.dropIds.Select(id => (short)id)],
             chanceNumerator: drop.chanceNumerator,
             chanceDenominator: drop.chanceDenominator,
             luckType: DropChance.LuckType.All),
@@ -60,19 +60,19 @@ internal static class DropProcessor
     public static IEnumerable<DropResult> ProcessMechBossSpawnersDropRule(MechBossSpawnersDropRule _, DropStateStore store)
     {
         var mechanicalEyeDropContext = new DropContext(
-            itemIds: ItemID.MechanicalEye,
+            itemId: ItemID.MechanicalEye,
             chanceDenominator: 2500,
             luckType: DropChance.LuckType.All,
             dropCondition: DropCondition.NotDefeatedTheTwins);
 
         var mechanicalWormDropContext = new DropContext(
-            itemIds: ItemID.MechanicalWorm,
+            itemId: ItemID.MechanicalWorm,
             chanceDenominator: 2500,
             luckType: DropChance.LuckType.All,
             dropCondition: DropCondition.NotDefeatedTheDestroyer);
 
         var mechanicalSkullDropContext = new DropContext(
-            itemIds: ItemID.MechanicalSkull,
+            itemId: ItemID.MechanicalSkull,
             chanceDenominator: 2500,
             luckType: DropChance.LuckType.All,
             dropCondition: DropCondition.NotDefeatedSkeletronPrime);
@@ -97,7 +97,7 @@ internal static class DropProcessor
         if (!CanDrop(dropContext))
             yield break;
 
-        var dropState = store.GetState(dropContext.ItemIds);
+        var dropState = store.GetState(dropContext.ItemIdGroups);
         var gameContext = new GameContext();
 
         for (int i = 0; i < dropContext.DropAttemptCount; i++)

@@ -5,7 +5,7 @@ namespace DeterministicDrops.DropSystem;
 
 internal sealed class DropContext
 {
-    public short[][] ItemIds { get; }
+    public short[][] ItemIdGroups { get; }
     public int Numerator { get; }
     public int Denominator { get; }
     public int ChanceRollCount { get; }
@@ -16,7 +16,7 @@ internal sealed class DropContext
     public DropProcessor.DropCondition Condition { get; }
 
     public DropContext(
-        short itemIds,
+        short itemId,
         int chanceNumerator = 1,
         int chanceDenominator = 1,
         int chanceRollCount = 1,
@@ -26,7 +26,7 @@ internal sealed class DropContext
         DropChance.LuckType luckType = DropChance.LuckType.None,
         DropProcessor.DropCondition dropCondition = DropProcessor.DropCondition.None)
     {
-        ItemIds = [[itemIds]];
+        ItemIdGroups = [[itemId]];
         Numerator = chanceNumerator;
         Denominator = chanceDenominator;
         ChanceRollCount = chanceRollCount;
@@ -48,7 +48,7 @@ internal sealed class DropContext
         DropChance.LuckType luckType = DropChance.LuckType.None,
         DropProcessor.DropCondition dropCondition = DropProcessor.DropCondition.None)
     {
-        ItemIds = [.. itemIds.Select(x => new short[] { x })];
+        ItemIdGroups = [.. itemIds.Select(x => new short[] { x })];
         Numerator = chanceNumerator;
         Denominator = chanceDenominator;
         ChanceRollCount = chanceRollCount;
@@ -60,7 +60,7 @@ internal sealed class DropContext
     }
 
     public DropContext(
-        short[][] itemIds,
+        short[][] itemIdGroups,
         int chanceNumerator = 1,
         int chanceDenominator = 1,
         int chanceRollCount = 1,
@@ -70,7 +70,7 @@ internal sealed class DropContext
         DropChance.LuckType luckType = DropChance.LuckType.None,
         DropProcessor.DropCondition dropCondition = DropProcessor.DropCondition.None)
     {
-        ItemIds = itemIds;
+        ItemIdGroups = itemIdGroups;
         Numerator = chanceNumerator;
         Denominator = chanceDenominator;
         ChanceRollCount = chanceRollCount;

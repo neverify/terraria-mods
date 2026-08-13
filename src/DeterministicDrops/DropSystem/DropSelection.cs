@@ -9,7 +9,7 @@ internal static class DropSelection
 {
     public static IEnumerable<DropResult> GetDropResults(DropContext dropContext, GameContext gameContext, int dropCycle)
     {
-        var droppedItemIds = GetDroppedItemIds(dropContext.ItemIds, dropCycle, gameContext.WorldSeed);
+        var droppedItemIds = GetDroppedItemIds(dropContext.ItemIdGroups, dropCycle, gameContext.WorldSeed);
 
         foreach (short droppedItemId in droppedItemIds)
         {
@@ -18,18 +18,18 @@ internal static class DropSelection
         }
     }
 
-    private static IEnumerable<short> GetDroppedItemIds(short[][] itemIds, int dropCycle, int worldSeed)
+    private static IEnumerable<short> GetDroppedItemIds(short[][] itemIdGroups, int dropCycle, int worldSeed)
     {
-        int itemCycle = dropCycle / itemIds.Length;
+        int itemCycle = dropCycle / itemIdGroups.Length;
 
-        int itemsSeed = Hashing.Hash(itemIds);
+        int itemsSeed = Hashing.Hash(itemIdGroups);
         int seed = Hashing.Hash(worldSeed, itemsSeed, itemCycle);
         var rng = new Random(seed);
 
-        short[][] shuffledItemIds = [.. itemIds];
+        short[][] shuffledItemIds = [.. itemIdGroups];
         rng.Shuffle(shuffledItemIds);
 
-        var itemIdGroup = shuffledItemIds[dropCycle % itemIds.Length];
+        var itemIdGroup = shuffledItemIds[dropCycle % itemIdGroups.Length];
 
         foreach (short itemId in itemIdGroup)
             yield return itemId;
