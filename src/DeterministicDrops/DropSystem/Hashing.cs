@@ -1,12 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DeterministicDrops.DropSystem;
 
 internal static class Hashing
 {
-    public static int Hash(params short[][] values) => Hash(values.SelectMany(x => x).Select(x => (int)x));
-
     public static int Hash(params IEnumerable<int> values)
     {
         ulong hash = 0;

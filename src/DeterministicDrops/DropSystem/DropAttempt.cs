@@ -9,8 +9,7 @@ internal static class DropAttempt
         double progress = DropChance.CalculateProgress(dropContext, gameContext);
         dropState.AddProgress(progress);
 
-        int dropId = Hashing.Hash(dropContext.ItemIdGroups);
-        double dropPosition = GetDropPosition(dropId, dropState.NextDropCycle, gameContext.WorldSeed);
+        double dropPosition = GetDropPosition(dropContext.Drop.Id, dropState.NextDropCycle, gameContext.WorldSeed);
 
         if (dropState.DropProgress < dropPosition)
         {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Terraria;
 using Utils;
@@ -13,14 +12,12 @@ internal sealed class DropStateStore(string savePath)
 
     private readonly Dictionary<string, DropState> _dropStates = [];
 
-    public DropState GetState(short[][] itemIds)
+    public DropState GetState(Drop drop)
     {
-        string dropId = SerializeDropId(itemIds);
-
-        if (!_dropStates.TryGetValue(dropId, out DropState state))
+        if (!_dropStates.TryGetValue(drop.Name, out DropState state))
         {
             state = new DropState();
-            _dropStates[dropId] = state;
+            _dropStates[drop.Name] = state;
         }
 
         return state;
@@ -67,8 +64,6 @@ internal sealed class DropStateStore(string savePath)
 
         Mod.Instance.Log.Info($"Saved drop states for world: {fileName}");
     }
-
-    private static string SerializeDropId(short[][] itemIds) => string.Join(";", itemIds.Select(id => string.Join(",", id)));
 }
 
 [method: JsonConstructor]

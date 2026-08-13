@@ -9,7 +9,7 @@ internal static class DropSelection
 {
     public static IEnumerable<DropResult> GetDropResults(DropContext dropContext, GameContext gameContext, int dropCycle)
     {
-        var droppedItemIds = GetDroppedItemIds(dropContext.ItemIdGroups, dropCycle, gameContext.WorldSeed);
+        var droppedItemIds = GetDroppedItemIds(dropContext.Drop, dropCycle, gameContext.WorldSeed);
 
         foreach (short droppedItemId in droppedItemIds)
         {
@@ -18,20 +18,20 @@ internal static class DropSelection
         }
     }
 
-    private static IEnumerable<short> GetDroppedItemIds(short[][] itemIdGroups, int dropCycle, int worldSeed)
+    private static IEnumerable<short> GetDroppedItemIds(Drop drop, int dropCycle, int worldSeed)
     {
-        int itemCycle = dropCycle / itemIdGroups.Length;
+        int itemCycle = dropCycle / drop.Count;
 
-        int itemsSeed = Hashing.Hash(itemIdGroups);
-        int seed = Hashing.Hash(worldSeed, itemsSeed, itemCycle);
+        int seed = Hashing.Hash(worldSeed, drop.Id, itemCycle);
         var rng = new Random(seed);
 
-        short[][] shuffledItemIds = [.. itemIdGroups];
-        rng.Shuffle(shuffledItemIds);
+        short[] options = [.. Enumerable.Range(0, drop.Count).Select(i => (short)i)];
+        rng.Shuffle(options);
 
-        var itemIdGroup = shuffledItemIds[dropCycle % itemIdGroups.Length];
+        int index = options[dropCycle % options.Length];
+        var itemIds = drop.Select(index);
 
-        foreach (short itemId in itemIdGroup)
+        foreach (short itemId in itemIds)
             yield return itemId;
     }
 
