@@ -91,9 +91,9 @@ The `DropStateStore` class serves as an abstraction layer for storing the per-it
 
 `DropStateStore` stores the `DropState` instances in a dictionary, keyed by the item ID. Permanent storage is implemented as a per-world json file. The `Load()` and `Save()` methods handle the serialization and deserialization of the drop states as well as reading and writing the json files.
 
-#### `DropScheduler`
+#### `DropProcessor`
 
-The `DropScheduler` class is responsible for the logic of item drops. It has two main responsibilities:
+The `DropProcessor` class is responsible for the logic of item drops. It has two main responsibilities:
 
 1. Determine the progress at which to award the drop for each cycle and the amount that should be dropped.
 2. Given an item, update the progress and determine whether a drop should be awarded.

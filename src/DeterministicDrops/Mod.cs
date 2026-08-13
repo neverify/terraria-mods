@@ -81,6 +81,12 @@ public class Mod : IMod, IModLifecycle
         );
 
         patcher.Patch(
+            typeof(MechBossSpawnersDropRule),
+            "TryDroppingItem",
+            prefix: Patcher.GetHarmonyMethod(typeof(MechBossSpawnersDropRulePatch), nameof(MechBossSpawnersDropRulePatch.TryDroppingItemPrefix))
+        );
+
+        patcher.Patch(
             typeof(WorldFile),
             "SaveWorld",
             prefix: Patcher.GetHarmonyMethod(typeof(SaveWorldPatch), nameof(SaveWorldPatch.Prefix))

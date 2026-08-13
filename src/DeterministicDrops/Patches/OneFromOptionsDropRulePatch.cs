@@ -6,5 +6,5 @@ namespace DeterministicDrops.Patches;
 internal static class OneFromOptionsDropRulePatch
 {
     public static bool TryDroppingItemPrefix(DropAttemptInfo info, OneFromOptionsDropRule __instance, ref ItemDropAttemptResult __result)
-    => TryDroppingPatchHelper.HandleDrop(info, __instance, DropScheduler.ProcessOneFromOptionsDropRule, ref __result);
+    => TryDroppingPatchHelper.HandleDrop(info, __instance, DropProcessor.ProcessOneFromOptionsDropRule, ref __result);
 }

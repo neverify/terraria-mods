@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Utils;
 
@@ -6,15 +7,18 @@ namespace DeterministicDrops.DropSystem;
 
 internal static class DropSelection
 {
-    public static DropResult GetDropResult(DropContext dropContext, GameContext gameContext, int dropCycle)
+    public static IEnumerable<DropResult> GetDropResults(DropContext dropContext, GameContext gameContext, int dropCycle)
     {
-        int droppedItemId = GetDroppedItemId(dropContext.ItemIds, dropCycle, gameContext.WorldSeed);
-        int dropAmount = GetDropAmount(droppedItemId, dropCycle, dropContext.MinDropAmount, dropContext.MaxDropAmount, gameContext.WorldSeed);
+        var droppedItemIds = GetDroppedItemIds(dropContext.ItemIds, dropCycle, gameContext.WorldSeed);
 
-        return new DropResult(droppedItemId, dropAmount);
+        foreach (short droppedItemId in droppedItemIds)
+        {
+            int dropAmount = GetDropAmount(droppedItemId, dropCycle, dropContext.MinDropAmount, dropContext.MaxDropAmount, gameContext.WorldSeed);
+            yield return new DropResult(droppedItemId, dropAmount);
+        }
     }
 
-    private static int GetDroppedItemId(int[] itemIds, int dropCycle, int worldSeed)
+    private static IEnumerable<short> GetDroppedItemIds(short[][] itemIds, int dropCycle, int worldSeed)
     {
         int itemCycle = dropCycle / itemIds.Length;
 
@@ -22,18 +26,21 @@ internal static class DropSelection
         int seed = Hashing.Hash(worldSeed, itemsSeed, itemCycle);
         var rng = new Random(seed);
 
-        int[] shuffledItemIds = [.. itemIds];
+        short[][] shuffledItemIds = [.. itemIds];
         rng.Shuffle(shuffledItemIds);
 
-        return shuffledItemIds[dropCycle % itemIds.Length];
+        var itemIdGroup = shuffledItemIds[dropCycle % itemIds.Length];
+
+        foreach (short itemId in itemIdGroup)
+            yield return itemId;
     }
 
-    private static int GetDropAmount(int itemId, int dropCycle, int minAmount, int maxAmount, int worldSeed)
+    private static int GetDropAmount(short itemId, int dropCycle, int minAmount, int maxAmount, int worldSeed)
     {
         int count = maxAmount - minAmount + 1;
         int amountCycle = dropCycle / count;
 
-        int seed = Hashing.Hash(worldSeed, itemId, amountCycle);
+        int seed = Hashing.Hash(worldSeed, itemId, minAmount, maxAmount, amountCycle);
         var rng = new Random(seed);
 
         int[] amounts = [.. Enumerable.Range(minAmount, count)];

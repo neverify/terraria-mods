@@ -6,6 +6,9 @@ public class Config : ModConfig
 {
     public override int Version => 1;
 
-    [Client, Label("Enable Deterministic Drops"), Description("Enable the deterministic item drop system.")]
-    public bool EnableDeterministicDrops { get; set; } = true;
+    [Client, Label("Enable Deterministic NPC Drops"), Description("Enable the deterministic drop system for NPC drops.")]
+    public bool EnableDeterministicNpcDrops { get; set; } = true;
+
+    [Client, Label("Enable Deterministic Treasure Bags"), Description("Enable the deterministic drop system for treasure bags.")]
+    public bool EnableDeterministicTreasureBags { get; set; } = true;
 }

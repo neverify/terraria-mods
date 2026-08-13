@@ -10,16 +10,16 @@ internal static class TryDroppingPatchHelper
     public static bool HandleDrop<IItemDropRule>
     (DropAttemptInfo info, IItemDropRule __instance, Func<IItemDropRule, DropStateStore, IEnumerable<DropResult>> dropRuleProcessor, ref ItemDropAttemptResult __result)
     {
-        if (!Mod.Instance.Config.EnableDeterministicDrops)
+        if (!Mod.Instance.Config.EnableDeterministicNpcDrops)
             return true;
 
-        var drops = dropRuleProcessor(__instance, Mod.Instance.DropStateStore);
+        var dropResults = dropRuleProcessor(__instance, Mod.Instance.DropStateStore);
 
         bool dropped = false;
 
-        foreach (var result in drops)
+        foreach (var dropResult in dropResults)
         {
-            CommonCode.DropItemFromNPC(info.npc, result.ItemId, result.Amount);
+            CommonCode.DropItemFromNPC(info.npc, dropResult.ItemId, dropResult.Amount);
             dropped = true;
         }
 
