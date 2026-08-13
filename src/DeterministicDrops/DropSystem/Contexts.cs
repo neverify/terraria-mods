@@ -82,6 +82,30 @@ internal sealed class DropContext
     }
 }
 
+internal sealed class DropItems
+{
+    public int Length => _itemIdGroups.Length;
+
+    public short[] GetItemIds(int index) => _itemIdGroups[index];
+
+    private readonly short[][] _itemIdGroups;
+
+    public DropItems(short itemId)
+    {
+        _itemIdGroups = [[itemId]];
+    }
+
+    public DropItems(short[] itemIds)
+    {
+        _itemIdGroups = [.. itemIds.Select(x => new short[] { x })];
+    }
+
+    public DropItems(short[][] itemIdGroups)
+    {
+        _itemIdGroups = itemIdGroups;
+    }
+}
+
 internal sealed class GameContext
 {
     public int WorldSeed { get; } = Main.ActiveWorldFileData.Seed;
