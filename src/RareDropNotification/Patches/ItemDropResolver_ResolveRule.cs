@@ -1,8 +1,10 @@
+using HarmonyLib;
 using RareDropNotification.Features;
 using Terraria.GameContent.ItemDropRules;
 
 namespace RareDropNotification.Patches;
 
+[HarmonyPatch(typeof(ItemDropResolver), "ResolveRule")]
 internal sealed class ResolveRulePatch
 {
     internal static void Postfix(IItemDropRule rule, ItemDropAttemptResult __result)
