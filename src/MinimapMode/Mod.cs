@@ -10,7 +10,7 @@ public class Mod : IMod, IModLifecycle
     public string Name => "Minimap Mode";
     public string Version => "1.0.0";
 
-    internal static Mod Instance;
+    internal static Mod Instance { get; private set; }
 
     internal ILogger Log { get; private set; }
     internal Config Config { get; private set; }
