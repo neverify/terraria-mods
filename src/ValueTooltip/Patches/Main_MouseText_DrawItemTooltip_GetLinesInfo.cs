@@ -1,16 +1,14 @@
 using System.Linq;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
 namespace ValueTooltip.Patches;
 
-internal static class TooltipPatch
+[HarmonyPatch(typeof(Main), nameof(Main.MouseText_DrawItemTooltip_GetLinesInfo))]
+internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
 {
-    private const int PlatinumValue = 1000000;
-    private const int GoldValue = 10000;
-    private const int SilverValue = 100;
-
     internal static void Postfix(
         Item item,
         ref int numLines,
@@ -68,4 +66,8 @@ internal static class TooltipPatch
             _ => Colors.CoinCopper,
         };
     }
+
+    private const int PlatinumValue = 1000000;
+    private const int GoldValue = 10000;
+    private const int SilverValue = 100;
 }
