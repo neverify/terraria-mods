@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Terraria;
 using Utils;
 
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal sealed class DropStateStore(string savePath)
 {

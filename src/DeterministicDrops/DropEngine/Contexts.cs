@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Terraria;
 
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal sealed class DropContext(
     Drop drop,

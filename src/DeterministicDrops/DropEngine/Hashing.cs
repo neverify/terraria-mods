@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal static class Hashing
 {

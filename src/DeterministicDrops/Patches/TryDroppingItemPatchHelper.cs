@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DeterministicDrops.DropSystem;
+using DeterministicDrops.DropEngine;
 using Terraria.GameContent.ItemDropRules;
 
 namespace DeterministicDrops.Patches;

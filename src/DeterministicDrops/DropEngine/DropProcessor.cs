@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal static class DropProcessor
 {

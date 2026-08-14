@@ -1,4 +1,4 @@
-using DeterministicDrops.DropSystem;
+using DeterministicDrops.DropEngine;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
 

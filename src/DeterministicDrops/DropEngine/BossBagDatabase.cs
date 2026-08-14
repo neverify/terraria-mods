@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.ID;
 
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal static class BossBagDatabase
 {

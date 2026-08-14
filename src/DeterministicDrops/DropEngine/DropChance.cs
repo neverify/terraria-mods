@@ -1,6 +1,6 @@
 using System;
 
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal static class DropChance
 {

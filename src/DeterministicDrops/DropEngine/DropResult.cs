@@ -1,4 +1,4 @@
-namespace DeterministicDrops.DropSystem;
+namespace DeterministicDrops.DropEngine;
 
 internal readonly struct DropResult(int itemId, int amount)
 {

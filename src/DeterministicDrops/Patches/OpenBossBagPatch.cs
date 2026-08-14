@@ -1,4 +1,4 @@
-using DeterministicDrops.DropSystem;
+using DeterministicDrops.DropEngine;
 using HarmonyLib;
 using Terraria;
 using Terraria.DataStructures;
