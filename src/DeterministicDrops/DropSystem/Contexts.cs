@@ -32,10 +32,11 @@ internal sealed class DropContext(
 
 internal sealed class Drop
 {
-    public int Count => _itemIdGroups.Length;
     public int Id => Hashing.Hash(_itemIdGroups.SelectMany(x => x).Select(x => (int)x));
     public string Name =>
         string.Join(";", _itemIdGroups.Select(itemIds => string.Join(",", itemIds)));
+
+    public int Count => _itemIdGroups.Length;
 
     public ReadOnlyCollection<short> Select(int index) => new(_itemIdGroups[index]);
 
