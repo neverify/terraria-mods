@@ -1,11 +1,6 @@
 using FullBright.Features;
-using FullBright.Patches;
-using HarmonyLib;
-using Terraria.Graphics.Light;
-using Terraria.Map;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
-using Utils;
 
 namespace FullBright;
 
@@ -15,56 +10,22 @@ public class Mod : IMod
     public string Name => "Fullbright";
     public string Version => "1.1.0";
 
-    internal static ILogger Log;
-    internal static Config Config;
-    private static Harmony s_harmony;
+    internal static Mod Instance { get; private set; }
+
+    internal ILogger Log { get; private set; }
+    internal Config Config { get; private set; }
 
     public void Initialize(ModContext context)
     {
+        Instance = this;
+
         Log = context.Logger;
         Config = context.GetConfig<Config>();
-        s_harmony = new Harmony("com.neverify.full-bright");
     }
 
-    public static void OnGameReady()
-    {
-        if (s_harmony == null)
-            return;
-
-        var patcher = new Patcher(s_harmony, Log);
-
-        patcher.Patch(
-            typeof(LightingEngine),
-            "ProcessScan",
-            postfix: Patcher.GetHarmonyMethod(
-                typeof(ProcessScanPatch),
-                nameof(ProcessScanPatch.Postfix)
-            )
-        );
-
-        patcher.Patch(
-            typeof(LightingEngine),
-            "GetColor",
-            prefix: Patcher.GetHarmonyMethod(typeof(GetColorPatch), nameof(GetColorPatch.Prefix))
-        );
-
-        patcher.Patch(
-            typeof(WorldMap),
-            "UpdateLighting",
-            prefix: Patcher.GetHarmonyMethod(
-                typeof(UpdateLightingPatch),
-                nameof(UpdateLightingPatch.Prefix)
-            )
-        );
-
-        LightingQuality.SetQuality();
-    }
-
-    public void Unload()
-    {
-        s_harmony.UnpatchAll("com.neverify.full-bright");
-        Log.Info("Unloaded.");
-    }
+    public static void OnGameReady() => LightingQuality.SetQuality();
 
     public void OnConfigChanged() => LightingQuality.SetQuality();
+
+    public void Unload() { }
 }

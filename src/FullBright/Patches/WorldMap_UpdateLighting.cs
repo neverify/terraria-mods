@@ -1,15 +1,17 @@
+using HarmonyLib;
 using Terraria.Map;
 
 namespace FullBright.Patches;
 
+[HarmonyPatch(typeof(WorldMap), "UpdateLighting")]
 internal static class UpdateLightingPatch
 {
     internal static bool Prefix(int x, int y, WorldMap __instance)
     {
-        if (!Mod.Config.MapLightingOverride)
+        if (!Mod.Instance.Config.MapLightingOverride)
             return true;
 
-        byte brightness = (byte)(Mod.Config.MapLightingBrightness * byte.MaxValue);
+        byte brightness = (byte)(Mod.Instance.Config.MapLightingBrightness * byte.MaxValue);
 
         var mapTile = MapHelper.CreateMapTile(x, y, brightness);
 

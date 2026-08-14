@@ -5,5 +5,5 @@ namespace FullBright.Features;
 internal static class LightingQuality
 {
     internal static void SetQuality() =>
-        DebugOptions.devLightTilesCheat = Mod.Config.DisableLightSmoothing;
+        DebugOptions.devLightTilesCheat = Mod.Instance.Config.DisableLightSmoothing;
 }
