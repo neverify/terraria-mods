@@ -57,7 +57,7 @@ internal sealed class Drop
     public Drop(short[][] itemIdGroups) => _itemIdGroups = itemIdGroups;
 
     public Drop(int[][] itemIdGroups)
-        : this([.. itemIdGroups.SelectMany(group => group.Select(x => (short)x))]) { }
+        : this([.. itemIdGroups.Select(group => group.Select(x => (short)x).ToArray())]) { }
 }
 
 internal sealed class GameContext
