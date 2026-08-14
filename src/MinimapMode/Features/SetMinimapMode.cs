@@ -11,7 +11,7 @@ internal sealed class SetMinimapMode
             "Hidden" => 0,
             "Minimap" => 1,
             "Overlay" => 2,
-            _ => 1
+            _ => 1,
         };
     }
 }

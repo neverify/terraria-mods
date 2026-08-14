@@ -14,7 +14,9 @@ internal static class UpdateTimePatch
         if (Mod.Instance.Config.SpawnChanceMultiplier == 1.0f)
             return;
 
-        int spawnChanceDenominator = (int)(BaseSpawnChanceDenominator / (Mod.Instance.Config.SpawnChanceMultiplier - 1.0f));
+        int spawnChanceDenominator = (int)(
+            BaseSpawnChanceDenominator / (Mod.Instance.Config.SpawnChanceMultiplier - 1.0f)
+        );
 
         if (Main.rand.Next(spawnChanceDenominator) == 0)
             WorldGen.SpawnTravelNPC();

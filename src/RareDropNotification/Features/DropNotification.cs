@@ -19,7 +19,12 @@ internal static class DropNotification
         string itemName = ContentSamples.ItemsByType[drop.itemId].Name;
 
         // Format notification message
-        string message = FormatNotificationMessage(Mod.Config.DropNotificationFormat, drop.itemId, itemName, chance);
+        string message = FormatNotificationMessage(
+            Mod.Config.DropNotificationFormat,
+            drop.itemId,
+            itemName,
+            chance
+        );
 
         // Get notification color
         Color color = GetColor(chance, Mod.Config.NotificationThreshold);
@@ -27,9 +32,15 @@ internal static class DropNotification
         ShowNotification(message, color);
     }
 
-    private static void ShowNotification(string message, Color color) => Main.NewText(message, color);
+    private static void ShowNotification(string message, Color color) =>
+        Main.NewText(message, color);
 
-    private static string FormatNotificationMessage(string format, int itemId, string itemName, float chance)
+    private static string FormatNotificationMessage(
+        string format,
+        int itemId,
+        string itemName,
+        float chance
+    )
     {
         float chancePercent = chance * 100;
 
@@ -45,7 +56,7 @@ internal static class DropNotification
                     "itemId" => itemId.ToString(),
                     "itemName" => itemName,
                     "chance" => chancePercent.ToString("F2"),
-                    _ => m.Value
+                    _ => m.Value,
                 };
             }
         );

@@ -49,7 +49,10 @@
     The source is otherwise not needed for building mods, as with all other assemblies.
   -->
   <ItemGroup>
-    <ProjectReference Include="$(TerrariaModderCoreProject)" Condition="Exists('$(TerrariaModderCoreProject)')">
+    <ProjectReference
+      Include="$(TerrariaModderCoreProject)"
+      Condition="Exists('$(TerrariaModderCoreProject)')"
+    >
       <Private>false</Private>
     </ProjectReference>
     <Reference Include="TerrariaModder.Core" Condition="!Exists('$(TerrariaModderCoreProject)')">

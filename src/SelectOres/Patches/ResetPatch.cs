@@ -37,7 +37,7 @@ internal sealed class ResetPatch
         { "Tin", TileID.Tin },
         { "Lead", TileID.Lead },
         { "Tungsten", TileID.Tungsten },
-        { "Platinum", TileID.Platinum }
+        { "Platinum", TileID.Platinum },
     };
 
     private static readonly Dictionary<string, int> s_oreNameToBarId = new()
@@ -49,6 +49,6 @@ internal sealed class ResetPatch
         { "Tin", ItemID.TinBar },
         { "Lead", ItemID.LeadBar },
         { "Tungsten", ItemID.TungstenBar },
-        { "Platinum", ItemID.PlatinumBar }
+        { "Platinum", ItemID.PlatinumBar },
     };
 }

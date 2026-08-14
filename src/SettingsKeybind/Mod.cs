@@ -38,7 +38,10 @@ public class Mod : IMod
         patcher.Patch(
             typeof(Main),
             "DrawInterface_29_SettingsButton",
-            prefix: Patcher.GetHarmonyMethod(typeof(SettingsButtonPatch), nameof(SettingsButtonPatch.Prefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(SettingsButtonPatch),
+                nameof(SettingsButtonPatch.Prefix)
+            )
         );
     }
 

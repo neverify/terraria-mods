@@ -35,13 +35,19 @@ public class Mod : IMod
         patcher.Patch(
             typeof(Main),
             "UpdateTime",
-            postfix: Patcher.GetHarmonyMethod(typeof(UpdateTimePatch), nameof(UpdateTimePatch.Postfix))
+            postfix: Patcher.GetHarmonyMethod(
+                typeof(UpdateTimePatch),
+                nameof(UpdateTimePatch.Postfix)
+            )
         );
 
         patcher.Patch(
             typeof(Chest),
             "SetupTravelShop",
-            postfix: Patcher.GetHarmonyMethod(typeof(SetupTravelShopPatch), nameof(SetupTravelShopPatch.Postfix))
+            postfix: Patcher.GetHarmonyMethod(
+                typeof(SetupTravelShopPatch),
+                nameof(SetupTravelShopPatch.Postfix)
+            )
         );
     }
 

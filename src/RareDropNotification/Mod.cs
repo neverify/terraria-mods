@@ -34,7 +34,10 @@ public class Mod : IMod
         patcher.Patch(
             typeof(ItemDropResolver),
             "ResolveRule",
-            postfix: Patcher.GetHarmonyMethod(typeof(ResolveRulePatch), nameof(ResolveRulePatch.Postfix))
+            postfix: Patcher.GetHarmonyMethod(
+                typeof(ResolveRulePatch),
+                nameof(ResolveRulePatch.Postfix)
+            )
         );
     }
 

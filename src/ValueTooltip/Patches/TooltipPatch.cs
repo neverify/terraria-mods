@@ -11,7 +11,12 @@ internal static class TooltipPatch
     private const int GoldValue = 10000;
     private const int SilverValue = 100;
 
-    internal static void Postfix(Item item, ref int numLines, string[] toolTipLine, Color[] lineColors)
+    internal static void Postfix(
+        Item item,
+        ref int numLines,
+        string[] toolTipLine,
+        Color[] lineColors
+    )
     {
         if (!Mod.Config.ShowValueTooltips)
             return;
@@ -49,9 +54,8 @@ internal static class TooltipPatch
 
         return string.Join(
             " ",
-            coins
-                .Where(coin => coin.Amount > 0)
-                .Select(coin => $"{coin.Amount} {coin.Name}"));
+            coins.Where(coin => coin.Amount > 0).Select(coin => $"{coin.Amount} {coin.Name}")
+        );
     }
 
     private static Color GetValueColor(int value)

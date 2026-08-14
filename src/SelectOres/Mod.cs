@@ -34,7 +34,10 @@ public class Mod : IMod
         patcher.Patch(
             typeof(WorldGen),
             "Reset",
-            prefix: Patcher.GetHarmonyMethod(typeof(SmashAltarPatch), nameof(SmashAltarPatch.Prefix)),
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(SmashAltarPatch),
+                nameof(SmashAltarPatch.Prefix)
+            ),
             postfix: Patcher.GetHarmonyMethod(typeof(ResetPatch), nameof(ResetPatch.Postfix))
         );
     }

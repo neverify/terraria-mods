@@ -36,7 +36,10 @@ public class Mod : IMod
         patcher.Patch(
             typeof(LightingEngine),
             "ProcessScan",
-            postfix: Patcher.GetHarmonyMethod(typeof(ProcessScanPatch), nameof(ProcessScanPatch.Postfix))
+            postfix: Patcher.GetHarmonyMethod(
+                typeof(ProcessScanPatch),
+                nameof(ProcessScanPatch.Postfix)
+            )
         );
 
         patcher.Patch(
@@ -48,7 +51,10 @@ public class Mod : IMod
         patcher.Patch(
             typeof(WorldMap),
             "UpdateLighting",
-            prefix: Patcher.GetHarmonyMethod(typeof(UpdateLightingPatch), nameof(UpdateLightingPatch.Prefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(UpdateLightingPatch),
+                nameof(UpdateLightingPatch.Prefix)
+            )
         );
 
         LightingQuality.SetQuality();

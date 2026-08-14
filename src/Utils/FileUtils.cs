@@ -6,7 +6,10 @@ namespace Utils;
 
 public static class FileUtils
 {
-    private static readonly HashSet<char> s_invalidFileNameChars = [.. Path.GetInvalidFileNameChars()];
+    private static readonly HashSet<char> s_invalidFileNameChars =
+    [
+        .. Path.GetInvalidFileNameChars(),
+    ];
 
     public static string SanitizeFilename(string fileName)
     {
@@ -14,14 +17,16 @@ public static class FileUtils
 
         foreach (char c in fileName)
         {
-            sb.Append(c switch
-            {
-                ' ' => '_',
-                '.' => '_',
-                '*' => '_',
-                _ when s_invalidFileNameChars.Contains(c) => '-',
-                _ => c
-            });
+            sb.Append(
+                c switch
+                {
+                    ' ' => '_',
+                    '.' => '_',
+                    '*' => '_',
+                    _ when s_invalidFileNameChars.Contains(c) => '-',
+                    _ => c,
+                }
+            );
         }
 
         return sb.ToString();

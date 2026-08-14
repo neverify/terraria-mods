@@ -14,7 +14,7 @@ internal static class GetColorPatch
         __result = activeProcessedArea.Contains(x, y) switch
         {
             true => new Vector3(Mod.Config.Brightness),
-            false => Vector3.Zero
+            false => Vector3.Zero,
         };
 
         return false;

@@ -6,8 +6,10 @@ namespace FullBright.Patches;
 
 internal static class ProcessScanPatch
 {
-    private static readonly FieldInfo s_activeProcessedAreaField = typeof(LightingEngine)
-        .GetField("_activeProcessedArea", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo s_activeProcessedAreaField = typeof(LightingEngine).GetField(
+        "_activeProcessedArea",
+        BindingFlags.NonPublic | BindingFlags.Instance
+    );
 
     internal static Rectangle CachedActiveProcessedArea { get; private set; }
 
