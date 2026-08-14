@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using Terraria;
 using Terraria.ID;
 
 namespace BetterTravelingMerchant.Patches;
 
-internal static class SetupTravelShopPatch
+[HarmonyPatch(typeof(Chest), nameof(Chest.SetupTravelShop))]
+internal static class ChestPatch
 {
     internal static void Postfix()
     {
