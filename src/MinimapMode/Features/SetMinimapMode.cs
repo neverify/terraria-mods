@@ -6,7 +6,7 @@ internal sealed class SetMinimapMode
 {
     internal static void SetMode()
     {
-        Main.mapStyle = Mod.Config.DefaultMinimapMode switch
+        Main.mapStyle = Mod.Instance.Config.DefaultMinimapMode switch
         {
             "Hidden" => 0,
             "Minimap" => 1,

@@ -10,11 +10,15 @@ public class Mod : IMod, IModLifecycle
     public string Name => "Minimap Mode";
     public string Version => "1.0.0";
 
-    internal static ILogger Log;
-    internal static Config Config;
+    internal static Mod Instance;
+
+    internal ILogger Log { get; private set; }
+    internal Config Config { get; private set; }
 
     public void Initialize(ModContext context)
     {
+        Instance = this;
+
         Log = context.Logger;
         Config = context.GetConfig<Config>();
     }
@@ -31,7 +35,5 @@ public class Mod : IMod, IModLifecycle
 
     public void OnWorldUnload() { }
 
-    public void OnConfigChanged() { }
-
-    public void Unload() => Log.Info("Unloaded.");
+    public void Unload() { }
 }
