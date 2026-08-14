@@ -11,33 +11,33 @@ internal sealed class ResetPatch
 {
     internal static void Prefix()
     {
-        if (!Mod.Config.OverrideGeneration)
+        if (!Mod.Instance.Config.OverrideGeneration)
             return;
 
-        SetOreTier(ref WorldGen.SavedOreTiers.Cobalt, Mod.Config.HardmodeTier1Ore);
-        SetOreTier(ref WorldGen.SavedOreTiers.Mythril, Mod.Config.HardmodeTier2Ore);
-        SetOreTier(ref WorldGen.SavedOreTiers.Adamantite, Mod.Config.HardmodeTier3Ore);
+        SetOreTier(ref WorldGen.SavedOreTiers.Cobalt, Mod.Instance.Config.HardmodeTier1Ore);
+        SetOreTier(ref WorldGen.SavedOreTiers.Mythril, Mod.Instance.Config.HardmodeTier2Ore);
+        SetOreTier(ref WorldGen.SavedOreTiers.Adamantite, Mod.Instance.Config.HardmodeTier3Ore);
     }
 
     internal static void Postfix()
     {
-        if (!Mod.Config.OverrideGeneration)
+        if (!Mod.Instance.Config.OverrideGeneration)
             return;
 
-        GenVars.copper = s_oreNameToTileId[Mod.Config.Tier1Ore];
-        GenVars.iron = s_oreNameToTileId[Mod.Config.Tier2Ore];
-        GenVars.silver = s_oreNameToTileId[Mod.Config.Tier3Ore];
-        GenVars.gold = s_oreNameToTileId[Mod.Config.Tier4Ore];
+        GenVars.copper = s_oreNameToTileId[Mod.Instance.Config.Tier1Ore];
+        GenVars.iron = s_oreNameToTileId[Mod.Instance.Config.Tier2Ore];
+        GenVars.silver = s_oreNameToTileId[Mod.Instance.Config.Tier3Ore];
+        GenVars.gold = s_oreNameToTileId[Mod.Instance.Config.Tier4Ore];
 
-        GenVars.copperBar = s_oreNameToBarId[Mod.Config.Tier1Ore];
-        GenVars.ironBar = s_oreNameToBarId[Mod.Config.Tier2Ore];
-        GenVars.silverBar = s_oreNameToBarId[Mod.Config.Tier3Ore];
-        GenVars.goldBar = s_oreNameToBarId[Mod.Config.Tier4Ore];
+        GenVars.copperBar = s_oreNameToBarId[Mod.Instance.Config.Tier1Ore];
+        GenVars.ironBar = s_oreNameToBarId[Mod.Instance.Config.Tier2Ore];
+        GenVars.silverBar = s_oreNameToBarId[Mod.Instance.Config.Tier3Ore];
+        GenVars.goldBar = s_oreNameToBarId[Mod.Instance.Config.Tier4Ore];
 
-        WorldGen.SavedOreTiers.Copper = s_oreNameToTileId[Mod.Config.Tier1Ore];
-        WorldGen.SavedOreTiers.Iron = s_oreNameToTileId[Mod.Config.Tier2Ore];
-        WorldGen.SavedOreTiers.Silver = s_oreNameToTileId[Mod.Config.Tier3Ore];
-        WorldGen.SavedOreTiers.Gold = s_oreNameToTileId[Mod.Config.Tier4Ore];
+        WorldGen.SavedOreTiers.Copper = s_oreNameToTileId[Mod.Instance.Config.Tier1Ore];
+        WorldGen.SavedOreTiers.Iron = s_oreNameToTileId[Mod.Instance.Config.Tier2Ore];
+        WorldGen.SavedOreTiers.Silver = s_oreNameToTileId[Mod.Instance.Config.Tier3Ore];
+        WorldGen.SavedOreTiers.Gold = s_oreNameToTileId[Mod.Instance.Config.Tier4Ore];
     }
 
     private static void SetOreTier(ref int savedTier, string oreName)
