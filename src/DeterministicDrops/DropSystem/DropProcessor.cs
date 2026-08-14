@@ -9,73 +9,102 @@ namespace DeterministicDrops.DropSystem;
 
 internal static class DropProcessor
 {
-    public static IEnumerable<DropResult> ProcessCommonDrop(CommonDrop drop, DropStateStore store)
-    => ProcessCommonDrop(drop, store, DropChance.LuckType.All);
+    public static IEnumerable<DropResult> ProcessCommonDrop(
+        CommonDrop drop,
+        DropStateStore store
+    ) => ProcessCommonDrop(drop, store, DropChance.LuckType.All);
 
-    public static IEnumerable<DropResult> ProcessCommonDropNotScalingWithLuck(CommonDropNotScalingWithLuck drop, DropStateStore store)
-    => ProcessCommonDrop(drop, store, DropChance.LuckType.None);
+    public static IEnumerable<DropResult> ProcessCommonDropNotScalingWithLuck(
+        CommonDropNotScalingWithLuck drop,
+        DropStateStore store
+    ) => ProcessCommonDrop(drop, store, DropChance.LuckType.None);
 
-    public static IEnumerable<DropResult> ProcessCommonDropScalingWithOnlyBadLuck(CommonDropScalingWithOnlyBadLuck drop, DropStateStore store)
-    => ProcessCommonDrop(drop, store, DropChance.LuckType.Negative);
+    public static IEnumerable<DropResult> ProcessCommonDropScalingWithOnlyBadLuck(
+        CommonDropScalingWithOnlyBadLuck drop,
+        DropStateStore store
+    ) => ProcessCommonDrop(drop, store, DropChance.LuckType.Negative);
 
-    public static IEnumerable<DropResult> ProcessCommonDropWithRerolls(CommonDropWithRerolls drop, DropStateStore store)
-    => ProcessCommonDrop(drop, store, DropChance.LuckType.All, drop.timesToRoll);
+    public static IEnumerable<DropResult> ProcessCommonDropWithRerolls(
+        CommonDropWithRerolls drop,
+        DropStateStore store
+    ) => ProcessCommonDrop(drop, store, DropChance.LuckType.All, drop.timesToRoll);
 
-    private static IEnumerable<DropResult> ProcessCommonDrop(CommonDrop drop, DropStateStore store, DropChance.LuckType luckType, int chanceRollCount = 1)
-    => ProcessDrop(
-        new DropContext(
-            new(drop.itemId),
-            chanceNumerator: drop.chanceNumerator,
-            chanceDenominator: drop.chanceDenominator,
-            chanceRollCount: chanceRollCount,
-            minDropAmount: drop.amountDroppedMinimum,
-            maxDropAmount: drop.amountDroppedMaximum,
-            luckType: luckType),
-        store);
+    private static IEnumerable<DropResult> ProcessCommonDrop(
+        CommonDrop drop,
+        DropStateStore store,
+        DropChance.LuckType luckType,
+        int chanceRollCount = 1
+    ) =>
+        ProcessDrop(
+            new DropContext(
+                new(drop.itemId),
+                chanceNumerator: drop.chanceNumerator,
+                chanceDenominator: drop.chanceDenominator,
+                chanceRollCount: chanceRollCount,
+                minDropAmount: drop.amountDroppedMinimum,
+                maxDropAmount: drop.amountDroppedMaximum,
+                luckType: luckType
+            ),
+            store
+        );
 
-    public static IEnumerable<DropResult> ProcessFromOptionsWithoutRepeatsDropRule(FromOptionsWithoutRepeatsDropRule drop, DropStateStore store)
-    => ProcessDrop(
-        new DropContext(
-            new(drop.dropIds),
-            dropAttemptCount: drop.dropCount),
-        store);
+    public static IEnumerable<DropResult> ProcessFromOptionsWithoutRepeatsDropRule(
+        FromOptionsWithoutRepeatsDropRule drop,
+        DropStateStore store
+    ) => ProcessDrop(new DropContext(new(drop.dropIds), dropAttemptCount: drop.dropCount), store);
 
-    public static IEnumerable<DropResult> ProcessOneFromOptionsNotScaledWithLuckDropRule(OneFromOptionsNotScaledWithLuckDropRule drop, DropStateStore store)
-    => ProcessDrop(
-        new DropContext(
-            new(drop.dropIds),
-            chanceNumerator: drop.chanceNumerator,
-            chanceDenominator: drop.chanceDenominator),
-        store);
+    public static IEnumerable<DropResult> ProcessOneFromOptionsNotScaledWithLuckDropRule(
+        OneFromOptionsNotScaledWithLuckDropRule drop,
+        DropStateStore store
+    ) =>
+        ProcessDrop(
+            new DropContext(
+                new(drop.dropIds),
+                chanceNumerator: drop.chanceNumerator,
+                chanceDenominator: drop.chanceDenominator
+            ),
+            store
+        );
 
-    public static IEnumerable<DropResult> ProcessOneFromOptionsDropRule(OneFromOptionsDropRule drop, DropStateStore store)
-    => ProcessDrop(
-        new DropContext(
-            new(drop.dropIds),
-            chanceNumerator: drop.chanceNumerator,
-            chanceDenominator: drop.chanceDenominator,
-            luckType: DropChance.LuckType.All),
-        store);
+    public static IEnumerable<DropResult> ProcessOneFromOptionsDropRule(
+        OneFromOptionsDropRule drop,
+        DropStateStore store
+    ) =>
+        ProcessDrop(
+            new DropContext(
+                new(drop.dropIds),
+                chanceNumerator: drop.chanceNumerator,
+                chanceDenominator: drop.chanceDenominator,
+                luckType: DropChance.LuckType.All
+            ),
+            store
+        );
 
-    public static IEnumerable<DropResult> ProcessMechBossSpawnersDropRule(MechBossSpawnersDropRule _, DropStateStore store)
+    public static IEnumerable<DropResult> ProcessMechBossSpawnersDropRule(
+        MechBossSpawnersDropRule _,
+        DropStateStore store
+    )
     {
         var mechanicalEyeDropContext = new DropContext(
             new(ItemID.MechanicalEye),
             chanceDenominator: 2500,
             luckType: DropChance.LuckType.All,
-            dropCondition: DropCondition.NotDefeatedTheTwins);
+            dropCondition: DropCondition.NotDefeatedTheTwins
+        );
 
         var mechanicalWormDropContext = new DropContext(
             new(ItemID.MechanicalWorm),
             chanceDenominator: 2500,
             luckType: DropChance.LuckType.All,
-            dropCondition: DropCondition.NotDefeatedTheDestroyer);
+            dropCondition: DropCondition.NotDefeatedTheDestroyer
+        );
 
         var mechanicalSkullDropContext = new DropContext(
             new(ItemID.MechanicalSkull),
             chanceDenominator: 2500,
             luckType: DropChance.LuckType.All,
-            dropCondition: DropCondition.NotDefeatedSkeletronPrime);
+            dropCondition: DropCondition.NotDefeatedSkeletronPrime
+        );
 
         var result = ProcessDrop(mechanicalEyeDropContext, store);
         if (result.Any())
@@ -105,7 +134,12 @@ internal static class DropProcessor
 
                 foreach (var dropResult in dropResults)
                 {
-                    if (dropContext.ExtraDrops.TryGetValue(dropResult.ItemId, out DropContext extraDropContext))
+                    if (
+                        dropContext.ExtraDrops.TryGetValue(
+                            dropResult.ItemId,
+                            out DropContext extraDropContext
+                        )
+                    )
                     {
                         var extraDropResults = ProcessDrop(extraDropContext, store);
 
@@ -136,7 +170,9 @@ internal static class DropProcessor
             && (!condition.HasFlag(DropCondition.NoPortalGun) || !player.HasItem(ItemID.PortalGun))
             && (!condition.HasFlag(DropCondition.NotDefeatedTheTwins) || !NPC.downedMechBoss1)
             && (!condition.HasFlag(DropCondition.NotDefeatedTheDestroyer) || !NPC.downedMechBoss2)
-            && (!condition.HasFlag(DropCondition.NotDefeatedSkeletronPrime) || !NPC.downedMechBoss3);
+            && (
+                !condition.HasFlag(DropCondition.NotDefeatedSkeletronPrime) || !NPC.downedMechBoss3
+            );
     }
 
     [Flags]

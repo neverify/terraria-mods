@@ -7,8 +7,12 @@ namespace DeterministicDrops.Patches;
 
 internal static class TryDroppingPatchHelper
 {
-    public static bool HandleDrop<IItemDropRule>
-    (DropAttemptInfo info, IItemDropRule __instance, Func<IItemDropRule, DropStateStore, IEnumerable<DropResult>> dropRuleProcessor, ref ItemDropAttemptResult __result)
+    public static bool HandleDrop<IItemDropRule>(
+        DropAttemptInfo info,
+        IItemDropRule __instance,
+        Func<IItemDropRule, DropStateStore, IEnumerable<DropResult>> dropRuleProcessor,
+        ref ItemDropAttemptResult __result
+    )
     {
         if (!Mod.Instance.Config.EnableDeterministicNpcDrops)
             return true;
@@ -27,7 +31,7 @@ internal static class TryDroppingPatchHelper
         {
             State = dropped
                 ? ItemDropAttemptResultState.Success
-                : ItemDropAttemptResultState.FailedRandomRoll
+                : ItemDropAttemptResultState.FailedRandomRoll,
         };
 
         return false;

@@ -5,6 +5,15 @@ namespace DeterministicDrops.Patches;
 
 internal static class CommonDropPatch
 {
-    public static bool TryDroppingItemPrefix(DropAttemptInfo info, CommonDrop __instance, ref ItemDropAttemptResult __result)
-    => TryDroppingPatchHelper.HandleDrop(info, __instance, DropProcessor.ProcessCommonDrop, ref __result);
+    public static bool TryDroppingItemPrefix(
+        DropAttemptInfo info,
+        CommonDrop __instance,
+        ref ItemDropAttemptResult __result
+    ) =>
+        TryDroppingPatchHelper.HandleDrop(
+            info,
+            __instance,
+            DropProcessor.ProcessCommonDrop,
+            ref __result
+        );
 }

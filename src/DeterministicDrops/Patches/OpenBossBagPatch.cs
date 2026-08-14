@@ -32,7 +32,11 @@ internal sealed class OpenBossBagPatch
         return false;
     }
 
-    private static void SpawnCoins(Player player, IEntitySource itemSource, BossBagDatabase.CoinAmount coinAmount)
+    private static void SpawnCoins(
+        Player player,
+        IEntitySource itemSource,
+        BossBagDatabase.CoinAmount coinAmount
+    )
     {
         player.QuickSpawnItem(itemSource, ItemID.CopperCoin, coinAmount.Copper);
         player.QuickSpawnItem(itemSource, ItemID.SilverCoin, coinAmount.Silver);

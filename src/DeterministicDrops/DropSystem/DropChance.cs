@@ -13,12 +13,17 @@ internal static class DropChance
         None,
         All,
         Positive,
-        Negative
+        Negative,
     }
 
     public static double CalculateProgress(DropContext dropContext, GameContext gameContext)
     {
-        double chance = ApplyLuck(dropContext.Numerator, dropContext.Denominator, gameContext.Luck, dropContext.LuckType);
+        double chance = ApplyLuck(
+            dropContext.Numerator,
+            dropContext.Denominator,
+            gameContext.Luck,
+            dropContext.LuckType
+        );
         chance = ApplyRerolls(chance, dropContext.ChanceRollCount);
 
         return chance;
@@ -61,15 +66,17 @@ internal static class DropChance
         }
         else
         {
-            double luckyChance = (s_harmonicLut[(2 * denominator) - 1] - s_harmonicLut[denominator - 1]) / denominator;
+            double luckyChance =
+                (s_harmonicLut[(2 * denominator) - 1] - s_harmonicLut[denominator - 1])
+                / denominator;
             luckyChance *= numerator;
 
             return (baseChance * (1.0 + luck)) + (luckyChance * -luck);
         }
     }
 
-    private static double ApplyRerolls(double baseChance, int rolls)
-    => rolls <= 1 ? baseChance : 1.0 - Math.Pow(1.0 - baseChance, rolls);
+    private static double ApplyRerolls(double baseChance, int rolls) =>
+        rolls <= 1 ? baseChance : 1.0 - Math.Pow(1.0 - baseChance, rolls);
 
     private static double[] CreateHarmonicLut()
     {

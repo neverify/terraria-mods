@@ -5,6 +5,15 @@ namespace DeterministicDrops.Patches;
 
 internal static class FromOptionsWithoutRepeatsDropRulePatch
 {
-    public static bool TryDroppingItemPrefix(DropAttemptInfo info, FromOptionsWithoutRepeatsDropRule __instance, ref ItemDropAttemptResult __result)
-    => TryDroppingPatchHelper.HandleDrop(info, __instance, DropProcessor.ProcessFromOptionsWithoutRepeatsDropRule, ref __result);
+    public static bool TryDroppingItemPrefix(
+        DropAttemptInfo info,
+        FromOptionsWithoutRepeatsDropRule __instance,
+        ref ItemDropAttemptResult __result
+    ) =>
+        TryDroppingPatchHelper.HandleDrop(
+            info,
+            __instance,
+            DropProcessor.ProcessFromOptionsWithoutRepeatsDropRule,
+            ref __result
+        );
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Terraria;
 
@@ -14,7 +15,8 @@ internal sealed class DropContext(
     int maxDropAmount = 1,
     DropChance.LuckType luckType = DropChance.LuckType.None,
     DropProcessor.DropCondition dropCondition = DropProcessor.DropCondition.None,
-    Dictionary<int, DropContext> extraDrops = null)
+    Dictionary<int, DropContext> extraDrops = null
+)
 {
     public Drop Drop { get; } = drop;
     public int Numerator { get; } = chanceNumerator;
@@ -32,20 +34,30 @@ internal sealed class Drop
 {
     public int Count => _itemIdGroups.Length;
     public int Id => Hashing.Hash(_itemIdGroups.SelectMany(x => x).Select(x => (int)x));
-    public string Name => string.Join(";", _itemIdGroups.Select(itemIds => string.Join(",", itemIds)));
+    public string Name =>
+        string.Join(";", _itemIdGroups.Select(itemIds => string.Join(",", itemIds)));
 
-    public short[] Select(int index) => _itemIdGroups[index];
+    public ReadOnlyCollection<short> Select(int index) => new(_itemIdGroups[index]);
 
     private readonly short[][] _itemIdGroups;
 
-    public Drop(short itemId) => _itemIdGroups = [[itemId]];
-    public Drop(int itemId) : this((short)itemId) { }
+    public Drop(short itemId) =>
+        _itemIdGroups = [
+            [itemId],
+        ];
+
+    public Drop(int itemId)
+        : this((short)itemId) { }
 
     public Drop(short[] itemIds) => _itemIdGroups = [.. itemIds.Select(x => new short[] { x })];
-    public Drop(int[] itemIds) : this([.. itemIds.Select(x => (short)x)]) { }
+
+    public Drop(int[] itemIds)
+        : this([.. itemIds.Select(x => (short)x)]) { }
 
     public Drop(short[][] itemIdGroups) => _itemIdGroups = itemIdGroups;
-    public Drop(int[][] itemIdGroups) : this([.. itemIdGroups.SelectMany(group => group.Select(x => (short)x))]) { }
+
+    public Drop(int[][] itemIdGroups)
+        : this([.. itemIdGroups.SelectMany(group => group.Select(x => (short)x))]) { }
 }
 
 internal sealed class GameContext

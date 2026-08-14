@@ -4,12 +4,21 @@ namespace DeterministicDrops.DropSystem;
 
 internal static class DropAttempt
 {
-    public static bool TryAdvanceState(DropState dropState, DropContext dropContext, GameContext gameContext, out int dropCycle)
+    public static bool TryAdvanceState(
+        DropState dropState,
+        DropContext dropContext,
+        GameContext gameContext,
+        out int dropCycle
+    )
     {
         double progress = DropChance.CalculateProgress(dropContext, gameContext);
         dropState.AddProgress(progress);
 
-        double dropPosition = GetDropPosition(dropContext.Drop.Id, dropState.NextDropCycle, gameContext.WorldSeed);
+        double dropPosition = GetDropPosition(
+            dropContext.Drop.Id,
+            dropState.NextDropCycle,
+            gameContext.WorldSeed
+        );
 
         if (dropState.DropProgress < dropPosition)
         {

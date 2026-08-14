@@ -41,49 +41,73 @@ public class Mod : IMod, IModLifecycle
         patcher.Patch(
             typeof(CommonDrop),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(CommonDropPatch), nameof(CommonDropPatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(CommonDropPatch),
+                nameof(CommonDropPatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(CommonDropNotScalingWithLuck),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(CommonDropNotScalingWithLuckPatch), nameof(CommonDropNotScalingWithLuckPatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(CommonDropNotScalingWithLuckPatch),
+                nameof(CommonDropNotScalingWithLuckPatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(CommonDropScalingWithOnlyBadLuck),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(CommonDropScalingWithOnlyBadLuckPatch), nameof(CommonDropScalingWithOnlyBadLuckPatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(CommonDropScalingWithOnlyBadLuckPatch),
+                nameof(CommonDropScalingWithOnlyBadLuckPatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(CommonDropWithRerolls),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(CommonDropWithRerollsPatch), nameof(CommonDropWithRerollsPatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(CommonDropWithRerollsPatch),
+                nameof(CommonDropWithRerollsPatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(OneFromOptionsDropRule),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(OneFromOptionsDropRulePatch), nameof(OneFromOptionsDropRulePatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(OneFromOptionsDropRulePatch),
+                nameof(OneFromOptionsDropRulePatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(OneFromOptionsNotScaledWithLuckDropRule),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(OneFromOptionsNotScaledWithLuckDropRulePatch), nameof(OneFromOptionsNotScaledWithLuckDropRulePatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(OneFromOptionsNotScaledWithLuckDropRulePatch),
+                nameof(OneFromOptionsNotScaledWithLuckDropRulePatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(FromOptionsWithoutRepeatsDropRule),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(FromOptionsWithoutRepeatsDropRulePatch), nameof(FromOptionsWithoutRepeatsDropRulePatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(FromOptionsWithoutRepeatsDropRulePatch),
+                nameof(FromOptionsWithoutRepeatsDropRulePatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(
             typeof(MechBossSpawnersDropRule),
             "TryDroppingItem",
-            prefix: Patcher.GetHarmonyMethod(typeof(MechBossSpawnersDropRulePatch), nameof(MechBossSpawnersDropRulePatch.TryDroppingItemPrefix))
+            prefix: Patcher.GetHarmonyMethod(
+                typeof(MechBossSpawnersDropRulePatch),
+                nameof(MechBossSpawnersDropRulePatch.TryDroppingItemPrefix)
+            )
         );
 
         patcher.Patch(

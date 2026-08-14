@@ -7,13 +7,23 @@ namespace DeterministicDrops.DropSystem;
 
 internal static class DropSelection
 {
-    public static IEnumerable<DropResult> GetDropResults(DropContext dropContext, GameContext gameContext, int dropCycle)
+    public static IEnumerable<DropResult> GetDropResults(
+        DropContext dropContext,
+        GameContext gameContext,
+        int dropCycle
+    )
     {
         var droppedItemIds = GetDroppedItemIds(dropContext.Drop, dropCycle, gameContext.WorldSeed);
 
         foreach (short droppedItemId in droppedItemIds)
         {
-            int dropAmount = GetDropAmount(droppedItemId, dropCycle, dropContext.MinDropAmount, dropContext.MaxDropAmount, gameContext.WorldSeed);
+            int dropAmount = GetDropAmount(
+                droppedItemId,
+                dropCycle,
+                dropContext.MinDropAmount,
+                dropContext.MaxDropAmount,
+                gameContext.WorldSeed
+            );
             yield return new DropResult(droppedItemId, dropAmount);
         }
     }
@@ -35,7 +45,13 @@ internal static class DropSelection
             yield return itemId;
     }
 
-    private static int GetDropAmount(short itemId, int dropCycle, int minAmount, int maxAmount, int worldSeed)
+    private static int GetDropAmount(
+        short itemId,
+        int dropCycle,
+        int minAmount,
+        int maxAmount,
+        int worldSeed
+    )
     {
         int count = maxAmount - minAmount + 1;
         int amountCycle = dropCycle / count;

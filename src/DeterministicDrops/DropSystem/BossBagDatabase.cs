@@ -6,8 +6,8 @@ namespace DeterministicDrops.DropSystem;
 
 internal static class BossBagDatabase
 {
-    public static DropContext[] GetDropContexts(int bossBagId)
-    => s_bossBags.TryGetValue(bossBagId, out var contexts) ? contexts : [];
+    public static DropContext[] GetDropContexts(int bossBagId) =>
+        s_bossBags.TryGetValue(bossBagId, out var contexts) ? contexts : [];
 
     public static CoinAmount GetCoinAmount(int bossBagId)
     {
@@ -17,12 +17,23 @@ internal static class BossBagDatabase
         return new CoinAmount(value);
     }
 
-    private static DropContext[] DevSets() => [
-        new(new(s_devSets), chanceDenominator: 8, dropCondition: DropProcessor.DropCondition.CelebrationMK10),
-        new(new(s_devSets), chanceDenominator: 16, dropCondition: DropProcessor.DropCondition.NotCelebrationMK10),
-    ];
+    private static DropContext[] DevSets() =>
+        [
+            new(
+                new(s_devSets),
+                chanceDenominator: 8,
+                dropCondition: DropProcessor.DropCondition.CelebrationMK10
+            ),
+            new(
+                new(s_devSets),
+                chanceDenominator: 16,
+                dropCondition: DropProcessor.DropCondition.NotCelebrationMK10
+            ),
+        ];
 
-    private static readonly short[][] s_devSets = [
+    // csharpier-ignore-start
+    private static readonly short[][] s_devSets =
+    [
         [ItemID.AaronsBreastplate, ItemID.AaronsLeggings, ItemID.AaronsHelmet],
         [ItemID.ArkhalisHat, ItemID.ArkhalisShirt, ItemID.ArkhalisPants, ItemID.ArkhalisWings, ItemID.Arkhalis],
         [ItemID.CenxsTiara, ItemID.CenxsBreastplate, ItemID.CenxsLeggings, ItemID.CenxsWings],
@@ -45,201 +56,399 @@ internal static class BossBagDatabase
         [ItemID.KazzymodusHood, ItemID.KazzymodusChestpiece, ItemID.KazzymodusLeggings, ItemID.KazzymodusWings],
         [ItemID.LunasHead, ItemID.LunasBody, ItemID.LunasLegs, ItemID.LunasCloak, ItemID.LunasWings],
     ];
+    // csharpier-ignore-end
 
     private static readonly Dictionary<int, DropContext[]> s_bossBags = new()
     {
-        { ItemID.KingSlimeBossBag, [
-            new DropContext(new(ItemID.RoyalGel)),
-            new DropContext(new(ItemID.Solidifier)),
-            new DropContext(new(ItemID.SlimySaddle), chanceDenominator: 2),
-            new DropContext(new(ItemID.SlimeGun), chanceDenominator: 2),
-            new DropContext(new(ItemID.SlimeHook), chanceDenominator: 2),
-            new DropContext(new(ItemID.KingSlimeMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.SlimeStaff), chanceDenominator: 30),
-            new DropContext(new([ItemID.NinjaHood, ItemID.NinjaShirt, ItemID.NinjaPants]), dropAttemptCount: 2),
-        ] },
-
-        { ItemID.EyeOfCthulhuBossBag, [
-            new DropContext(new(ItemID.EoCShield)),
-            new DropContext(new(ItemID.EyeMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.Binoculars), chanceDenominator: 30),
-            new DropContext(new(ItemID.UnholyArrow), minDropAmount: 20, maxDropAmount: 50),
-            new DropContext(new(ItemID.CrimtaneOre), dropCondition: DropProcessor.DropCondition.Crimson, minDropAmount: 30, maxDropAmount: 90),
-            new DropContext(new(ItemID.CrimsonSeeds), dropCondition: DropProcessor.DropCondition.Crimson, minDropAmount: 1, maxDropAmount: 3),
-            new DropContext(new(ItemID.DemoniteOre), dropCondition: DropProcessor.DropCondition.Corruption, minDropAmount: 30, maxDropAmount: 90),
-            new DropContext(new(ItemID.CorruptSeeds), dropCondition: DropProcessor.DropCondition.Corruption, minDropAmount: 1, maxDropAmount: 3),
-        ] },
-
-        { ItemID.EaterOfWorldsBossBag, [
-            new DropContext(new(ItemID.WormScarf)),
-            new DropContext(new(ItemID.EaterMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.EatersBone), chanceDenominator: 20),
-            new DropContext(new(ItemID.DemoniteOre), minDropAmount: 80, maxDropAmount: 110, dropCondition: DropProcessor.DropCondition.Crimson | DropProcessor.DropCondition.NotMasterMode),
-            new DropContext(new(ItemID.DemoniteOre), minDropAmount: 110, maxDropAmount: 135, dropCondition: DropProcessor.DropCondition.Crimson | DropProcessor.DropCondition.MasterMode),
-            new DropContext(new(ItemID.ShadowScale), minDropAmount: 20, maxDropAmount: 40, dropCondition: DropProcessor.DropCondition.Corruption | DropProcessor.DropCondition.NotMasterMode),
-            new DropContext(new(ItemID.ShadowScale), minDropAmount: 30, maxDropAmount: 50, dropCondition: DropProcessor.DropCondition.Corruption | DropProcessor.DropCondition.MasterMode),
-        ] },
-
-        { ItemID.BrainOfCthulhuBossBag, [
-            new DropContext(new(ItemID.BrainOfConfusion)),
-            new DropContext(new(ItemID.BrainMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.BoneRattle), chanceDenominator: 20),
-            new DropContext(new(ItemID.CrimtaneOre), minDropAmount: 80, maxDropAmount: 110, dropCondition: DropProcessor.DropCondition.Crimson | DropProcessor.DropCondition.NotMasterMode),
-            new DropContext(new(ItemID.CrimtaneOre), minDropAmount: 110, maxDropAmount: 135, dropCondition: DropProcessor.DropCondition.Crimson | DropProcessor.DropCondition.MasterMode),
-            new DropContext(new(ItemID.TissueSample), minDropAmount: 20, maxDropAmount: 40, dropCondition: DropProcessor.DropCondition.Corruption | DropProcessor.DropCondition.NotMasterMode),
-            new DropContext(new(ItemID.TissueSample), minDropAmount: 30, maxDropAmount: 50, dropCondition: DropProcessor.DropCondition.Corruption | DropProcessor.DropCondition.MasterMode),
-        ] },
-
-        { ItemID.QueenBeeBossBag, [
-            new DropContext(new(ItemID.HiveBackpack)),
-            new DropContext(new(ItemID.HiveWand)),
-            new DropContext(new(ItemID.HoneyComb), chanceDenominator: 3),
-            new DropContext(new(ItemID.BeeMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.Nectar), chanceDenominator: 9),
-            new DropContext(new(ItemID.QueenOfBees), chanceDenominator: 9),
-            new DropContext(new(ItemID.HoneyedGoggles), chanceDenominator: 9),
-            new DropContext(new(ItemID.Beenade), minDropAmount: 10, maxDropAmount: 29),
-            new DropContext(new(ItemID.BeeWax), minDropAmount: 17, maxDropAmount: 30),
-            new DropContext(new([ItemID.BeeGun, ItemID.BeeKeeper, ItemID.BeesKnees])),
-            new DropContext(new([ItemID.BeeHat, ItemID.BeeShirt, ItemID.BeePants])),
-        ] },
-
-        { ItemID.DeerclopsBossBag, [
-            new DropContext(new(ItemID.BoneHelm)),
-            new DropContext(new(ItemID.ChesterPetItem), chanceDenominator: 3),
-            new DropContext(new(ItemID.Eyebrella), chanceDenominator: 3),
-            new DropContext(new(ItemID.DontStarveShaderItem), chanceDenominator: 3),
-            new DropContext(new(ItemID.DizzyHat), chanceDenominator: 14),
-            new DropContext(new([ItemID.PewMaticHorn, ItemID.WeatherPain, ItemID.HoundiusShootius, ItemID.LucyTheAxe])),
-        ] },
-
-        { ItemID.SkeletronBossBag, [
-            new DropContext(new(ItemID.BoneGlove)),
-            new DropContext(new([ItemID.SkeletronMask, ItemID.SkeletronHand, ItemID.BookofSkulls])),
-        ] },
-
-        { ItemID.WallOfFleshBossBag, [
-            new DropContext(new(ItemID.DemonHeart), dropCondition: DropProcessor.DropCondition.NotDemonHeart),
-            new DropContext(new(ItemID.Pwnhammer)),
-            new DropContext(new(ItemID.FleshMask), chanceDenominator: 7),
-            new DropContext(new([ItemID.WarriorEmblem, ItemID.RangerEmblem, ItemID.SorcererEmblem, ItemID.SummonerEmblem])),
-            new DropContext(new([ItemID.BreakerBlade, ItemID.ClockworkAssaultRifle, ItemID.LaserRifle, ItemID.FireWhip])),
-        ] },
-
-        { ItemID.QueenSlimeBossBag, [
-            new DropContext(new(ItemID.VolatileGelatin)),
-            new DropContext(new(ItemID.QueenSlimeMountSaddle), chanceDenominator: 2),
-            new DropContext(new(ItemID.QueenSlimeHook), chanceDenominator: 2),
-            new DropContext(new(ItemID.Smolstar), chanceDenominator: 3),
-            new DropContext(new(ItemID.QueenSlimeMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.GelBalloon), minDropAmount: 25, maxDropAmount: 74),
-            new DropContext(new([ItemID.CrystalNinjaHelmet, ItemID.CrystalNinjaChestplate, ItemID.CrystalNinjaLeggings]), dropAttemptCount: 2),
-        ] },
-
-        { ItemID.TwinsBossBag, [
-            new DropContext(new(ItemID.MechanicalWheelPiece)),
-            new DropContext(new(ItemID.TwinMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.SoulofSight), minDropAmount: 25, maxDropAmount: 40),
-            new DropContext(new(ItemID.HallowedBar), minDropAmount: 20, maxDropAmount: 35),
-            .. DevSets(),
-        ] },
-
-        { ItemID.DestroyerBossBag, [
-            new DropContext(new(ItemID.MechanicalWagonPiece)),
-            new DropContext(new(ItemID.DestroyerMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.SoulofMight), minDropAmount: 25, maxDropAmount: 40),
-            new DropContext(new(ItemID.HallowedBar), minDropAmount: 20, maxDropAmount: 35),
-            .. DevSets(),
-        ] },
-
-        { ItemID.SkeletronPrimeBossBag, [
-            new DropContext(new(ItemID.MechanicalBatteryPiece)),
-            new DropContext(new(ItemID.SkeletronPrimeMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.SoulofFright), minDropAmount: 25, maxDropAmount: 40),
-            new DropContext(new(ItemID.HallowedBar), minDropAmount: 20, maxDropAmount: 35),
-            .. DevSets(),
-        ] },
-
-        { ItemID.PlanteraBossBag, [
-            new DropContext(new(ItemID.SporeSac)),
-            new DropContext(new(ItemID.TempleKey)),
-            new DropContext(new(ItemID.PygmyStaff), chanceDenominator: 2),
-            new DropContext(new(ItemID.ThornHook), chanceDenominator: 10),
-            new DropContext(new(ItemID.PlanteraMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.Seedling), chanceDenominator: 15),
-            new DropContext(new(ItemID.TheAxe), chanceDenominator: 20),
-            new DropContext(new([
-                ItemID.GrenadeLauncher,
-                ItemID.VenusMagnum,
-                ItemID.NettleBurst,
-                ItemID.LeafBlower,
-                ItemID.FlowerPow,
-                ItemID.WaspGun,
-                ItemID.Seedler,
-                ItemID.FlowerWhip]),
-                extraDrops: new Dictionary<int, DropContext>() {
-                { ItemID.GrenadeLauncher, new(new(ItemID.RocketI), minDropAmount: 50, maxDropAmount: 149) }
-            }),
-            .. DevSets(),
-        ] },
-
-        { ItemID.GolemBossBag, [
-            new DropContext(new(ItemID.ShinyStone)),
-            new DropContext(new(ItemID.Picksaw), chanceDenominator: 3),
-            new DropContext(new(ItemID.GolemMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.BeetleHusk), minDropAmount: 18, maxDropAmount: 23),
-            new DropContext(new([
-                ItemID.Stynger,
-                ItemID.PossessedHatchet,
-                ItemID.SunStone,
-                ItemID.EyeoftheGolem,
-                ItemID.HeatRay,
-                ItemID.StaffofEarth,
-                ItemID.GolemFist]),
-                extraDrops: new Dictionary<int, DropContext>() {
-                { ItemID.GrenadeLauncher, new(new(ItemID.StyngerBolt), minDropAmount: 60, maxDropAmount: 99) }
-            }),
-            .. DevSets(),
-        ] },
-
-        { ItemID.FishronBossBag, [
-            new DropContext(new(ItemID.ShrimpyTruffle)),
-            new DropContext(new(ItemID.DukeFishronMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.FishronWings), chanceDenominator: 10),
-            new DropContext(new([ItemID.BubbleGun, ItemID.Flairon, ItemID.RazorbladeTyphoon, ItemID.TempestStaff, ItemID.Tsunami, ItemID.EelWhip])),
-            .. DevSets(),
-        ] },
-
-        { ItemID.FairyQueenBossBag, [
-            new DropContext(new(ItemID.EmpressFlightBooster)),
-            new DropContext(new(ItemID.HallowBossDye), chanceDenominator: 4, minDropAmount: 3, maxDropAmount: 3),
-            new DropContext(new(ItemID.FairyQueenMask), chanceDenominator: 7),
-            new DropContext(new(ItemID.FairyWings), chanceDenominator: 10),
-            new DropContext(new(ItemID.SparkleGuitar), chanceDenominator: 20),
-            new DropContext(new(ItemID.RainbowCursor), chanceDenominator: 20),
-            new DropContext(new([ItemID.FairyQueenMagicItem, ItemID.PiercingStarlight, ItemID.RainbowWhip, ItemID.FairyQueenRangedItem])),
-            .. DevSets(),
-        ] },
-
-        { ItemID.BossBagBetsy, [
-            new DropContext(new(ItemID.BetsyWings), chanceDenominator: 4),
-            new DropContext(new(ItemID.BossMaskBetsy), chanceDenominator: 7),
-            new DropContext(new(ItemID.DefenderMedal), minDropAmount: 30, maxDropAmount: 49),
-            new DropContext(new([ItemID.DD2BetsyBow, ItemID.MonkStaffT3, ItemID.ApprenticeStaffT3, ItemID.DD2SquireBetsySword])),
-            .. DevSets(),
-        ] },
-
-        { ItemID.MoonLordBossBag, [
-            new DropContext(new(ItemID.GravityGlobe)),
-            new DropContext(new(ItemID.SuspiciousLookingTentacle)),
-            new DropContext(new(ItemID.LongRainbowTrailWings)),
-            new DropContext(new(ItemID.PortalGun), dropCondition: DropProcessor.DropCondition.NoPortalGun),
-            new DropContext(new(ItemID.BossMaskMoonlord), chanceDenominator: 7),
-            new DropContext(new(ItemID.MeowmereMinecart), chanceDenominator: 10),
-            new DropContext(new(ItemID.LunarOre), minDropAmount: 90, maxDropAmount: 110),
-            new DropContext(new([ItemID.Meowmere, ItemID.Terrarian, ItemID.StarWrath, ItemID.SDMG, ItemID.Celeb2, ItemID.LastPrism, ItemID.LunarFlareBook, ItemID.RainbowCrystalStaff, ItemID.MoonlordTurretStaff, ItemID.MoonLordWhip]), dropAttemptCount: 2),
-            .. DevSets(),
-        ] },
+        {
+            ItemID.KingSlimeBossBag,
+            [
+                new(new(ItemID.RoyalGel)),
+                new(new(ItemID.Solidifier)),
+                new(new(ItemID.SlimySaddle), chanceDenominator: 2),
+                new(new(ItemID.SlimeGun), chanceDenominator: 2),
+                new(new(ItemID.SlimeHook), chanceDenominator: 2),
+                new(new(ItemID.KingSlimeMask), chanceDenominator: 7),
+                new(new(ItemID.SlimeStaff), chanceDenominator: 30),
+                new(
+                    new([ItemID.NinjaHood, ItemID.NinjaShirt, ItemID.NinjaPants]),
+                    dropAttemptCount: 2
+                ),
+            ]
+        },
+        {
+            ItemID.EyeOfCthulhuBossBag,
+            [
+                new(new(ItemID.EoCShield)),
+                new(new(ItemID.EyeMask), chanceDenominator: 7),
+                new(new(ItemID.Binoculars), chanceDenominator: 30),
+                new(new(ItemID.UnholyArrow), minDropAmount: 20, maxDropAmount: 50),
+                new(
+                    new(ItemID.CrimtaneOre),
+                    dropCondition: DropProcessor.DropCondition.Crimson,
+                    minDropAmount: 30,
+                    maxDropAmount: 90
+                ),
+                new(
+                    new(ItemID.CrimsonSeeds),
+                    dropCondition: DropProcessor.DropCondition.Crimson,
+                    minDropAmount: 1,
+                    maxDropAmount: 3
+                ),
+                new(
+                    new(ItemID.DemoniteOre),
+                    dropCondition: DropProcessor.DropCondition.Corruption,
+                    minDropAmount: 30,
+                    maxDropAmount: 90
+                ),
+                new(
+                    new(ItemID.CorruptSeeds),
+                    dropCondition: DropProcessor.DropCondition.Corruption,
+                    minDropAmount: 1,
+                    maxDropAmount: 3
+                ),
+            ]
+        },
+        {
+            ItemID.EaterOfWorldsBossBag,
+            [
+                new(new(ItemID.WormScarf)),
+                new(new(ItemID.EaterMask), chanceDenominator: 7),
+                new(new(ItemID.EatersBone), chanceDenominator: 20),
+                new(
+                    new(ItemID.DemoniteOre),
+                    minDropAmount: 80,
+                    maxDropAmount: 110,
+                    dropCondition: DropProcessor.DropCondition.Crimson
+                        | DropProcessor.DropCondition.NotMasterMode
+                ),
+                new(
+                    new(ItemID.DemoniteOre),
+                    minDropAmount: 110,
+                    maxDropAmount: 135,
+                    dropCondition: DropProcessor.DropCondition.Crimson
+                        | DropProcessor.DropCondition.MasterMode
+                ),
+                new(
+                    new(ItemID.ShadowScale),
+                    minDropAmount: 20,
+                    maxDropAmount: 40,
+                    dropCondition: DropProcessor.DropCondition.Corruption
+                        | DropProcessor.DropCondition.NotMasterMode
+                ),
+                new(
+                    new(ItemID.ShadowScale),
+                    minDropAmount: 30,
+                    maxDropAmount: 50,
+                    dropCondition: DropProcessor.DropCondition.Corruption
+                        | DropProcessor.DropCondition.MasterMode
+                ),
+            ]
+        },
+        {
+            ItemID.BrainOfCthulhuBossBag,
+            [
+                new(new(ItemID.BrainOfConfusion)),
+                new(new(ItemID.BrainMask), chanceDenominator: 7),
+                new(new(ItemID.BoneRattle), chanceDenominator: 20),
+                new(
+                    new(ItemID.CrimtaneOre),
+                    minDropAmount: 80,
+                    maxDropAmount: 110,
+                    dropCondition: DropProcessor.DropCondition.Crimson
+                        | DropProcessor.DropCondition.NotMasterMode
+                ),
+                new(
+                    new(ItemID.CrimtaneOre),
+                    minDropAmount: 110,
+                    maxDropAmount: 135,
+                    dropCondition: DropProcessor.DropCondition.Crimson
+                        | DropProcessor.DropCondition.MasterMode
+                ),
+                new(
+                    new(ItemID.TissueSample),
+                    minDropAmount: 20,
+                    maxDropAmount: 40,
+                    dropCondition: DropProcessor.DropCondition.Corruption
+                        | DropProcessor.DropCondition.NotMasterMode
+                ),
+                new(
+                    new(ItemID.TissueSample),
+                    minDropAmount: 30,
+                    maxDropAmount: 50,
+                    dropCondition: DropProcessor.DropCondition.Corruption
+                        | DropProcessor.DropCondition.MasterMode
+                ),
+            ]
+        },
+        {
+            ItemID.QueenBeeBossBag,
+            [
+                new(new(ItemID.HiveBackpack)),
+                new(new(ItemID.HiveWand)),
+                new(new(ItemID.HoneyComb), chanceDenominator: 3),
+                new(new(ItemID.BeeMask), chanceDenominator: 7),
+                new(new(ItemID.Nectar), chanceDenominator: 9),
+                new(new(ItemID.QueenOfBees), chanceDenominator: 9),
+                new(new(ItemID.HoneyedGoggles), chanceDenominator: 9),
+                new(new(ItemID.Beenade), minDropAmount: 10, maxDropAmount: 29),
+                new(new(ItemID.BeeWax), minDropAmount: 17, maxDropAmount: 30),
+                new(new([ItemID.BeeGun, ItemID.BeeKeeper, ItemID.BeesKnees])),
+                new(new([ItemID.BeeHat, ItemID.BeeShirt, ItemID.BeePants])),
+            ]
+        },
+        {
+            ItemID.DeerclopsBossBag,
+            [
+                new(new(ItemID.BoneHelm)),
+                new(new(ItemID.ChesterPetItem), chanceDenominator: 3),
+                new(new(ItemID.Eyebrella), chanceDenominator: 3),
+                new(new(ItemID.DontStarveShaderItem), chanceDenominator: 3),
+                new(new(ItemID.DizzyHat), chanceDenominator: 14),
+                new(
+                    new([
+                        ItemID.PewMaticHorn,
+                        ItemID.WeatherPain,
+                        ItemID.HoundiusShootius,
+                        ItemID.LucyTheAxe,
+                    ])
+                ),
+            ]
+        },
+        {
+            ItemID.SkeletronBossBag,
+            [
+                new(new(ItemID.BoneGlove)),
+                new(new([ItemID.SkeletronMask, ItemID.SkeletronHand, ItemID.BookofSkulls])),
+            ]
+        },
+        {
+            ItemID.WallOfFleshBossBag,
+            [
+                new(
+                    new(ItemID.DemonHeart),
+                    dropCondition: DropProcessor.DropCondition.NotDemonHeart
+                ),
+                new(new(ItemID.Pwnhammer)),
+                new(new(ItemID.FleshMask), chanceDenominator: 7),
+                new(
+                    new([
+                        ItemID.WarriorEmblem,
+                        ItemID.RangerEmblem,
+                        ItemID.SorcererEmblem,
+                        ItemID.SummonerEmblem,
+                    ])
+                ),
+                new(
+                    new([
+                        ItemID.BreakerBlade,
+                        ItemID.ClockworkAssaultRifle,
+                        ItemID.LaserRifle,
+                        ItemID.FireWhip,
+                    ])
+                ),
+            ]
+        },
+        {
+            ItemID.QueenSlimeBossBag,
+            [
+                new(new(ItemID.VolatileGelatin)),
+                new(new(ItemID.QueenSlimeMountSaddle), chanceDenominator: 2),
+                new(new(ItemID.QueenSlimeHook), chanceDenominator: 2),
+                new(new(ItemID.Smolstar), chanceDenominator: 3),
+                new(new(ItemID.QueenSlimeMask), chanceDenominator: 7),
+                new(new(ItemID.GelBalloon), minDropAmount: 25, maxDropAmount: 74),
+                new(
+                    new([
+                        ItemID.CrystalNinjaHelmet,
+                        ItemID.CrystalNinjaChestplate,
+                        ItemID.CrystalNinjaLeggings,
+                    ]),
+                    dropAttemptCount: 2
+                ),
+            ]
+        },
+        {
+            ItemID.TwinsBossBag,
+            [
+                new(new(ItemID.MechanicalWheelPiece)),
+                new(new(ItemID.TwinMask), chanceDenominator: 7),
+                new(new(ItemID.SoulofSight), minDropAmount: 25, maxDropAmount: 40),
+                new(new(ItemID.HallowedBar), minDropAmount: 20, maxDropAmount: 35),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.DestroyerBossBag,
+            [
+                new(new(ItemID.MechanicalWagonPiece)),
+                new(new(ItemID.DestroyerMask), chanceDenominator: 7),
+                new(new(ItemID.SoulofMight), minDropAmount: 25, maxDropAmount: 40),
+                new(new(ItemID.HallowedBar), minDropAmount: 20, maxDropAmount: 35),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.SkeletronPrimeBossBag,
+            [
+                new(new(ItemID.MechanicalBatteryPiece)),
+                new(new(ItemID.SkeletronPrimeMask), chanceDenominator: 7),
+                new(new(ItemID.SoulofFright), minDropAmount: 25, maxDropAmount: 40),
+                new(new(ItemID.HallowedBar), minDropAmount: 20, maxDropAmount: 35),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.PlanteraBossBag,
+            [
+                new(new(ItemID.SporeSac)),
+                new(new(ItemID.TempleKey)),
+                new(new(ItemID.PygmyStaff), chanceDenominator: 2),
+                new(new(ItemID.ThornHook), chanceDenominator: 10),
+                new(new(ItemID.PlanteraMask), chanceDenominator: 7),
+                new(new(ItemID.Seedling), chanceDenominator: 15),
+                new(new(ItemID.TheAxe), chanceDenominator: 20),
+                new(
+                    new([
+                        ItemID.GrenadeLauncher,
+                        ItemID.VenusMagnum,
+                        ItemID.NettleBurst,
+                        ItemID.LeafBlower,
+                        ItemID.FlowerPow,
+                        ItemID.WaspGun,
+                        ItemID.Seedler,
+                        ItemID.FlowerWhip,
+                    ]),
+                    extraDrops: new()
+                    {
+                        [ItemID.GrenadeLauncher] = new(
+                            new(ItemID.RocketI),
+                            minDropAmount: 50,
+                            maxDropAmount: 149
+                        ),
+                    }
+                ),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.GolemBossBag,
+            [
+                new(new(ItemID.ShinyStone)),
+                new(new(ItemID.Picksaw), chanceDenominator: 3),
+                new(new(ItemID.GolemMask), chanceDenominator: 7),
+                new(new(ItemID.BeetleHusk), minDropAmount: 18, maxDropAmount: 23),
+                new(
+                    new([
+                        ItemID.Stynger,
+                        ItemID.PossessedHatchet,
+                        ItemID.SunStone,
+                        ItemID.EyeoftheGolem,
+                        ItemID.HeatRay,
+                        ItemID.StaffofEarth,
+                        ItemID.GolemFist,
+                    ]),
+                    extraDrops: new()
+                    {
+                        [ItemID.Stynger] = new(
+                            new(ItemID.StyngerBolt),
+                            minDropAmount: 60,
+                            maxDropAmount: 99
+                        ),
+                    }
+                ),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.FishronBossBag,
+            [
+                new(new(ItemID.ShrimpyTruffle)),
+                new(new(ItemID.DukeFishronMask), chanceDenominator: 7),
+                new(new(ItemID.FishronWings), chanceDenominator: 10),
+                new(
+                    new([
+                        ItemID.BubbleGun,
+                        ItemID.Flairon,
+                        ItemID.RazorbladeTyphoon,
+                        ItemID.TempestStaff,
+                        ItemID.Tsunami,
+                        ItemID.EelWhip,
+                    ])
+                ),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.FairyQueenBossBag,
+            [
+                new(new(ItemID.EmpressFlightBooster)),
+                new(
+                    new(ItemID.HallowBossDye),
+                    chanceDenominator: 4,
+                    minDropAmount: 3,
+                    maxDropAmount: 3
+                ),
+                new(new(ItemID.FairyQueenMask), chanceDenominator: 7),
+                new(new(ItemID.FairyWings), chanceDenominator: 10),
+                new(new(ItemID.SparkleGuitar), chanceDenominator: 20),
+                new(new(ItemID.RainbowCursor), chanceDenominator: 20),
+                new(
+                    new([
+                        ItemID.FairyQueenMagicItem,
+                        ItemID.PiercingStarlight,
+                        ItemID.RainbowWhip,
+                        ItemID.FairyQueenRangedItem,
+                    ])
+                ),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.BossBagBetsy,
+            [
+                new(new(ItemID.BetsyWings), chanceDenominator: 4),
+                new(new(ItemID.BossMaskBetsy), chanceDenominator: 7),
+                new(new(ItemID.DefenderMedal), minDropAmount: 30, maxDropAmount: 49),
+                new(
+                    new([
+                        ItemID.DD2BetsyBow,
+                        ItemID.MonkStaffT3,
+                        ItemID.ApprenticeStaffT3,
+                        ItemID.DD2SquireBetsySword,
+                    ])
+                ),
+                .. DevSets(),
+            ]
+        },
+        {
+            ItemID.MoonLordBossBag,
+            [
+                new(new(ItemID.GravityGlobe)),
+                new(new(ItemID.SuspiciousLookingTentacle)),
+                new(new(ItemID.LongRainbowTrailWings)),
+                new(new(ItemID.PortalGun), dropCondition: DropProcessor.DropCondition.NoPortalGun),
+                new(new(ItemID.BossMaskMoonlord), chanceDenominator: 7),
+                new(new(ItemID.MeowmereMinecart), chanceDenominator: 10),
+                new(new(ItemID.LunarOre), minDropAmount: 90, maxDropAmount: 110),
+                new(
+                    new([
+                        ItemID.Meowmere,
+                        ItemID.Terrarian,
+                        ItemID.StarWrath,
+                        ItemID.SDMG,
+                        ItemID.Celeb2,
+                        ItemID.LastPrism,
+                        ItemID.LunarFlareBook,
+                        ItemID.RainbowCrystalStaff,
+                        ItemID.MoonlordTurretStaff,
+                        ItemID.MoonLordWhip,
+                    ]),
+                    dropAttemptCount: 2
+                ),
+                .. DevSets(),
+            ]
+        },
     };
 
     private static readonly Dictionary<int, CoinAmount> s_coinAmounts = new()
