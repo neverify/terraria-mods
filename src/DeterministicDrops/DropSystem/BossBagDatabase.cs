@@ -9,9 +9,6 @@ internal static class BossBagDatabase
     public static DropContext[] GetDropContexts(int bossBagId)
     => s_bossBags.TryGetValue(bossBagId, out var contexts) ? contexts : [];
 
-    public static DropContext[] GetExtraDrops(int itemId)
-    => s_extraDrops.TryGetValue(itemId, out var contexts) ? contexts : [];
-
     public static CoinAmount GetCoinAmount(int bossBagId)
     {
         s_coinAmounts.TryGetValue(bossBagId, out var amount);
@@ -171,7 +168,18 @@ internal static class BossBagDatabase
             new DropContext(new(ItemID.PlanteraMask), chanceDenominator: 7),
             new DropContext(new(ItemID.Seedling), chanceDenominator: 15),
             new DropContext(new(ItemID.TheAxe), chanceDenominator: 20),
-            new DropContext(new([ItemID.GrenadeLauncher, ItemID.VenusMagnum, ItemID.NettleBurst, ItemID.LeafBlower, ItemID.FlowerPow, ItemID.WaspGun, ItemID.Seedler, ItemID.FlowerWhip])),
+            new DropContext(new([
+                ItemID.GrenadeLauncher,
+                ItemID.VenusMagnum,
+                ItemID.NettleBurst,
+                ItemID.LeafBlower,
+                ItemID.FlowerPow,
+                ItemID.WaspGun,
+                ItemID.Seedler,
+                ItemID.FlowerWhip]),
+                extraDrops: new Dictionary<int, DropContext>() {
+                { ItemID.GrenadeLauncher, new(new(ItemID.RocketI), minDropAmount: 50, maxDropAmount: 149) }
+            }),
             .. DevSets(),
         ] },
 
@@ -180,7 +188,17 @@ internal static class BossBagDatabase
             new DropContext(new(ItemID.Picksaw), chanceDenominator: 3),
             new DropContext(new(ItemID.GolemMask), chanceDenominator: 7),
             new DropContext(new(ItemID.BeetleHusk), minDropAmount: 18, maxDropAmount: 23),
-            new DropContext(new([ItemID.Stynger, ItemID.PossessedHatchet, ItemID.SunStone, ItemID.EyeoftheGolem, ItemID.HeatRay, ItemID.StaffofEarth, ItemID.GolemFist])),
+            new DropContext(new([
+                ItemID.Stynger,
+                ItemID.PossessedHatchet,
+                ItemID.SunStone,
+                ItemID.EyeoftheGolem,
+                ItemID.HeatRay,
+                ItemID.StaffofEarth,
+                ItemID.GolemFist]),
+                extraDrops: new Dictionary<int, DropContext>() {
+                { ItemID.GrenadeLauncher, new(new(ItemID.StyngerBolt), minDropAmount: 60, maxDropAmount: 99) }
+            }),
             .. DevSets(),
         ] },
 
@@ -222,12 +240,6 @@ internal static class BossBagDatabase
             new DropContext(new([ItemID.Meowmere, ItemID.Terrarian, ItemID.StarWrath, ItemID.SDMG, ItemID.Celeb2, ItemID.LastPrism, ItemID.LunarFlareBook, ItemID.RainbowCrystalStaff, ItemID.MoonlordTurretStaff, ItemID.MoonLordWhip]), dropAttemptCount: 2),
             .. DevSets(),
         ] },
-    };
-
-    private static readonly Dictionary<int, DropContext[]> s_extraDrops = new()
-    {
-        { ItemID.GrenadeLauncher, [new DropContext(new(ItemID.RocketI), minDropAmount: 50, maxDropAmount: 149)] },
-        { ItemID.Stynger, [new DropContext(new(ItemID.StyngerBolt), minDropAmount: 60, maxDropAmount: 99)] },
     };
 
     private static readonly Dictionary<int, CoinAmount> s_coinAmounts = new()

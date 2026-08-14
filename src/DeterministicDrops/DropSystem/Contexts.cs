@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 
@@ -12,7 +13,8 @@ internal sealed class DropContext(
     int minDropAmount = 1,
     int maxDropAmount = 1,
     DropChance.LuckType luckType = DropChance.LuckType.None,
-    DropProcessor.DropCondition dropCondition = DropProcessor.DropCondition.None)
+    DropProcessor.DropCondition dropCondition = DropProcessor.DropCondition.None,
+    Dictionary<int, DropContext> extraDrops = null)
 {
     public Drop Drop { get; } = drop;
     public int Numerator { get; } = chanceNumerator;
@@ -23,6 +25,7 @@ internal sealed class DropContext(
     public int MaxDropAmount { get; } = maxDropAmount;
     public DropChance.LuckType LuckType { get; } = luckType;
     public DropProcessor.DropCondition Condition { get; } = dropCondition;
+    public Dictionary<int, DropContext> ExtraDrops { get; } = extraDrops ?? [];
 }
 
 internal sealed class Drop

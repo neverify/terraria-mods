@@ -23,17 +23,7 @@ internal sealed class OpenBossBagPatch
             var dropResults = DropProcessor.ProcessDrop(dropContext, Mod.Instance.DropStateStore);
 
             foreach (var dropResult in dropResults)
-            {
                 __instance.QuickSpawnItem(itemSource, dropResult.ItemId, dropResult.Amount);
-
-                var extraDrops = BossBagDatabase.GetExtraDrops(dropResult.ItemId);
-                foreach (var extraDrop in extraDrops)
-                {
-                    var extraDropResults = DropProcessor.ProcessDrop(extraDrop, Mod.Instance.DropStateStore);
-                    foreach (var extraDropResult in extraDropResults)
-                        __instance.QuickSpawnItem(itemSource, extraDropResult.ItemId, extraDropResult.Amount);
-                }
-            }
         }
 
         var coinAmount = BossBagDatabase.GetCoinAmount(type);

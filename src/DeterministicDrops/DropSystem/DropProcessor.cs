@@ -86,10 +86,7 @@ internal static class DropProcessor
             return result;
 
         result = ProcessDrop(mechanicalSkullDropContext, store);
-        if (result.Any())
-            return result;
-
-        return [];
+        return result.Any() ? result : [];
     }
 
     public static IEnumerable<DropResult> ProcessDrop(DropContext dropContext, DropStateStore store)
@@ -107,7 +104,17 @@ internal static class DropProcessor
                 var dropResults = DropSelection.GetDropResults(dropContext, gameContext, dropCycle);
 
                 foreach (var dropResult in dropResults)
+                {
+                    if (dropContext.ExtraDrops.TryGetValue(dropResult.ItemId, out DropContext extraDropContext))
+                    {
+                        var extraDropResults = ProcessDrop(extraDropContext, store);
+
+                        foreach (var extraDropResult in extraDropResults)
+                            yield return extraDropResult;
+                    }
+
                     yield return dropResult;
+                }
             }
         }
     }
