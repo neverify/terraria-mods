@@ -9,7 +9,7 @@ internal sealed class ResolveRulePatch
 {
     internal static void Postfix(IItemDropRule rule, ItemDropAttemptResult __result)
     {
-        if (!Mod.Config.Enabled)
+        if (!Mod.Instance.Config.Enabled)
             return;
 
         if (__result.State is ItemDropAttemptResultState.Success && rule is CommonDrop drop)

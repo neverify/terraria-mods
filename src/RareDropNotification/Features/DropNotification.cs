@@ -13,21 +13,21 @@ internal static class DropNotification
     {
         float chance = (float)drop.chanceNumerator / drop.chanceDenominator;
 
-        if (chance > Mod.Config.NotificationThreshold)
+        if (chance > Mod.Instance.Config.NotificationThreshold)
             return;
 
         string itemName = ContentSamples.ItemsByType[drop.itemId].Name;
 
         // Format notification message
         string message = FormatNotificationMessage(
-            Mod.Config.DropNotificationFormat,
+            Mod.Instance.Config.DropNotificationFormat,
             drop.itemId,
             itemName,
             chance
         );
 
         // Get notification color
-        Color color = GetColor(chance, Mod.Config.NotificationThreshold);
+        Color color = GetColor(chance, Mod.Instance.Config.NotificationThreshold);
 
         ShowNotification(message, color);
     }
@@ -66,8 +66,8 @@ internal static class DropNotification
 
     private static Color GetColor(float chance, float threshold)
     {
-        Color lowColor = ParseHex(Mod.Config.NotificationColorLow);
-        Color highColor = ParseHex(Mod.Config.NotificationColorHigh);
+        Color lowColor = ParseHex(Mod.Instance.Config.NotificationColorLow);
+        Color highColor = ParseHex(Mod.Instance.Config.NotificationColorHigh);
 
         float t = threshold > 0 ? chance / threshold : 1f;
         t = Math.Max(0f, Math.Min(1f, t));
@@ -79,7 +79,7 @@ internal static class DropNotification
     {
         if (string.IsNullOrEmpty(hex) || hex.Length != 7 || hex[0] != '#')
         {
-            Mod.Log.Warn($"Invalid hex color format: {hex}, using fallback color.");
+            Mod.Instance.Log.Warn($"Invalid hex color format: {hex}, using fallback color.");
             return Config.FallbackColor;
         }
 
@@ -92,7 +92,7 @@ internal static class DropNotification
         }
         catch
         {
-            Mod.Log.Warn($"Failed to parse hex color: {hex}, using fallback color.");
+            Mod.Instance.Log.Warn($"Failed to parse hex color: {hex}, using fallback color.");
             return Config.FallbackColor;
         }
     }
