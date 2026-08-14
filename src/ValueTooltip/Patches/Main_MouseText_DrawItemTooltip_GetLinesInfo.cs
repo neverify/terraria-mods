@@ -16,7 +16,7 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
         Color[] lineColors
     )
     {
-        if (!Mod.Config.ShowValueTooltips)
+        if (!Mod.Instance.Config.ShowValueTooltips)
             return;
 
         if (item.value <= 0 || Main.npcShop > 0 || ItemID.Sets.CommonCoin[item.type])
