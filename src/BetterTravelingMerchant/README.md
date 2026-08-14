@@ -2,7 +2,7 @@
 
 Increase the spawn rate of the Traveling Merchant and force certain items to always be sold.
 
-The game rolls a 1 in 108000 chance each tick to attempt to spawn the Traveling Merchant. This results in the spawn rate following a binomial distribution, which means it is possible to go arbitrarily long without a single spawn. The logic for choosing which items to sell is also unnecessarily complicated, and results in dozens of spawns being required to obtain all of the important items.
+The game rolls a 1 in 108000 chance each tick to attempt to spawn the Traveling Merchant. This results in the spawn rate following a binomial distribution, which means it is possible to go arbitrarily long without a single spawn. The logic for choosing which items to sell is also unnecessarily complicated and results in needing dozens of spawns on average to obtain all of the important items.
 
 This mod alleviates these frustrations by increasing the spawn rate of the Traveling Merchant by a configurable amount and forcing the most useful items to always be sold.
 
