@@ -10,7 +10,7 @@ internal static class CommonDropNotScalingWithLuckPatch
         CommonDropNotScalingWithLuck __instance,
         ref ItemDropAttemptResult __result
     ) =>
-        TryDroppingPatchHelper.HandleDrop(
+        TryDroppingItemPatchHelper.HandleDrop(
             info,
             __instance,
             DropProcessor.ProcessCommonDropNotScalingWithLuck,

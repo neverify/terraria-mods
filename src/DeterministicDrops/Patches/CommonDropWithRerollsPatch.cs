@@ -10,7 +10,7 @@ internal static class CommonDropWithRerollsPatch
         CommonDropWithRerolls __instance,
         ref ItemDropAttemptResult __result
     ) =>
-        TryDroppingPatchHelper.HandleDrop(
+        TryDroppingItemPatchHelper.HandleDrop(
             info,
             __instance,
             DropProcessor.ProcessCommonDropWithRerolls,

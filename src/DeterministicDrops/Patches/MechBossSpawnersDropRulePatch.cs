@@ -10,7 +10,7 @@ internal static class MechBossSpawnersDropRulePatch
         MechBossSpawnersDropRule __instance,
         ref ItemDropAttemptResult __result
     ) =>
-        TryDroppingPatchHelper.HandleDrop(
+        TryDroppingItemPatchHelper.HandleDrop(
             info,
             __instance,
             DropProcessor.ProcessMechBossSpawnersDropRule,

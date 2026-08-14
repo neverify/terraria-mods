@@ -10,7 +10,7 @@ internal static class FromOptionsWithoutRepeatsDropRulePatch
         FromOptionsWithoutRepeatsDropRule __instance,
         ref ItemDropAttemptResult __result
     ) =>
-        TryDroppingPatchHelper.HandleDrop(
+        TryDroppingItemPatchHelper.HandleDrop(
             info,
             __instance,
             DropProcessor.ProcessFromOptionsWithoutRepeatsDropRule,
