@@ -1,11 +1,16 @@
 using DeterministicDrops.DropSystem;
+using HarmonyLib;
 using Terraria.GameContent.ItemDropRules;
 
 namespace DeterministicDrops.Patches;
 
+[HarmonyPatch(
+    typeof(FromOptionsWithoutRepeatsDropRule),
+    nameof(FromOptionsWithoutRepeatsDropRule.TryDroppingItem)
+)]
 internal static class FromOptionsWithoutRepeatsDropRulePatch
 {
-    public static bool TryDroppingItemPrefix(
+    public static bool Prefix(
         DropAttemptInfo info,
         FromOptionsWithoutRepeatsDropRule __instance,
         ref ItemDropAttemptResult __result

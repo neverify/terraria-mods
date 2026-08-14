@@ -9,8 +9,7 @@ namespace DeterministicDrops.Patches;
 [HarmonyPatch(typeof(Player), nameof(Player.OpenBossBag))]
 internal sealed class OpenBossBagPatch
 {
-    [HarmonyPrefix]
-    public static bool OpenBossBagPrefix(int type, Player __instance)
+    public static bool Prefix(int type, Player __instance)
     {
         if (!Mod.Instance.Config.EnableDeterministicTreasureBags)
             return true;
