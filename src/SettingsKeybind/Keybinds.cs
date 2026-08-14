@@ -6,7 +6,7 @@ internal static class Keybinds
 {
     internal static void Register()
     {
-        Mod.Context.RegisterKeybind(
+        Mod.Instance.Context.RegisterKeybind(
             "toggle-settings",
             "Toggle Settings",
             "Toggle the settings menu",
@@ -14,6 +14,6 @@ internal static class Keybinds
             ToggleSettings.Toggle
         );
 
-        Mod.Log.Info("Keybinds registered.");
+        Mod.Instance.Log.Info("Keybinds registered.");
     }
 }

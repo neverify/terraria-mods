@@ -9,15 +9,19 @@ public class Mod : IMod
     public string Name => "Settings Keybind";
     public string Version => "1.0.0";
 
-    internal static ILogger Log;
-    internal static ModContext Context;
-    internal static Config Config;
+    internal static Mod Instance { get; private set; }
+
+    internal ILogger Log { get; private set; }
+    internal Config Config { get; private set; }
+    internal ModContext Context { get; private set; }
 
     public void Initialize(ModContext context)
     {
+        Instance = this;
+
         Log = context.Logger;
-        Context = context;
         Config = context.GetConfig<Config>();
+        Context = context;
 
         Keybinds.Register();
     }
