@@ -26,5 +26,7 @@ public class Mod : IMod
         Keybinds.Register();
     }
 
+    public void OnConfigChanged() { }
+
     public void Unload() { }
 }

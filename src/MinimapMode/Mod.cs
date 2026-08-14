@@ -35,5 +35,7 @@ public class Mod : IMod, IModLifecycle
 
     public void OnWorldUnload() { }
 
+    public void OnConfigChanged() { }
+
     public void Unload() { }
 }

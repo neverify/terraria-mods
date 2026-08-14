@@ -22,5 +22,7 @@ public class Mod : IMod
         Config = context.GetConfig<Config>();
     }
 
+    public void OnConfigChanged() { }
+
     public void Unload() { }
 }

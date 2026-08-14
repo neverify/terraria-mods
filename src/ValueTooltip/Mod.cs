@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
 
@@ -21,6 +22,8 @@ public class Mod : IMod
         Log = context.Logger;
         Config = context.GetConfig<Config>();
     }
+
+    public void OnConfigChanged() { }
 
     public void Unload() { }
 }
