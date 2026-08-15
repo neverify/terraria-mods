@@ -4,7 +4,7 @@
   "version": "1.0.1",
   "author": "neverify",
   "description": "Increase the spawn rate of the Traveling Merchant and force certain items to always be sold.",
-  "homepage": "https://github.com/neverify/terraria-mods",
+  "homepage": "https://www.nexusmods.com/terraria/mods/218",
 
   "entry_dll": "BetterTravelingMerchant.dll",
   "framework_version": ">=0.4.0",

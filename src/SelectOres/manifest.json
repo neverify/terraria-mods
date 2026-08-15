@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "neverify",
   "description": "Select which ores are generated in your world, independent of world seed.",
-  "homepage": "https://github.com/neverify/terraria-mods",
+  "homepage": "https://www.nexusmods.com/terraria/mods/210",
 
   "entry_dll": "SelectOres.dll",
   "framework_version": ">=0.4.0",
