@@ -6,18 +6,16 @@ public class Config : ModConfig
 {
     public override int Version => 2;
 
-    [Label("Brightness Override"), Description("Override the brightness of all tiles.")]
+    [
+        Label("Brightness Override"),
+        Description("Enable the brightness override. Only works with the \"color\" lighting mode.")
+    ]
     public bool BrightnessOverride { get; set; } = true;
 
     [Label("Brightness"), Description("The brightness at which to render tiles at."), Range(0f, 1f)]
     public float Brightness { get; set; } = 0.5f;
 
-    [
-        Label("Disable Light Smoothing"),
-        Description(
-            "Recommended with brightness override to improve performance. This option has no visual impact with brightness override on, since all tiles are the same brightness."
-        )
-    ]
+    [Label("Disable Light Smoothing"), Description("Disable vanilla light smoothing.")]
     public bool DisableLightSmoothing { get; set; } = true;
 
     [Label("Map Lighting Override"), Description("Override the brightness of map lighting.")]

@@ -8,7 +8,7 @@ public class Config : ModConfig
 
     [
         Label("Hide Settings Button"),
-        Description("Hide the vanilla settings button at the bottom right of the screen.")
+        Description("Hide the vanilla settings button at the bottom right of the inventory.")
     ]
     public bool HideSettingsButton { get; set; } = false;
 }

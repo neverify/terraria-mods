@@ -9,7 +9,7 @@ public class Config : ModConfig
     [
         Label("Override Generation"),
         Description(
-            "Whether the selected ores are enforced on world generation and when smashing altars."
+            "Whether the selected ores are enforced during world generation and when smashing altars."
         )
     ]
     public bool OverrideGeneration { get; set; } = true;

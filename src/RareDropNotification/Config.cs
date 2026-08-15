@@ -7,12 +7,12 @@ public class Config : ModConfig
 {
     public override int Version => 1;
 
-    [Label("Show Notifications"), Description("Show a chat message when the conditions are met.")]
+    [Label("Show Notifications"), Description("Show a chat message when a rare item is dropped.")]
     public bool Enabled { get; set; } = true;
 
     [
         Label("Notification Threshold"),
-        Description("The threshold for displaying notifications"),
+        Description("The minimum drop chance for the chat message to be sent."),
         Range(0f, 1f)
     ]
     public float NotificationThreshold { get; set; } = 0.1f;
