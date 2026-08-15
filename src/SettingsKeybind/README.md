@@ -14,6 +14,8 @@ Hide the vanilla settings button at the bottom right of the inventory.
 
 If you use the keybind to access the menu, the button becomes useless.
 
+The mod works in multiplayer.
+
 ## Keybinds
 
 ### Toggle Settings

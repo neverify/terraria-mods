@@ -4,6 +4,8 @@ This is a monorepo containing all of my Terraria mods for the [TerrariaModder](h
 
 All mods are built for Terraria 1.4.5 and require TerrariaModder 0.4.0.
 
+None of the mods have explicit multiplayer support, but might still work at least partially.
+
 ## Mods
 
 |                                                              |                                                                                                                                                                     |

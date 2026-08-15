@@ -6,6 +6,8 @@ Knowing the value of items is a very useful thing in Terraria. Especially in the
 
 This mod fixes the issue by adding a line to all items' tooltips that displays their sell value. Coins and items that do not have a sell value are excluded from this. Stacked items show the total value with the base value displayed in parentheses.
 
+The mod should work in multiplayer.
+
 ## Config
 
 ### Show Value Tooltips

@@ -6,6 +6,8 @@ The game rolls a 1 in 108000 chance each tick to attempt to spawn the Traveling 
 
 This mod alleviates these frustrations by increasing the spawn rate of the Traveling Merchant by a configurable amount and forcing the most useful items to always be sold.
 
+The mod should work in multiplayer.
+
 ## Configuration
 
 ### Spawn Chance Multiplier

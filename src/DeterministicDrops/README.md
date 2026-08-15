@@ -16,6 +16,8 @@ The mod supports all types of NPC drops. Normal drops will simply drop a single 
 
 The drop logic attempts to follow vanilla as closely as possible, trying to not be too blatant. However, the amount of randomization is a personal preference question, so my take on how the drops should be distributed might not align with everyone's opinions. Making drops NPC-agnostic is an example of an opinionated design choice. The average drop rates are _exactly_ the same as vanilla, though. Any discrepancy is considered a bug.
 
+The mod probably does not work in multiplayer.
+
 ## Configuration
 
 ### Enable Deterministic NPC Drops
