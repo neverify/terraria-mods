@@ -3,7 +3,7 @@
   "name": "Select Ores",
   "version": "1.0.0",
   "author": "neverify",
-  "description": "Select which ores are generated in your world, independent of world seed.",
+  "description": "Select which ores are generated in your world during worldgen and when smashing altars.",
   "homepage": "https://www.nexusmods.com/terraria/mods/210",
 
   "entry_dll": "SelectOres.dll",
