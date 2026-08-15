@@ -2,7 +2,9 @@
 
 Show a configurable chat message when a rare item is dropped.
 
-The mod only shows notifications for drops with a 1/x chance. Drops that always occur and pick from a list of alternatives with equal odds, such as many boss drops and mimics, are not notified.
+Terraria has a lot of item drops, so it is easy to miss the rare ones. This mod makes sure you never miss a drop you care about again.
+
+The mod only shows notifications for drops with a 1/x chance. Drops that always occur and pick from a list of alternatives with equal odds, such as mimics and many boss drops, are not notified.
 
 ## Configuration
 

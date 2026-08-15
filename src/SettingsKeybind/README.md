@@ -2,11 +2,17 @@
 
 Add a configurable keybind to toggle the settings menu.
 
+I have always found the absence of a dedicated settings keybind frustrating. Accessing the settings menu from the inventory is slow, and it is thus hard to pause the game quickly.
+
+This mod solves the problem by adding a keybind to toggle the settings menu. The keybind works regardless of if the inventory or a shop is open.
+
 ## Configuration
 
 ### Hide Settings Button
 
-Hide the vanilla settings button at the bottom right of the screen.
+Hide the vanilla settings button at the bottom right of the inventory.
+
+If you use the keybind to access the menu, the button becomes useless.
 
 ## Keybinds
 

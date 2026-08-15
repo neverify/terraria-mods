@@ -1,12 +1,20 @@
 # Select Ores
 
-Select which ores are generated in your world, independent of world seed.
+Select which ores are generated in your world during worldgen and when smashing altars.
+
+In Terraria the alternative ores are usually strictly superior to their original variants. Pickaxes have lower use times and higher pickaxe power, swords and bows deal more damage etc. Thus playing in a world with the alternative ores meaningfully affects game difficulty. For example, having platinum instead of gold will make a pre-boss melee tank build much easier to achieve.
+
+The same applies to hardmode ores, especially when it comes to the tools. And even worse, the result of smashing altars is determined randomly, independent of the world seed. This means that it is possible to get the ores you want by smashing an altar and force-quitting the game repeatedly, which is just dumb.
+
+And because the shimmer exists, there are no downsides to having the alternative ores either, since you can just transmute the ores to their original counterparts.
+
+This mod fixes these frustrations by allowing selecting which ores are generated. The generation of pre-hardmode ores takes place during worldgen; outside of that the mod has no effect on them. **It won't change ores in existing worlds**. For hardmode ores, the mod intercepts the altar smashing event.
 
 ## Configuration
 
 ### Override Generation
 
-Whether the selected ores are enforced on world generation and when smashing altars.
+Whether the selected ores are enforced during world generation and when smashing altars.
 
 ### Tier 1 Ore
 

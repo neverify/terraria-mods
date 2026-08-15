@@ -2,6 +2,10 @@
 
 Set the minimap to a configured mode when loading into a world.
 
+In vanilla Terraria the minimap style is not persisted between game launches. Having to change the minimap style every time you play the game is annoying.
+
+This mod fixes this issue by allowing you to set a default minimap mode that will be applied when loading into a world.
+
 ## Configuration
 
 ### Force Minimap Mode

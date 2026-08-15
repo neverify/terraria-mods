@@ -2,6 +2,12 @@
 
 Force all tiles to render at a configured brightness.
 
+This mod is a performant implementation of fullbright. The vanilla rendering engine can't normally handle rendering all the tiles at full brightness at 60fps. This is why most naive fullbright implementations lag the game considerably. This mod implements performance optimizations to minimize the impact of rendering more tiles than intended. You should be able to retain 60fps even on weaker hardware.
+
+The mod also allows overriding the brightness of the map, so it will actually reflect what you see in-game.
+
+The mod modifies the lighting engine of the "Color" lighting mode, so other lighting modes are unaffected.
+
 ## Configuration
 
 ### Brightness Override
