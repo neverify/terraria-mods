@@ -6,6 +6,8 @@ I have always found the absence of a dedicated settings keybind frustrating. Acc
 
 This mod solves the problem by adding a keybind to toggle the settings menu. The keybind works regardless of if the inventory or a shop is open.
 
+The mod works in multiplayer.
+
 ## Configuration
 
 ### Hide Settings Button
@@ -13,8 +15,6 @@ This mod solves the problem by adding a keybind to toggle the settings menu. The
 Hide the vanilla settings button at the bottom right of the inventory.
 
 If you use the keybind to access the menu, the button becomes useless.
-
-The mod works in multiplayer.
 
 ## Keybinds
 
