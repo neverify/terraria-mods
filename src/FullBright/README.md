@@ -32,7 +32,7 @@ Override the brightness of map lighting.
 
 ### Map Lighting Brightness
 
-The brightness to set map tiles to. Decimal number between `0` and `1` (e.g. 0.1 = 10%).
+The brightness to set map tiles to. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
 
 ## Development
 
