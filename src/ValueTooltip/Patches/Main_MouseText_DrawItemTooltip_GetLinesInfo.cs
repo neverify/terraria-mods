@@ -28,12 +28,12 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
         if (sellValue == 0 || numLines >= toolTipLine.Length)
             return;
 
-        toolTipLine[numLines] = GetValueTooltip(sellValue, item.stack);
+        toolTipLine[numLines] = CreateValueTooltip(sellValue, item.stack);
         lineColors[numLines] = GetValueColor(totalSellValue);
         numLines++;
     }
 
-    private static string GetValueTooltip(int sellValue, int stack)
+    private static string CreateValueTooltip(int sellValue, int stack)
     {
         string valueText = GetValueText(sellValue * stack);
 
@@ -44,10 +44,10 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
     {
         var coins = new[]
         {
-            (Amount: value / PlatinumValue, Name: "Platinum"),
-            (Amount: value % PlatinumValue / GoldValue, Name: "Gold"),
-            (Amount: value % GoldValue / SilverValue, Name: "Silver"),
-            (Amount: value % SilverValue, Name: "Copper"),
+            (Amount: value / CoinValues.Platinum, Name: "Platinum"),
+            (Amount: value % CoinValues.Platinum / CoinValues.Gold, Name: "Gold"),
+            (Amount: value % CoinValues.Gold / CoinValues.Silver, Name: "Silver"),
+            (Amount: value % CoinValues.Silver, Name: "Copper"),
         };
 
         return string.Join(
@@ -60,14 +60,18 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
     {
         return value switch
         {
-            int v when v >= PlatinumValue => Colors.CoinPlatinum,
-            int v when v >= GoldValue => Colors.CoinGold,
-            int v when v >= SilverValue => Colors.CoinSilver,
+            int v when v >= CoinValues.Platinum => Colors.CoinPlatinum,
+            int v when v >= CoinValues.Gold => Colors.CoinGold,
+            int v when v >= CoinValues.Silver => Colors.CoinSilver,
             _ => Colors.CoinCopper,
         };
     }
 
-    private const int PlatinumValue = 1000000;
-    private const int GoldValue = 10000;
-    private const int SilverValue = 100;
+    private static class CoinValues
+    {
+        public const int Platinum = 1000000;
+        public const int Gold = 10000;
+        public const int Silver = 100;
+        public const int Copper = 1;
+    }
 }
