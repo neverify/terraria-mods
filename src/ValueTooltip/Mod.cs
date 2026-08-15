@@ -1,4 +1,3 @@
-using System.Net.NetworkInformation;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
 
