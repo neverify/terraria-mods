@@ -115,7 +115,10 @@ internal static class DropProcessor
             return result;
 
         result = ProcessDrop(mechanicalSkullDropContext, store);
-        return result.Any() ? result : [];
+        if (result.Any())
+            return result;
+
+        return [];
     }
 
     public static IEnumerable<DropResult> ProcessDrop(DropContext dropContext, DropStateStore store)
