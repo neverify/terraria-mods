@@ -9,16 +9,6 @@ namespace SelectOres.Patches;
 [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.Reset))]
 internal sealed class ResetPatch
 {
-    internal static void Prefix()
-    {
-        if (!Mod.Instance.Config.OverrideGeneration)
-            return;
-
-        SetOreTier(ref WorldGen.SavedOreTiers.Cobalt, Mod.Instance.Config.HardmodeTier1Ore);
-        SetOreTier(ref WorldGen.SavedOreTiers.Mythril, Mod.Instance.Config.HardmodeTier2Ore);
-        SetOreTier(ref WorldGen.SavedOreTiers.Adamantite, Mod.Instance.Config.HardmodeTier3Ore);
-    }
-
     internal static void Postfix()
     {
         if (!Mod.Instance.Config.OverrideGeneration)
@@ -40,12 +30,6 @@ internal sealed class ResetPatch
         WorldGen.SavedOreTiers.Gold = s_oreNameToTileId[Mod.Instance.Config.Tier4Ore];
     }
 
-    private static void SetOreTier(ref int savedTier, string oreName)
-    {
-        if (savedTier == -1)
-            savedTier = s_oreNameToTileId[oreName];
-    }
-
     private static readonly Dictionary<string, int> s_oreNameToTileId = new()
     {
         { "Copper", TileID.Copper },
@@ -56,12 +40,6 @@ internal sealed class ResetPatch
         { "Lead", TileID.Lead },
         { "Tungsten", TileID.Tungsten },
         { "Platinum", TileID.Platinum },
-        { "Cobalt", TileID.Cobalt },
-        { "Mythril", TileID.Mythril },
-        { "Adamantite", TileID.Adamantite },
-        { "Palladium", TileID.Palladium },
-        { "Orichalcum", TileID.Orichalcum },
-        { "Titanium", TileID.Titanium },
     };
 
     private static readonly Dictionary<string, int> s_oreNameToBarId = new()
