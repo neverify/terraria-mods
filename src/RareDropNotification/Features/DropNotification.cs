@@ -18,7 +18,6 @@ internal static class DropNotification
 
         string itemName = ContentSamples.ItemsByType[drop.itemId].Name;
 
-        // Format notification message
         string message = FormatNotificationMessage(
             Mod.Instance.Config.DropNotificationFormat,
             drop.itemId,
@@ -26,7 +25,6 @@ internal static class DropNotification
             chance
         );
 
-        // Get notification color
         Color color = GetColor(chance, Mod.Instance.Config.NotificationThreshold);
 
         ShowNotification(message, color);
@@ -69,9 +67,11 @@ internal static class DropNotification
         Color lowColor = ParseHex(Mod.Instance.Config.NotificationColorLow);
         Color highColor = ParseHex(Mod.Instance.Config.NotificationColorHigh);
 
+        // Calculate interpolation factor.
         float t = threshold > 0 ? chance / threshold : 1f;
         t = Math.Max(0f, Math.Min(1f, t));
 
+        // Apply linear interpolation.
         return Color.Lerp(lowColor, highColor, t);
     }
 
