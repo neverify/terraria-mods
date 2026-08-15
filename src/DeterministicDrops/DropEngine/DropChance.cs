@@ -54,6 +54,7 @@ internal static class DropChance
         if (luck == 0.0)
             return baseChance;
 
+        // For the luck formulas, see https://terraria.wiki.gg/wiki/Luck#Impact.
         if (luck > 0.0)
         {
             int min = denominator / 2;

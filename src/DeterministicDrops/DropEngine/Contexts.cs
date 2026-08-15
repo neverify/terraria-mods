@@ -32,7 +32,10 @@ internal sealed class DropContext(
 
 internal sealed class Drop
 {
+    // The ID of the drop is used to make different drops have different RNGs
     public int Id => Hashing.Hash(_itemIdGroups.SelectMany(x => x).Select(x => (int)x));
+
+    // JSON key for the drop state.
     public string Name =>
         string.Join(";", _itemIdGroups.Select(itemIds => string.Join(",", itemIds)));
 

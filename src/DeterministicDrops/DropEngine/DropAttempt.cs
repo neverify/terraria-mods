@@ -20,12 +20,14 @@ internal static class DropAttempt
             gameContext.WorldSeed
         );
 
+        // No drop occurred.
         if (dropState.DropProgress < dropPosition)
         {
             dropCycle = -1;
             return false;
         }
 
+        // Drop occurred.
         dropState.AdvanceCycle();
         dropCycle = dropState.NextDropCycle - 1;
         return true;

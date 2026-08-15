@@ -13,6 +13,7 @@ internal static class BossBagDatabase
     {
         s_coinAmounts.TryGetValue(bossBagId, out var amount);
 
+        // 1.015^4 is the average multiplier.
         int value = (int)(amount.Value * Math.Pow(1.015, 4));
         return new CoinAmount(value);
     }

@@ -130,10 +130,12 @@ internal static class DropProcessor
         {
             if (DropAttempt.TryAdvanceState(dropState, dropContext, gameContext, out int dropCycle))
             {
+                // Drop occurred, get the results.
                 var dropResults = DropSelection.GetDropResults(dropContext, gameContext, dropCycle);
 
                 foreach (var dropResult in dropResults)
                 {
+                    // Get extra drops.
                     if (
                         dropContext.ExtraDrops.TryGetValue(
                             dropResult.ItemId,
@@ -159,6 +161,7 @@ internal static class DropProcessor
 
         var player = Main.player[Main.myPlayer];
 
+        // csharpier-ignore-start
         return (!condition.HasFlag(DropCondition.MasterMode) || Main.masterMode)
             && (!condition.HasFlag(DropCondition.NotMasterMode) || !Main.masterMode)
             && (!condition.HasFlag(DropCondition.Crimson) || WorldGen.crimson)
@@ -170,9 +173,8 @@ internal static class DropProcessor
             && (!condition.HasFlag(DropCondition.NoPortalGun) || !player.HasItem(ItemID.PortalGun))
             && (!condition.HasFlag(DropCondition.NotDefeatedTheTwins) || !NPC.downedMechBoss1)
             && (!condition.HasFlag(DropCondition.NotDefeatedTheDestroyer) || !NPC.downedMechBoss2)
-            && (
-                !condition.HasFlag(DropCondition.NotDefeatedSkeletronPrime) || !NPC.downedMechBoss3
-            );
+            && (!condition.HasFlag(DropCondition.NotDefeatedSkeletronPrime) || !NPC.downedMechBoss3);
+        // csharpier-ignore-end
     }
 
     [Flags]
