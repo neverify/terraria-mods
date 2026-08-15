@@ -20,8 +20,11 @@ internal static class ChestPatch
 
     private static void AddAllItems()
     {
-        AddItemSet(s_handOfCreationIngredients);
-        AddItemSet(s_shellphoneIngredients);
+        if (Mod.Instance.Config.HandOfCreationIngredients)
+            AddItemSet(s_handOfCreationIngredients);
+
+        if (Mod.Instance.Config.ShellphoneIngredients)
+            AddItemSet(s_shellphoneIngredients);
     }
 
     private static void AddItemSet(HashSet<int> items)
