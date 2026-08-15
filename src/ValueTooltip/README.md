@@ -18,6 +18,10 @@ Show the sell value of items in their tooltip.
 
 #### `Main.MouseText_DrawItemTooltip_GetLinesInfo()`
 
-This method is responsible for building the tooltip for items. The mod applies a postfix patch onto this method to add the sell value of the item to the tooltip.
+```cs
+public static void MouseText_DrawItemTooltip_GetLinesInfo(Item item, ref int yoyoLogo, ref int researchLine, float oldKB, ref int numLines, string[] toolTipLine, Color[] lineColors)
+```
 
-The sell value is formatted to include the counts of each coin. The sell value is multiplied with the stack size of the item to get the total sell value. If the stack is more than one item, the base sell value is displayed in parentheses at the end. The tooltip is colored based on the highest full coin.
+This method is responsible for building the tooltip for items. The method is just a long list of conditions of all of the possible tooltip entries, so it is not shown here. The important part is the signature of the method.
+
+The mod applies a postfix patch to this method to add the sell value of the item to the tooltip. The tooltips are stored in the `toolTipLine` string array, and the `numLines` variable keeps track of the number of lines in the tooltip. The value tooltip is simply placed at the end of the `toolTipLine` array, and the `numLines` variable is incremented by one.

@@ -55,6 +55,7 @@ public static void Reset()
 {
     // ...
 
+    // Set the default ore IDs.
     GenVars.copper = 7;
     GenVars.iron = 6;
     GenVars.silver = 9;
@@ -62,6 +63,7 @@ public static void Reset()
 
     // ...
 
+    // Set the default bar IDs.
     WorldGen.SavedOreTiers.Copper = 7;
     WorldGen.SavedOreTiers.Iron = 6;
     WorldGen.SavedOreTiers.Silver = 9;
@@ -73,6 +75,7 @@ public static void Reset()
 
     // ...
 
+    // Randomly switch to the alternative ores.
     if (WorldGen.genRand.Next(2) == 0)
     {
         GenVars.copper = 166;
@@ -102,11 +105,9 @@ public static void Reset()
 }
 ```
 
-This method resets the state of the worldgen engine. It first sets the generated ores to their original ids, then randomly assigns the new ores in their place. The values are randomized again later for secret seeds, such as the drunk seed, but that doesn't change the patch logic.
+This method resets the state of the worldgen engine. It first sets the generated ores to their original ids, then randomly assigns the new ores in their place.
 
-The mod applies a postfix patch to this method to override the `GenVars` and `WorldGen.SavedOreTiers` values to the configured ones.
-
-The patch uses a dictionary to map the config keys to the tile and item ids.
+The mod applies a postfix patch to this method to override the `GenVars` and `WorldGen.SavedOreTiers` values to the configured ones. Since the method is called before world generation, the configured ores are automatically applied for it.
 
 #### `Terraria.WorldGen.SmashAltar()`
 
@@ -114,6 +115,7 @@ The patch uses a dictionary to map the config keys to the tile and item ids.
 public static void SmashAltar(int i, int j) {
     // ...
 
+    // Randomize the first tier if unset.
     if (WorldGen.SavedOreTiers.Cobalt == -1)
     {
         WorldGen.SavedOreTiers.Cobalt = 107;
@@ -125,6 +127,7 @@ public static void SmashAltar(int i, int j) {
 
     // ...
 
+    // Randomize the second tier if unset.
     if (WorldGen.SavedOreTiers.Mythril == -1)
     {
         WorldGen.SavedOreTiers.Mythril = 108;
@@ -136,6 +139,7 @@ public static void SmashAltar(int i, int j) {
 
     // ...
 
+    // Randomize the third tier if unset.
     if (WorldGen.SavedOreTiers.Adamantite == -1)
     {
         WorldGen.SavedOreTiers.Adamantite = 111;
@@ -149,8 +153,6 @@ public static void SmashAltar(int i, int j) {
 }
 ```
 
-This method runs whenever an altar is smashed. It excecutes these paths based on the total number of altars smashed. When a given tier is selected, the method first checks if the related `WorldGen.SavedOreTiers` value is -1 (indicating it is the first altar of that tier), and if so, randomizes the generated ore.
+This method handles smashing altars. It excecutes the different conditional paths based on the total number of altars smashed. When a given tier is selected, the method first checks if the relevant `WorldGen.SavedOreTiers` property is -1. That would indicate it is the first altar of that tier, in which case that tier is randomized.
 
-The mod applies a prefix patch onto this method, which checks whether the `WorldGen.SavedOreTiers` value for each ore is -1. If it is, the value is overridden to the configured ore. This way the randomization step is skipped altogether. This check also prevents unnecessarily overriding the value each time the method is called. While the performance impact would obviously be negligible, the check makes the logic a bit cleaner.
-
-The patch uses a dictionary to map the config keys to the tile ids.
+The mod applies a prefix patch to this method that overrides the `WorldGen.SavedOreTiers` property values. This prevents the aformentioned check from succeeding, skipping the randomization.

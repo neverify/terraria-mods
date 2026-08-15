@@ -26,7 +26,9 @@ Toggle the settings menu. Default keybind: `Escape`.
 
 #### `Main.DrawInterface_29_SettingsButton()`
 
-This method handles drawing the settings button when the inventory is open. The mod applies a prefix patch onto this method to conditionally skip it based on the configuration setting.
+This method handles drawing the settings button when the inventory is open. The implementation of the method is not relevant, so it is not shown here.
+
+The mod applies a prefix patch to this method to conditionally skip it based on the config setting.
 
 ### Keybinds
 

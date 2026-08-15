@@ -37,6 +37,7 @@ The gradient edge for high rarity drops. Hex color code. This config option can'
 ```cs
 private ItemDropAttemptResult ResolveRule(IItemDropRule rule, DropAttemptInfo info)
 {
+    // Check if the drop fills its conditions.
     if (!rule.CanDrop(info))
     {
         ItemDropAttemptResult itemDropAttemptResult = new ItemDropAttemptResult
@@ -46,8 +47,11 @@ private ItemDropAttemptResult ResolveRule(IItemDropRule rule, DropAttemptInfo in
         this.ResolveRuleChains(rule, info, itemDropAttemptResult);
         return itemDropAttemptResult;
     }
+
     INestedItemDropRule nestedItemDropRule = rule as INestedItemDropRule;
     ItemDropAttemptResult itemDropAttemptResult2;
+
+    // Evaluate the rule.
     if (nestedItemDropRule != null)
     {
         itemDropAttemptResult2 = nestedItemDropRule.TryDroppingItem(info, new ItemDropRuleResolveAction(this.ResolveRule));
@@ -56,16 +60,25 @@ private ItemDropAttemptResult ResolveRule(IItemDropRule rule, DropAttemptInfo in
     {
         itemDropAttemptResult2 = rule.TryDroppingItem(info);
     }
+
     this.ResolveRuleChains(rule, info, itemDropAttemptResult2);
+
+    // Return the drop attempt result.
     return itemDropAttemptResult2;
 }
 ```
 
-This method resolves an item drop rule and returns the result of the drop attempt. The mod applies a postfix patch onto this method in order to obtain the result of the drop attempt. The result is then passed on to the notification handler.
+This method resolves and evaluates an item drop rule and returns the result of the drop attempt.
+
+The mod applies a postfix patch to this method in order to obtain the result of the drop attempt. The patch qualifies drop attempts that were succesful and that are of the type `CommonDrop`. Drops of that type include the most common types of drops in the game.
+
+The result is then passed on to the notification handler.
 
 ### Displaying Notifications
 
-The `DropNotification` class handles the logic for displaying the chat messages. The message format is parsed with Regex. The hex colors are parsed manually and converted to `Color`-objects, which are then linearly interpolated to obtain the final color based on the drop chance.
+The `DropNotification` class handles displaying the chat messages.
+
+The message format is parsed with Regex. The hex colors are parsed manually and converted to `Color`-objects, which are then linearly interpolated to obtain the final color based on the drop chance.
 
 ## Credits
 
