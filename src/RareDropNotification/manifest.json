@@ -1,7 +1,7 @@
 {
   "id": "rare-drop-notification",
   "name": "Rare Drop Notification",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "neverify",
   "description": "Show a configurable chat message when a rare item is dropped.",
   "homepage": "https://www.nexusmods.com/terraria/mods/209",

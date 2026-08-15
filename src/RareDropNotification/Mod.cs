@@ -7,7 +7,7 @@ public class Mod : IMod
 {
     public string Id => "rare-drop-notification";
     public string Name => "Rare Drop Notification";
-    public string Version => "1.0.0";
+    public string Version => "1.0.1";
 
     internal static Mod Instance { get; private set; }
 

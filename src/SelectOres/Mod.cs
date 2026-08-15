@@ -7,7 +7,7 @@ public class Mod : IMod
 {
     public string Id => "select-ores";
     public string Name => "Select Ores";
-    public string Version => "1.0.0";
+    public string Version => "1.0.1";
 
     internal static Mod Instance { get; private set; }
 

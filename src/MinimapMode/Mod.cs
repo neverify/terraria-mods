@@ -8,7 +8,7 @@ public class Mod : IMod, IModLifecycle
 {
     public string Id => "minimap-mode";
     public string Name => "Minimap Mode";
-    public string Version => "1.0.0";
+    public string Version => "1.0.1";
 
     internal static Mod Instance { get; private set; }
 

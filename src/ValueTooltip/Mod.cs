@@ -7,7 +7,7 @@ public class Mod : IMod
 {
     public string Id => "value-tooltip";
     public string Name => "Value Tooltip";
-    public string Version => "1.0.0";
+    public string Version => "1.0.1";
 
     internal static Mod Instance { get; private set; }
 

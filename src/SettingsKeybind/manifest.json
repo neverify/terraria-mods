@@ -1,7 +1,7 @@
 {
   "id": "settings-keybind",
   "name": "Settings Keybind",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "neverify",
   "description": "Add a configurable keybind to toggle the settings menu.",
   "homepage": "https://www.nexusmods.com/terraria/mods/211",

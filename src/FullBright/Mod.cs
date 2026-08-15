@@ -8,7 +8,7 @@ public class Mod : IMod
 {
     public string Id => "full-bright";
     public string Name => "Fullbright";
-    public string Version => "1.1.0";
+    public string Version => "1.1.1";
 
     internal static Mod Instance { get; private set; }
 
