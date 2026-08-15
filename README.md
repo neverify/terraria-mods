@@ -79,7 +79,7 @@ The script `build-all.ps1` builds all projects at once. This is mostly useful wh
 
 The script `zip-all.ps1` creates a versioned zip of all built projects. This is mostly useful for creating releases.
 
-## Questions, Suggestions, Contributing and Bug Reports
+## Questions, Suggestions, Bug Reports and Contributing
 
 If you have any questions, suggestions or have found a bug, feel free to open an issue or contact me in the [TerrariaModder Discord](https://discord.gg/VvVD5EeYsK) (@neverify). You can also report bugs in the `Bugs` tab of the Nexus Mods page of the respective mod.
 
@@ -87,6 +87,6 @@ If you want to contribute, please contact me on Discord first :​)
 
 ## Credits
 
-A massive thanks to Inidar1 for creating the TerrariaModder framework and ConfuzzedCat for creating TerrariaInjector. They make all of these mods possible and the wait for tModLoader 1.4.5 bearable <​3
+A massive thanks to [Inidar1](https://github.com/Inidar1) for creating the TerrariaModder framework and [ConfuzzedCat](https://github.com/ConfuzzedCat) for creating TerrariaInjector. They make all of these mods possible and the wait for tModLoader 1.4.5 bearable <​3
 
 Mod icons use Terraria assets.
