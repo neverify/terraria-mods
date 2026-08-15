@@ -10,6 +10,7 @@ internal static class ProcessScanPatch
 {
     internal static Rectangle CachedActiveProcessedArea { get; private set; }
 
+    // Cache the active processed area.
     internal static void Postfix(LightingEngine __instance)
     {
         if (!Mod.Instance.Config.BrightnessOverride)

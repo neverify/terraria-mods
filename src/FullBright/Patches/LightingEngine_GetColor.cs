@@ -14,6 +14,7 @@ internal static class GetColorPatch
 
         Rectangle activeProcessedArea = ProcessScanPatch.CachedActiveProcessedArea;
 
+        // Don't override color outside the active processed area.
         __result = activeProcessedArea.Contains(x, y)
             ? new Vector3(Mod.Instance.Config.Brightness)
             : Vector3.Zero;
