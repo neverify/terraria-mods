@@ -12,7 +12,7 @@ Drop amounts are also deterministic. The dropped amounts cycle between all possi
 
 Luck is also taken into account. When an NPC dies, the progress towards each drop is increased or decreased according to the players luck. The effect of luck is exactly that of vanilla.
 
-The mod supports all types of NPC drops. Normal drops will simply drop a single item. Drops that choose from a set of items – such as mimic drops and many boss drops – cycle between all the items. The placement of drops is randomized within each cycle, so you won't always get the drops in the same order. Boss bags are also supported and they follow the same logic as normal drops. There are many more drop variants within the game, and I won't list them all here. They all function in the same vein as the two basic drop types with their respective tweaks.
+The mod supports all types of NPC drops. Normal drops will simply drop a single item. Drops that choose from a set of items – such as mimic drops and many boss drops – cycle between all the items. The placement of drops is randomized within each cycle, so you won't always get the drops in the same order. Treasure bags are also supported and they follow the same logic as normal drops. There are many more drop variants within the game, and I won't list them all here. They all function in the same vein as the two basic drop types with their respective tweaks.
 
 The drop logic attempts to follow vanilla as closely as possible, trying to not be too blatant. However, the amount of randomization is a personal preference question, so my take on how the drops should be distributed might not align with everyone's opinions. Making drops NPC-agnostic is an example of an opinionated design choice. The average drop rates are _exactly_ the same as vanilla, though. Any discrepancy is considered a bug.
 
@@ -26,11 +26,11 @@ Enable the deterministic item drop system for NPCs.
 
 When this option is enabled, kills count towards the progress of each item, and item drops are handled by the mod. When this setting is disabled, the vanilla system is used, effectively "pausing" the mod. You can't "miss" NPC drops due to this option being disabled.
 
-### Enable Deterministic Boss Bag Drops
+### Enable Deterministic Treasure Bag Drops
 
-Enable the deterministic item drop system for boss bags.
+Enable the deterministic item drop system for treasure bags.
 
-When this option is enabled, boss bag drops are handled by the mod. When this setting is disabled, the vanilla system is used, effectively "pausing" the mod. You can't "miss" boss bag drops due to this option being disabled.
+When this option is enabled, treasure bag drops are handled by the mod. When this setting is disabled, the vanilla system is used, effectively "pausing" the mod. You can't "miss" treasure bag drops due to this option being disabled.
 
 ## Development
 
@@ -54,10 +54,10 @@ public void OpenBossBag(int type)
     bool masterMode = Main.masterMode;
     IEntitySource itemSource_OpenItem = GetItemSource_OpenItem(type);
 
-    // Select the boss bag
+    // Select the treasure bag
     switch (type)
     {
-        // Spawn the items of that boss bag
+        // Spawn the items of that treasure bag
         case 3318:
         {
             if (Main.rand.Next(2) == 0)
@@ -73,12 +73,12 @@ public void OpenBossBag(int type)
             // Rest of the items
         }
 
-        // Rest of the boss bags
+        // Rest of the treasure bags
     }
 
     int num10 = -1;
 
-    // Map the boss bag type to the corresponding NPC ID
+    // Map the treasure bag type to the corresponding NPC ID
     if (type == 3318)
     {
         num10 = 50;
@@ -119,9 +119,9 @@ public void OpenBossBag(int type)
 }
 ```
 
-This method handles opening boss bags. It contains the items of each boss bag and the spawning logic inline. This is why all of the boss bag drops have to be manually registered in the mod.
+This method handles opening treasure bags. It contains the items of each treasure bag and the spawning logic inline. This is why all of the treasure bag drops have to be manually registered in the mod.
 
-The method contains a massive switch statement for each type of boss bag. Inside each case, the items for that boss bag are spawned if their respective random roll succeeds.
+The method contains a massive switch statement for each type of treasure bag. Inside each case, the items for that treasure bag are spawned if their respective random roll succeeds.
 
 At the end the coins are spawned. The coin amount is calculated from the NPC value, which is mapped manually. The value is then randomized before being turned into coins and spawned into the player's inventory.
 
@@ -164,7 +164,7 @@ A single item is the simplest case: that item will be awarded every time the dro
 
 Multiple items represent a drop where each of the items has an equal probability of being awarded when a drop occurs. Mimic drops and many boss drops fall into this category, for example.
 
-Multiple item groups is currently only used by developer sets dropped from boss bags. They function the same as multiple items with the exception that instead of a single item being awarded when a drop occurs, all of the items of that group are awarded.
+Multiple item groups is currently only used by developer sets dropped from treasure bags. They function the same as multiple items with the exception that instead of a single item being awarded when a drop occurs, all of the items of that group are awarded.
 
 Internally all of these drop types are encoded by a jagged array (`short[][]`), which is the native representation of multiple item groups.
 
@@ -234,9 +234,9 @@ The `DropResult` class represents the outcome of a single drop operation, contai
 
 #### `BossBagDatabase`
 
-The `BossBagDatabase` class contains the drop tables of boss bags represented by `DropContext` arrays. The reason this database has to exist is because the vanilla code that handles opening boss bags does not utilize the pre-existing drop system, but instead is a massive switch statement with item spawning determined inline. Thus it is not feasible to extract any information about the drops from that method.
+The `BossBagDatabase` class contains the drop tables of treasure bags represented by `DropContext` arrays. The reason this database has to exist is because the vanilla code that handles opening treasure bags does not utilize the pre-existing drop system, but instead is a massive switch statement with item spawning determined inline. Thus it is not feasible to extract any information about the drops from that method.
 
-The class also provides the coin drops for each boss bag since the drop system is not capable of handling them. To simulate the effect of the vanilla randomization of the value, the base value is always multiplied by the average multiplier (`1.015^4`).
+The class also provides the coin drops for each treasure bag since the drop system is not capable of handling them. To simulate the effect of the vanilla randomization of the value, the base value is always multiplied by the average multiplier (`1.015^4`).
 
 ### Randomization
 
