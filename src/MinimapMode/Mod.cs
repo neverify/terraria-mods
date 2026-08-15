@@ -35,6 +35,7 @@ public class Mod : IMod, IModLifecycle
 
     public void OnWorldUnload() { }
 
+    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
 
     public void Unload() { }

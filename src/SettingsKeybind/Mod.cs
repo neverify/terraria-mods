@@ -26,6 +26,7 @@ public class Mod : IMod
         Keybinds.Register();
     }
 
+    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
 
     public void Unload() { }

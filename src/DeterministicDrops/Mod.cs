@@ -41,6 +41,7 @@ public class Mod : IMod, IModLifecycle
         DropStateStore = null;
     }
 
+    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
 
     public void Unload() { }
