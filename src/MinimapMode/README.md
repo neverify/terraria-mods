@@ -16,7 +16,7 @@ Force the configured minimap mode when loading into a world.
 
 ### Default Minimap Mode
 
-The mode to set the minimap to when loading into a world. Possible values are `Hidden`, `Minimap`, and `Overlay`.
+The mode to set the minimap to when loading into a world. Possible values: `Hidden`, `Minimap`, and `Overlay`.
 
 ## Development
 

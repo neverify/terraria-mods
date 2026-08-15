@@ -12,7 +12,7 @@ The mod should work in multiplayer.
 
 ### Spawn Chance Multiplier
 
-Multiply the chance of the traveling merchant spawning each tick. Decimal number between `1.0` and `100.0`.
+Multiply the chance of the traveling merchant spawning each tick. Decimal number between `1.0` and `100.0` (e.g. `2.0` = 2x).
 
 ### Additional Items
 

@@ -14,11 +14,11 @@ The mod should work in multiplayer.
 
 ### Brightness Override
 
-Enable the brightness override. This only works with the "color" lighting mode.
+Enable the brightness override. Only works with the "color" lighting mode.
 
 ### Brightness
 
-The brightness at which to render tiles at. Decimal number between `0` and `1` (e.g. 0.1 = 10%).
+The brightness at which to render tiles at. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
 
 ### Disable Light Smoothing
 

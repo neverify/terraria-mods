@@ -20,7 +20,7 @@ If you use the keybind to access the menu, the button becomes useless.
 
 ### Toggle Settings
 
-Toggle the settings menu. Default keybind: `Escape`.
+Toggle the settings menu. Default: `Escape`.
 
 ## Development
 
