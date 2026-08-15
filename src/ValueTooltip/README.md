@@ -8,7 +8,7 @@ This mod fixes the issue by adding a line to all items' tooltips that displays t
 
 The mod should work in multiplayer.
 
-## Config
+## Configuration
 
 ### Show Value Tooltips
 
