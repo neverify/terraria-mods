@@ -29,6 +29,7 @@ internal static class ChestPatch
 
     private static void AddItemSet(HashSet<int> items)
     {
+        // Find the first available slot.
         int count = Array.IndexOf(Main.travelShop, 0);
 
         foreach (int itemId in items)
