@@ -2,7 +2,7 @@
 
 This is a monorepo containing all of my Terraria mods for the [TerrariaModder](https://inidar1.github.io/terraria-modder/) framework.
 
-All mods are built for Terraria 1.4.5 and require TerrariaModder 0.4.0.
+All mods are built for Terraria 1.4.5 and require TerrariaModder 0.4.0 or later.
 
 None of the mods have explicit multiplayer support, but might still work at least partially.
 
@@ -25,18 +25,18 @@ Install [TerrariaModder](https://inidar1.github.io/terraria-modder/installation/
 
 ### With TerrariaModder Vault
 
-You can find all of the mods in the "Browse Nexus" section.
+Enter the ID of the mod in the search bar of the "Browse Nexus" section and press Enter. The mod should appear in the list and be able to be installed normally. The ID of the mod is the final number in the URL of the mod's page on Nexus Mods.
 
 ### Manually
 
-1. Download the [latest release](https://github.com/neverify/terraria-mods/releases) of any mod or from [Nexus Mods](https://www.nexusmods.com/terraria).
+1. Download the latest release of any mod from [GitHub](https://github.com/neverify/terraria-mods/releases) or from [Nexus Mods](https://www.nexusmods.com/terraria).
 2. Extract the downloaded .zip file and move the folder inside into `Terraria/TerrariaModder/mods/`.
 
 ## Development
 
 Mods are located in `src/` where each mod is a separate C# project.
 
-The `src/Utils/` folder contains shared utilities – currently only a helper for harmony patching.
+The `src/Utils/` folder contains shared utilities.
 
 `Directory.Build.props` contains MSBuild properties common to all projects. These include
 
@@ -52,7 +52,7 @@ Each mod has its own `README.md` file documenting the mod's logic.
 ### Setup
 
 1. Install required tools:
-   - [.NET 10](https://dotnet.microsoft.com/en-us/download) (lower versions also work)
+   - [.NET 10](https://dotnet.microsoft.com/en-us/download)
    - [.NET Framework 4.8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 2. Clone the repository.
 3. Copy and rename `Directory.Build.local.props.example` to `Directory.Build.local.props`.
@@ -68,7 +68,7 @@ Each mod has its own `README.md` file documenting the mod's logic.
 6. Build a mod with `dotnet build`:
 
    ```bash
-   dotnet build src/FullBright/FullBright.csproj -c Release
+   dotnet build src/<ModName>/<ModName>.csproj -c Release
    ```
 
    Build output is written to `build/<mod-id>/`. The mod's `manifest.json` and `icon.png` are automatically copied as well.
@@ -87,6 +87,6 @@ If you want to contribute, please contact me on Discord first :​)
 
 ## Credits
 
-A massive thanks to Inidar1 for creating the TerrariaModder framework. It makes all of these mods possible and the wait for tModLoader 1.4.5 bearable <​3
+A massive thanks to Inidar1 for creating the TerrariaModder framework and ConfuzzedCat for creating TerrariaInjector. They make all of these mods possible and the wait for tModLoader 1.4.5 bearable <​3
 
 Mod icons use Terraria assets.
