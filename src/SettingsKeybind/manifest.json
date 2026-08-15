@@ -7,7 +7,7 @@
   "homepage": "https://github.com/neverify/terraria-mods",
 
   "entry_dll": "SettingsKeybind.dll",
-  "framework_version": "0.4.0",
+  "framework_version": ">=0.4.0",
   "terraria_version": "1.4.5",
 
   "keybinds": [
