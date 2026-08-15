@@ -8,7 +8,7 @@ public class Mod : IMod, IModLifecycle
 {
     public string Id => "deterministic-drops";
     public string Name => "Deterministic Drops";
-    public string Version => "1.0.1";
+    public string Version => "1.1.0";
 
     internal static Mod Instance { get; private set; }
 
