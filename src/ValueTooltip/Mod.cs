@@ -23,6 +23,7 @@ public class Mod : IMod
         Config = context.GetConfig<Config>();
     }
 
+    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
 
     public void Unload() { }
