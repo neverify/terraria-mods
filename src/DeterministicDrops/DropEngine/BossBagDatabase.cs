@@ -227,7 +227,7 @@ internal static class BossBagDatabase
             [
                 new(
                     new(ItemID.DemonHeart),
-                    dropCondition: DropProcessor.DropCondition.NotDemonHeart
+                    dropCondition: DropProcessor.DropCondition.NoDemonHeart
                 ),
                 new(new(ItemID.Pwnhammer)),
                 new(new(ItemID.FleshMask), chanceDenominator: 7),

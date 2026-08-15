@@ -164,7 +164,7 @@ internal static class DropProcessor
             && (!condition.HasFlag(DropCondition.Crimson) || WorldGen.crimson)
             && (!condition.HasFlag(DropCondition.Corruption) || !WorldGen.crimson)
             && (!condition.HasFlag(DropCondition.DemonHeart) || player.extraAccessory)
-            && (!condition.HasFlag(DropCondition.NotDemonHeart) || !player.extraAccessory)
+            && (!condition.HasFlag(DropCondition.NoDemonHeart) || !player.extraAccessory)
             && (!condition.HasFlag(DropCondition.CelebrationMK10) || Main.tenthAnniversaryWorld)
             && (!condition.HasFlag(DropCondition.NotCelebrationMK10) || !Main.tenthAnniversaryWorld)
             && (!condition.HasFlag(DropCondition.NoPortalGun) || !player.HasItem(ItemID.PortalGun))
@@ -184,7 +184,7 @@ internal static class DropProcessor
         Crimson = 1 << 2,
         Corruption = 1 << 3,
         DemonHeart = 1 << 4,
-        NotDemonHeart = 1 << 5,
+        NoDemonHeart = 1 << 5,
         CelebrationMK10 = 1 << 6,
         NotCelebrationMK10 = 1 << 7,
         NoPortalGun = 1 << 8,
