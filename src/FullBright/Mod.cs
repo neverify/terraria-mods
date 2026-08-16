@@ -1,31 +1,15 @@
 using FullBright.Features;
-using TerrariaModder.Core;
-using TerrariaModder.Core.Logging;
+using Utils;
 
 namespace FullBright;
 
-public class Mod : IMod
+public class Mod : ModBase<Mod, Config>
 {
-    public string Id => "full-bright";
-    public string Name => "Fullbright";
-    public string Version => "1.1.1";
-
-    internal static Mod Instance { get; private set; }
-
-    internal ILogger Log { get; private set; }
-    internal Config Config { get; private set; }
-
-    public void Initialize(ModContext context)
-    {
-        Instance = this;
-
-        Log = context.Logger;
-        Config = context.GetConfig<Config>();
-    }
+    public override string Id => "full-bright";
+    public override string Name => "Fullbright";
+    public override string Version => "1.1.1";
 
     public static void OnGameReady() => LightingQuality.SetQuality();
 
     public void OnConfigChanged() => LightingQuality.SetQuality();
-
-    public void Unload() { }
 }

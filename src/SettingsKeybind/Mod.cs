@@ -1,33 +1,14 @@
-using TerrariaModder.Core;
-using TerrariaModder.Core.Logging;
+using Utils;
 
 namespace SettingsKeybind;
 
-public class Mod : IMod
+public class Mod : ModBase<Mod, Config>
 {
-    public string Id => "settings-keybind";
-    public string Name => "Settings Keybind";
-    public string Version => "1.0.1";
+    public override string Id => "settings-keybind";
+    public override string Name => "Settings Keybind";
+    public override string Version => "1.0.1";
 
-    internal static Mod Instance { get; private set; }
+    protected override void Initialize() => Keybinds.Register();
 
-    internal ILogger Log { get; private set; }
-    internal Config Config { get; private set; }
-    internal ModContext Context { get; private set; }
-
-    public void Initialize(ModContext context)
-    {
-        Instance = this;
-
-        Log = context.Logger;
-        Config = context.GetConfig<Config>();
-        Context = context;
-
-        Keybinds.Register();
-    }
-
-    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
-
-    public void Unload() { }
 }

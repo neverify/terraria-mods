@@ -1,29 +1,13 @@
 using TerrariaModder.Core;
-using TerrariaModder.Core.Logging;
+using Utils;
 
 namespace RareDropNotification;
 
-public class Mod : IMod
+public class Mod : ModBase<Mod, Config>, IMod
 {
-    public string Id => "rare-drop-notification";
-    public string Name => "Rare Drop Notification";
-    public string Version => "1.0.1";
+    public override string Id => "rare-drop-notification";
+    public override string Name => "Rare Drop Notification";
+    public override string Version => "1.0.1";
 
-    internal static Mod Instance { get; private set; }
-
-    internal ILogger Log { get; private set; }
-    internal Config Config { get; private set; }
-
-    public void Initialize(ModContext context)
-    {
-        Instance = this;
-
-        Log = context.Logger;
-        Config = context.GetConfig<Config>();
-    }
-
-    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
-
-    public void Unload() { }
 }

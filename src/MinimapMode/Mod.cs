@@ -1,27 +1,14 @@
 using MinimapMode.Features;
 using TerrariaModder.Core;
-using TerrariaModder.Core.Logging;
+using Utils;
 
 namespace MinimapMode;
 
-public class Mod : IMod, IModLifecycle
+public class Mod : ModBase<Mod, Config>, IModLifecycle
 {
-    public string Id => "minimap-mode";
-    public string Name => "Minimap Mode";
-    public string Version => "1.0.1";
-
-    internal static Mod Instance { get; private set; }
-
-    internal ILogger Log { get; private set; }
-    internal Config Config { get; private set; }
-
-    public void Initialize(ModContext context)
-    {
-        Instance = this;
-
-        Log = context.Logger;
-        Config = context.GetConfig<Config>();
-    }
+    public override string Id => "minimap-mode";
+    public override string Name => "Minimap Mode";
+    public override string Version => "1.0.1";
 
     public void OnWorldLoad()
     {
@@ -35,8 +22,5 @@ public class Mod : IMod, IModLifecycle
 
     public void OnWorldUnload() { }
 
-    // Prevent "Game Reload Required" message on config changes.
     public void OnConfigChanged() { }
-
-    public void Unload() { }
 }
