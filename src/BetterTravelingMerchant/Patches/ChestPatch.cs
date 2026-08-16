@@ -4,13 +4,14 @@ using System.Linq;
 using HarmonyLib;
 using Terraria;
 using Terraria.ID;
-using Utils;
 
 namespace BetterTravelingMerchant.Patches;
 
 [HarmonyPatch(typeof(Chest), nameof(Chest.SetupTravelShop))]
-internal sealed class ChestPatch : Patch<Mod>
+internal sealed class ChestPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static void Postfix()
     {
         if (!Mod.Instance.Config.AdditionalItems)

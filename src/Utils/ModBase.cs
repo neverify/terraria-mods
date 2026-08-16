@@ -4,15 +4,7 @@ using TerrariaModder.Core.Logging;
 
 namespace Utils;
 
-public abstract class ModBase<TMod>
-    where TMod : ModBase<TMod>
-{
-    internal static TMod Instance { get; private set; }
-
-    protected void SetInstance() => Instance = (TMod)this;
-}
-
-public abstract class ModBase<TMod, TConfig> : ModBase<TMod>, IMod
+public abstract class ModBase<TMod, TConfig> : IMod
     where TMod : ModBase<TMod, TConfig>
     where TConfig : ModConfig
 {
@@ -20,13 +12,15 @@ public abstract class ModBase<TMod, TConfig> : ModBase<TMod>, IMod
     public abstract string Name { get; }
     public abstract string Version { get; }
 
+    internal static TMod Instance { get; private set; }
+
     internal ILogger Log { get; private set; }
     internal TConfig Config { get; private set; }
     internal ModContext Context { get; private set; }
 
     void IMod.Initialize(ModContext context)
     {
-        SetInstance();
+        Instance = (TMod)this;
 
         Log = context.Logger;
         Config = context.GetConfig<TConfig>();

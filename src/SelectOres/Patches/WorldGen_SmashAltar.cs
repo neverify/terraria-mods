@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using HarmonyLib;
 using Terraria;
 using Terraria.ID;
-using Utils;
 
 namespace SelectOres.Patches;
 
 [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.SmashAltar))]
-internal sealed class SmashAltarPatch : Patch<Mod>
+internal sealed class SmashAltarPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static void Prefix()
     {
         if (!Mod.Instance.Config.OverrideGeneration)

@@ -1,7 +1,6 @@
 using DeterministicDrops.DropEngine;
 using HarmonyLib;
 using Terraria.GameContent.ItemDropRules;
-using Utils;
 
 namespace DeterministicDrops.Patches;
 
@@ -9,8 +8,10 @@ namespace DeterministicDrops.Patches;
     typeof(FromOptionsWithoutRepeatsDropRule),
     nameof(FromOptionsWithoutRepeatsDropRule.TryDroppingItem)
 )]
-internal sealed class FromOptionsWithoutRepeatsDropRulePatch : Patch<Mod>
+internal sealed class FromOptionsWithoutRepeatsDropRulePatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static bool Prefix(
         DropAttemptInfo info,
         FromOptionsWithoutRepeatsDropRule __instance,

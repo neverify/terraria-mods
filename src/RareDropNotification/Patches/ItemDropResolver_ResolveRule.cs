@@ -1,13 +1,14 @@
 using HarmonyLib;
 using RareDropNotification.Features;
 using Terraria.GameContent.ItemDropRules;
-using Utils;
 
 namespace RareDropNotification.Patches;
 
 [HarmonyPatch(typeof(ItemDropResolver), "ResolveRule")]
-internal sealed class ResolveRulePatch : Patch<Mod>
+internal sealed class ResolveRulePatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static void Postfix(IItemDropRule rule, ItemDropAttemptResult __result)
     {
         if (!Mod.Instance.Config.Enabled)

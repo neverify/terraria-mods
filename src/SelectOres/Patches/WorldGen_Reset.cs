@@ -3,13 +3,14 @@ using HarmonyLib;
 using Terraria;
 using Terraria.ID;
 using Terraria.WorldBuilding;
-using Utils;
 
 namespace SelectOres.Patches;
 
 [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.Reset))]
-internal sealed class ResetPatch : Patch<Mod>
+internal sealed class ResetPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static void Postfix()
     {
         if (!Mod.Instance.Config.OverrideGeneration)

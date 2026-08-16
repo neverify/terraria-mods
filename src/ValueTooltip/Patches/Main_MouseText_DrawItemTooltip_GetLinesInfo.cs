@@ -3,13 +3,14 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Utils;
 
 namespace ValueTooltip.Patches;
 
 [HarmonyPatch(typeof(Main), nameof(Main.MouseText_DrawItemTooltip_GetLinesInfo))]
-internal sealed class MouseText_DrawItemTooltip_GetLinesInfoPatch : Patch<Mod>
+internal sealed class MouseText_DrawItemTooltip_GetLinesInfoPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static void Postfix(
         Item item,
         ref int numLines,

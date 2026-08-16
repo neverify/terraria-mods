@@ -2,13 +2,14 @@ using System.Reflection;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Light;
-using Utils;
 
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(LightingEngine), "ProcessScan")]
-internal sealed class ProcessScanPatch : Patch<Mod>
+internal sealed class ProcessScanPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     public static Rectangle CachedActiveProcessedArea { get; private set; }
 
     // Cache the active processed area.

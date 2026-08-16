@@ -1,12 +1,13 @@
 using HarmonyLib;
 using Terraria.Map;
-using Utils;
 
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(WorldMap), "UpdateLighting")]
-internal sealed class UpdateLightingPatch : Patch<Mod>
+internal sealed class UpdateLightingPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static bool Prefix(int x, int y, WorldMap __instance)
     {
         if (!Mod.Instance.Config.MapLightingOverride)

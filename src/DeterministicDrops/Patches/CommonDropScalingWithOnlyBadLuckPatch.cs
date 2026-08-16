@@ -1,7 +1,6 @@
 using DeterministicDrops.DropEngine;
 using HarmonyLib;
 using Terraria.GameContent.ItemDropRules;
-using Utils;
 
 namespace DeterministicDrops.Patches;
 
@@ -9,8 +8,10 @@ namespace DeterministicDrops.Patches;
     typeof(CommonDropScalingWithOnlyBadLuck),
     nameof(CommonDropScalingWithOnlyBadLuck.TryDroppingItem)
 )]
-internal sealed class CommonDropScalingWithOnlyBadLuckPatch : Patch<Mod>
+internal sealed class CommonDropScalingWithOnlyBadLuckPatch
 {
+    private static bool Prepare() => Mod.Instance != null;
+
     private static bool Prefix(
         DropAttemptInfo info,
         CommonDropScalingWithOnlyBadLuck __instance,
