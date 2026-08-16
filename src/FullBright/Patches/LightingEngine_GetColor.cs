@@ -14,10 +14,8 @@ internal sealed class GetColorPatch
         if (!Mod.Instance.Config.BrightnessOverride)
             return true;
 
-        Rectangle activeProcessedArea = ProcessScanPatch.CachedActiveProcessedArea;
-
         // Don't override color outside the active processed area.
-        __result = activeProcessedArea.Contains(x, y)
+        __result = ProcessScanPatch.CachedActiveProcessedArea.Contains(x, y)
             ? new Vector3(Mod.Instance.Config.Brightness)
             : Vector3.Zero;
 
