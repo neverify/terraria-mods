@@ -1,7 +1,7 @@
 {
   "id": "minimap-mode",
   "name": "Minimap Mode",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "neverify",
   "description": "Set the minimap to a configured mode when loading into a world.",
   "homepage": "https://www.nexusmods.com/terraria/mods/208",

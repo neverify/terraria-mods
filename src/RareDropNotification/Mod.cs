@@ -7,7 +7,7 @@ public class Mod : ModBase<Mod, Config>, IMod
 {
     public override string Id => "rare-drop-notification";
     public override string Name => "Rare Drop Notification";
-    public override string Version => "1.0.1";
+    public override string Version => "1.0.2";
 
     public void OnConfigChanged() { }
 }
