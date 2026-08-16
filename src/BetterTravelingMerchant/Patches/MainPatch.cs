@@ -8,7 +8,7 @@ internal sealed class MainPatch
 {
     private const int BaseSpawnChanceDenominator = 108000;
 
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static void Postfix()
     {

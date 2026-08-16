@@ -6,7 +6,7 @@ namespace FullBright.Patches;
 [HarmonyPatch(typeof(WorldMap), "UpdateLighting")]
 internal sealed class UpdateLightingPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static bool Prefix(int x, int y, WorldMap __instance)
     {

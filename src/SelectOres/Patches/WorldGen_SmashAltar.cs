@@ -8,7 +8,7 @@ namespace SelectOres.Patches;
 [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.SmashAltar))]
 internal sealed class SmashAltarPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static void Prefix()
     {

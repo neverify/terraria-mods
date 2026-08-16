@@ -7,7 +7,7 @@ namespace DeterministicDrops.Patches;
 [HarmonyPatch(typeof(CommonDrop), nameof(CommonDrop.TryDroppingItem))]
 internal sealed class CommonDropPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static bool Prefix(
         DropAttemptInfo info,

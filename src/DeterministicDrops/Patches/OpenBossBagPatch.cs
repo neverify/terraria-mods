@@ -9,7 +9,7 @@ namespace DeterministicDrops.Patches;
 [HarmonyPatch(typeof(Player), nameof(Player.OpenBossBag))]
 internal sealed class OpenBossBagPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static bool Prefix(int type, Player __instance)
     {

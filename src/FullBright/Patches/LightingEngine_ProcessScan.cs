@@ -8,7 +8,7 @@ namespace FullBright.Patches;
 [HarmonyPatch(typeof(LightingEngine), "ProcessScan")]
 internal sealed class ProcessScanPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     public static Rectangle CachedActiveProcessedArea { get; private set; }
 

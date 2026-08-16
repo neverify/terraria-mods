@@ -10,7 +10,7 @@ namespace DeterministicDrops.Patches;
 )]
 internal sealed class CommonDropNotScalingWithLuckPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static bool Prefix(
         DropAttemptInfo info,

@@ -7,7 +7,7 @@ namespace RareDropNotification.Patches;
 [HarmonyPatch(typeof(ItemDropResolver), "ResolveRule")]
 internal sealed class ResolveRulePatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static void Postfix(IItemDropRule rule, ItemDropAttemptResult __result)
     {

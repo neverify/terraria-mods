@@ -7,7 +7,7 @@ namespace FullBright.Patches;
 [HarmonyPatch(typeof(LightingEngine), "GetColor")]
 internal sealed class GetColorPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static bool Prefix(int x, int y, ref Vector3 __result)
     {

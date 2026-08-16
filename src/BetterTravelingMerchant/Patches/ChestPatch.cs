@@ -10,7 +10,7 @@ namespace BetterTravelingMerchant.Patches;
 [HarmonyPatch(typeof(Chest), nameof(Chest.SetupTravelShop))]
 internal sealed class ChestPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static void Postfix()
     {

@@ -9,7 +9,7 @@ namespace ValueTooltip.Patches;
 [HarmonyPatch(typeof(Main), nameof(Main.MouseText_DrawItemTooltip_GetLinesInfo))]
 internal sealed class MouseText_DrawItemTooltip_GetLinesInfoPatch
 {
-    private static bool Prepare() => Mod.Instance != null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static void Postfix(
         Item item,
