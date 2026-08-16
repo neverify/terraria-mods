@@ -1,10 +1,11 @@
 using HarmonyLib;
 using Terraria.IO;
+using Utils;
 
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(WorldFile), nameof(WorldFile.SaveWorld))]
-internal static class SaveWorldPatch
+internal sealed class SaveWorldPatch : Patch<Mod>
 {
-    internal static void Prefix() => Mod.Instance.DropStateStore?.Save();
+    private static void Prefix() => Mod.Instance.DropStateStore?.Save();
 }

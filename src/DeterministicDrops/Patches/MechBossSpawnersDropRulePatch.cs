@@ -1,13 +1,14 @@
 using DeterministicDrops.DropEngine;
 using HarmonyLib;
 using Terraria.GameContent.ItemDropRules;
+using Utils;
 
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(MechBossSpawnersDropRule), nameof(MechBossSpawnersDropRule.TryDroppingItem))]
-internal static class MechBossSpawnersDropRulePatch
+internal sealed class MechBossSpawnersDropRulePatch : Patch<Mod>
 {
-    public static bool Prefix(
+    private static bool Prefix(
         DropAttemptInfo info,
         MechBossSpawnersDropRule __instance,
         ref ItemDropAttemptResult __result

@@ -1,13 +1,14 @@
 using DeterministicDrops.DropEngine;
 using HarmonyLib;
 using Terraria.GameContent.ItemDropRules;
+using Utils;
 
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(CommonDropWithRerolls), nameof(CommonDropWithRerolls.TryDroppingItem))]
-internal static class CommonDropWithRerollsPatch
+internal sealed class CommonDropWithRerollsPatch : Patch<Mod>
 {
-    public static bool Prefix(
+    private static bool Prefix(
         DropAttemptInfo info,
         CommonDropWithRerolls __instance,
         ref ItemDropAttemptResult __result

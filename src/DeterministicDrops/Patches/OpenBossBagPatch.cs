@@ -3,13 +3,14 @@ using HarmonyLib;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Utils;
 
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(Player), nameof(Player.OpenBossBag))]
-internal sealed class OpenBossBagPatch
+internal sealed class OpenBossBagPatch : Patch<Mod>
 {
-    public static bool Prefix(int type, Player __instance)
+    private static bool Prefix(int type, Player __instance)
     {
         if (!Mod.Instance.Config.EnableDeterministicTreasureBags)
             return true;

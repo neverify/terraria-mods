@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using DeterministicDrops.DropEngine;
 using Terraria.GameContent.ItemDropRules;
+using Utils;
 
 namespace DeterministicDrops.Patches;
 
-internal static class TryDroppingItemPatchHelper
+internal sealed class TryDroppingItemPatchHelper : Patch<Mod>
 {
     public static bool HandleDrop<IItemDropRule>(
         DropAttemptInfo info,

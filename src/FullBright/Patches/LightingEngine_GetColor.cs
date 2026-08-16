@@ -1,13 +1,14 @@
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Light;
+using Utils;
 
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(LightingEngine), "GetColor")]
-internal static class GetColorPatch
+internal sealed class GetColorPatch : Patch<Mod>
 {
-    internal static bool Prefix(int x, int y, ref Vector3 __result)
+    private static bool Prefix(int x, int y, ref Vector3 __result)
     {
         if (!Mod.Instance.Config.BrightnessOverride)
             return true;

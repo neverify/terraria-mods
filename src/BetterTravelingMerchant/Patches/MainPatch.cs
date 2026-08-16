@@ -1,19 +1,20 @@
 using HarmonyLib;
 using Terraria;
+using Utils;
 
 namespace BetterTravelingMerchant.Patches;
 
 [HarmonyPatch(typeof(Main), "UpdateTime")]
-internal static class MainPatch
+internal sealed class MainPatch : Patch<Mod>
 {
     private const int BaseSpawnChanceDenominator = 108000;
 
-    internal static void Postfix()
+    private static void Postfix()
     {
-        if (!(!Main.IsFastForwardingTime() && Main.dayTime && Main.time < 27000.0))
+        if (Mod.Instance == null || Mod.Instance.Config.SpawnChanceMultiplier == 1.0f)
             return;
 
-        if (Mod.Instance.Config.SpawnChanceMultiplier == 1.0f)
+        if (!(!Main.IsFastForwardingTime() && Main.dayTime && Main.time < 27000.0))
             return;
 
         int spawnChanceDenominator = (int)(

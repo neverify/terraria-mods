@@ -2,16 +2,17 @@ using System.Reflection;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Light;
+using Utils;
 
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(LightingEngine), "ProcessScan")]
-internal static class ProcessScanPatch
+internal sealed class ProcessScanPatch : Patch<Mod>
 {
-    internal static Rectangle CachedActiveProcessedArea { get; private set; }
+    public static Rectangle CachedActiveProcessedArea { get; private set; }
 
     // Cache the active processed area.
-    internal static void Postfix(LightingEngine __instance)
+    private static void Postfix(LightingEngine __instance)
     {
         if (!Mod.Instance.Config.BrightnessOverride)
             return;

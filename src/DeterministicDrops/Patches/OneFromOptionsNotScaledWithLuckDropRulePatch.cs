@@ -1,6 +1,7 @@
 using DeterministicDrops.DropEngine;
 using HarmonyLib;
 using Terraria.GameContent.ItemDropRules;
+using Utils;
 
 namespace DeterministicDrops.Patches;
 
@@ -8,9 +9,9 @@ namespace DeterministicDrops.Patches;
     typeof(OneFromOptionsNotScaledWithLuckDropRule),
     nameof(OneFromOptionsNotScaledWithLuckDropRule.TryDroppingItem)
 )]
-internal static class OneFromOptionsNotScaledWithLuckDropRulePatch
+internal sealed class OneFromOptionsNotScaledWithLuckDropRulePatch : Patch<Mod>
 {
-    public static bool Prefix(
+    private static bool Prefix(
         DropAttemptInfo info,
         OneFromOptionsNotScaledWithLuckDropRule __instance,
         ref ItemDropAttemptResult __result
