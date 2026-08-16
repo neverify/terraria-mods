@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-08-16
+
+## Fixed
+
+- Disabling the mod in TerrariaModder Vault causing a crash.
+
 ## [1.0.1] - 2026-08-15
 
 ### Fixed
