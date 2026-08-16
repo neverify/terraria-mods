@@ -9,13 +9,6 @@ Get-ChildItem -Path $srcPath -Directory | ForEach-Object {
 
         dotnet build $csproj -c Release
 
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "Build failed for $modId" -ForegroundColor Red
-        }
-        else {
-            Write-Host "Build succeeded for $modId" -ForegroundColor Green
-        }
-
         Write-Host
     }
     else {
