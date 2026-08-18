@@ -120,29 +120,25 @@ internal static class BossBagDatabase
                     new(ItemID.DemoniteOre),
                     minDropAmount: 80,
                     maxDropAmount: 110,
-                    dropCondition: DropProcessor.DropCondition.Crimson
-                        | DropProcessor.DropCondition.NotMasterMode
+                    dropCondition: DropProcessor.DropCondition.NotMasterMode
                 ),
                 new(
                     new(ItemID.DemoniteOre),
                     minDropAmount: 110,
                     maxDropAmount: 135,
-                    dropCondition: DropProcessor.DropCondition.Crimson
-                        | DropProcessor.DropCondition.MasterMode
+                    dropCondition: DropProcessor.DropCondition.MasterMode
                 ),
                 new(
                     new(ItemID.ShadowScale),
                     minDropAmount: 20,
                     maxDropAmount: 40,
-                    dropCondition: DropProcessor.DropCondition.Corruption
-                        | DropProcessor.DropCondition.NotMasterMode
+                    dropCondition: DropProcessor.DropCondition.NotMasterMode
                 ),
                 new(
                     new(ItemID.ShadowScale),
                     minDropAmount: 30,
                     maxDropAmount: 50,
-                    dropCondition: DropProcessor.DropCondition.Corruption
-                        | DropProcessor.DropCondition.MasterMode
+                    dropCondition: DropProcessor.DropCondition.MasterMode
                 ),
             ]
         },
@@ -156,29 +152,25 @@ internal static class BossBagDatabase
                     new(ItemID.CrimtaneOre),
                     minDropAmount: 80,
                     maxDropAmount: 110,
-                    dropCondition: DropProcessor.DropCondition.Crimson
-                        | DropProcessor.DropCondition.NotMasterMode
+                    dropCondition: DropProcessor.DropCondition.NotMasterMode
                 ),
                 new(
                     new(ItemID.CrimtaneOre),
                     minDropAmount: 110,
                     maxDropAmount: 135,
-                    dropCondition: DropProcessor.DropCondition.Crimson
-                        | DropProcessor.DropCondition.MasterMode
+                    dropCondition: DropProcessor.DropCondition.MasterMode
                 ),
                 new(
                     new(ItemID.TissueSample),
                     minDropAmount: 20,
                     maxDropAmount: 40,
-                    dropCondition: DropProcessor.DropCondition.Corruption
-                        | DropProcessor.DropCondition.NotMasterMode
+                    dropCondition: DropProcessor.DropCondition.NotMasterMode
                 ),
                 new(
                     new(ItemID.TissueSample),
                     minDropAmount: 30,
                     maxDropAmount: 50,
-                    dropCondition: DropProcessor.DropCondition.Corruption
-                        | DropProcessor.DropCondition.MasterMode
+                    dropCondition: DropProcessor.DropCondition.MasterMode
                 ),
             ]
         },
