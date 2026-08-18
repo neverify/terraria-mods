@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-08-18
+
+## Fixed
+
+- Eater of Worlds and Brain of Cthulhu boss bags having incorrect conditions for dropping the evil ores and Shadow Scales/Tissue Samples.
+
 ## [1.1.1] - 2026-08-16
 
 ## Fixed
