@@ -2,7 +2,7 @@
 
 Reduce variance in item drops while preserving vanilla drop rates.
 
-The NPC drop system in vanilla Terraria uses a bernoulli trial to determine if items should be dropped. This results in the drops following a binomial distribution, which allows for cases of extreme luck and unluck. In practise this means that you can kill 1000 Chaos Elementals while not obtaining a single Rod of Discord – annoying!
+The drop system in vanila Terraria follows a binomial distribution. This means that it is possible to go very long periods without getting a desired drop. For example, killing 1000 Chaos Elementals, yet not obtaining a single Rod of Discord – annoying!
 
 This mod fixes this issue. Instead of drops being determined by a random chance, each kill of an NPC adds progress towards obtaining each item it can drop according to the drop rate. This means that killing NPCs with higher odds of dropping an item adds more progress than NPCs with a lower drop rate. For example, killing a Flying Dutchman contributes 67 regular pirates worth of progress towards obtaining any of the Lucky Ring parts.
 
