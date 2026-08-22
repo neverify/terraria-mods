@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>FunctionalSocialAccessories</AssemblyName>
+    <ModId>functional-social-accessories</ModId>
+    <RootNamespace>FunctionalSocialAccessories</RootNamespace>
+  </PropertyGroup>
+</Project>
