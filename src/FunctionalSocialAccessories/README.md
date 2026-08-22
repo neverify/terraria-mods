@@ -4,12 +4,13 @@ Make accessories in social slots functional.
 
 This mod provides a simple way to increase the amount of accessories available. It makes accessories function in the social slots just like they do in the regular accessory slots.
 
-The current implementation has the following side-effects:
+The current implementation has the following shortcomings:
 
 - When having wings in both a regular slot and its corresponding social slot, the stats of the wings in the social slot are used instead of the vanilla behavior of using the stats from the regular slot.
 - There is no way to disable the effects of accessories in social slots.
+- The tooltip "Not functional in social slot" is still displayed.
 
-I am planning to implement fixes to both of these issues. There are probably other side-effects as well – I haven't tested the mod extensively. Please report any issues you encounter using the instructions below :​)
+I will probably address these issues at some point. There are probably other side-effects as well – I haven't tested the mod extensively. Please report any issues you encounter using the instructions below :​)
 
 The mod works in multiplayer.
 
