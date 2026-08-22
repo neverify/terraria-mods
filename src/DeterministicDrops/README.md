@@ -39,12 +39,12 @@ When this option is enabled, treasure bag drops are handled by the mod. When thi
 #### `Terraria.GameContent.ItemDropRules.IItemDropRule.TryDroppingItem()`
 
 ```cs
-ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info);
+ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
 ```
 
 This method handles dropping items from NPCs. The implementation varies wildly across different drop rules, which is why the code is not included here. The `DropContext` class abstracts all of the properties exhibited by the different implementations, which allows the generic drop engine to handle all the different drops.
 
-The mod applies prefix patches onto these methods to replace them. The patches forward the `IItemDropRule` instance to the generic `TryDroppingItemPatchHelper` method. That method passes the instance with other arguments to the pseudo-overloads of `ProcessDrop`. These methods extract the relevant info from the instances to form the `DropContext` object and pass it to the generic `ProcessDrop` method.
+The mod applies prefix patches to these methods to replace them. The patches forward the `IItemDropRule` instance to the generic `TryDroppingItemPatchHelper` method. That method passes the instance with other arguments to the pseudo-overloads of `ProcessDrop`. These methods extract the relevant info from the instances to form the `DropContext` object and pass it to the generic `ProcessDrop` method.
 
 #### `Terraria.Player.OpenBossBag()`
 
@@ -125,7 +125,7 @@ The method contains a massive switch statement for each type of treasure bag. In
 
 At the end the coins are spawned. The coin amount is calculated from the NPC value, which is mapped manually. The value is then randomized before being turned into coins and spawned into the player's inventory.
 
-The mod applies a prefix patch onto this method to replace it. The patch fetches the appropriate `DropContext` array from `BossBagDatabase`, then calls the `ProcessDrop` method with them. It then spawns all of the dropped items. Finally it fetches the amount of coins from the database and spawns them.
+The mod applies a prefix patch to this method to replace it. The patch fetches the appropriate `DropContext` array from `BossBagDatabase`, then calls the `ProcessDrop` method with them. It then spawns all of the dropped items. Finally it fetches the amount of coins from the database and spawns them.
 
 #### `Terraria.IO.WorldFile.SaveWorld()`
 
@@ -146,7 +146,7 @@ public static void SaveWorld(bool resetTime = false, bool useTemps = false, bool
 
 This method handles saving the world on exit and when an autosave occurs.
 
-The mod applies a prefix patch onto this method to save the drop progress. Since the save method is also called in the `OnWorldUnload()` lifecycle hook, this patch only handles autosaves. Since the mod's `DropStateStore` instance is cleared in the unload hook, the patch uses a null-conditional operator to call the save method. This call only goes through during autosaves, when the `DropStateStore` instance is not `null`.
+The mod applies a prefix patch to this method to save the drop progress. Since the save method is also called in the `OnWorldUnload()` lifecycle hook, this patch only handles autosaves. Since the mod's `DropStateStore` instance is cleared in the unload hook, the patch uses a null-conditional operator to call the save method. This call only goes through during autosaves, when the `DropStateStore` instance is not `null`.
 
 ### Drop System
 

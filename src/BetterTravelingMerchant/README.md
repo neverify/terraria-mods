@@ -63,10 +63,10 @@ private static void UpdateTime()
 
 This method handles spawning the Traveling Merchant. The spawn is attempted each tick with a 1 in 108000 chance.
 
-The mod applies a postfix patch onto this method to roll the chance again with configurable odds. Since the `UpdateTime()` method is massive, it is not feasible to prevent the original chance from being rolled. Adding a second roll introduces a new distribution. Since the sum of two binomial distributions does not equal the distribution produced by increasing the original chance, there is a slight error between the configured multiplier and the actual probability. However, since the base chance is so low, this error is negligible (<1%). The error could be accounted for, but I decided against it to reduce the complexity of the patch.
+The mod applies a postfix patch to this method to roll the chance again with configurable odds. Since the `UpdateTime()` method is massive, it is not feasible to prevent the original chance from being rolled. Adding a second roll introduces a new distribution. Since the sum of two binomial distributions does not equal the distribution produced by increasing the original chance, there is a slight error between the configured multiplier and the actual probability. However, since the base chance is so low, this error is negligible (<1%). The error could be accounted for, but I decided against it to reduce the complexity of the patch.
 
 #### `Terraria.Chest.SetupTravelShop()`
 
 This method handles selecting the items sold by the Traveling Merchant. The implementation is quite long and frankly irrelevant, so it is not included here. The important part is that the method modifies the `Main.travelShop` array. This array contains the IDs of all the sold items in the order in which they appear in the shop.
 
-The mod applies a postfix patch onto this method to add the configured items into the shop. The patch first identifies the first open slot by looking for the first occurence of `0` in the array. It then loops through the configured items and adds them to sequential slots.
+The mod applies a postfix patch to this method to add the configured items into the shop. The patch first identifies the first open slot by looking for the first occurence of `0` in the array. It then loops through the configured items and adds them to sequential slots.
