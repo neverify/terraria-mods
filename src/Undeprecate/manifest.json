@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "neverify",
   "description": "Prevent Terraria from removing deprecated items.",
-  "homepage": "",
+  "homepage": "https://www.nexusmods.com/terraria/mods/233",
 
   "entry_dll": "Undeprecate.dll",
   "framework_version": ">=0.4.0",

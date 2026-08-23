@@ -4,7 +4,7 @@
   "version": "1.0.2",
   "author": "neverify",
   "description": "Make accessories in social slots functional.",
-  "homepage": "",
+  "homepage": "https://www.nexusmods.com/terraria/mods/232",
 
   "entry_dll": "FunctionalSocialAccessories.dll",
   "framework_version": ">=0.4.0",
