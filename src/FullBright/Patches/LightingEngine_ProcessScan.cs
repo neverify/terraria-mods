@@ -6,7 +6,7 @@ using Terraria.Graphics.Light;
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(LightingEngine), "ProcessScan")]
-internal sealed class ProcessScanPatch
+internal static class ProcessScanPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

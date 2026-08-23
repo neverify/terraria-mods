@@ -4,7 +4,7 @@ using Terraria.Map;
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(WorldMap), "UpdateLighting")]
-internal sealed class UpdateLightingPatch
+internal static class UpdateLightingPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

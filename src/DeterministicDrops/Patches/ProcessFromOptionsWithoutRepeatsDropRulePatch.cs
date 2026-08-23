@@ -8,7 +8,7 @@ namespace DeterministicDrops.Patches;
     typeof(FromOptionsWithoutRepeatsDropRule),
     nameof(FromOptionsWithoutRepeatsDropRule.TryDroppingItem)
 )]
-internal sealed class FromOptionsWithoutRepeatsDropRulePatch
+internal static class FromOptionsWithoutRepeatsDropRulePatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

@@ -2,7 +2,7 @@ using Terraria;
 
 namespace MinimapMode.Features;
 
-internal sealed class SetMinimapMode
+internal static class SetMinimapMode
 {
     internal static void SetMode()
     {

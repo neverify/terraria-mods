@@ -8,7 +8,7 @@ namespace DeterministicDrops.Patches;
     typeof(OneFromOptionsNotScaledWithLuckDropRule),
     nameof(OneFromOptionsNotScaledWithLuckDropRule.TryDroppingItem)
 )]
-internal sealed class OneFromOptionsNotScaledWithLuckDropRulePatch
+internal static class OneFromOptionsNotScaledWithLuckDropRulePatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

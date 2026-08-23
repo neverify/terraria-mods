@@ -7,7 +7,7 @@ using Terraria.ID;
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(Player), nameof(Player.OpenBossBag))]
-internal sealed class OpenBossBagPatch
+internal static class OpenBossBagPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

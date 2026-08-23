@@ -7,7 +7,7 @@ using Terraria.WorldBuilding;
 namespace SelectOres.Patches;
 
 [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.Reset))]
-internal sealed class ResetPatch
+internal static class ResetPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

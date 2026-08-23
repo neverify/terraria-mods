@@ -5,7 +5,7 @@ using Terraria.Graphics.Light;
 namespace FullBright.Patches;
 
 [HarmonyPatch(typeof(LightingEngine), "GetColor")]
-internal sealed class GetColorPatch
+internal static class GetColorPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

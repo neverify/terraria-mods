@@ -5,7 +5,7 @@ using Terraria.GameContent.ItemDropRules;
 
 namespace DeterministicDrops.Patches;
 
-internal sealed class TryDroppingItemPatchHelper
+internal static class TryDroppingItemPatchHelper
 {
     public static bool HandleDrop<IItemDropRule>(
         DropAttemptInfo info,

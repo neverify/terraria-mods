@@ -4,7 +4,7 @@ using Terraria.IO;
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(WorldFile), nameof(WorldFile.SaveWorld))]
-internal sealed class SaveWorldPatch
+internal static class SaveWorldPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

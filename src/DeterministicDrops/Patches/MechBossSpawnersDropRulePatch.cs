@@ -5,7 +5,7 @@ using Terraria.GameContent.ItemDropRules;
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(MechBossSpawnersDropRule), nameof(MechBossSpawnersDropRule.TryDroppingItem))]
-internal sealed class MechBossSpawnersDropRulePatch
+internal static class MechBossSpawnersDropRulePatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

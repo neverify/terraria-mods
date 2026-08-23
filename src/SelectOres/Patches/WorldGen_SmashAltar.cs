@@ -6,7 +6,7 @@ using Terraria.ID;
 namespace SelectOres.Patches;
 
 [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.SmashAltar))]
-internal sealed class SmashAltarPatch
+internal static class SmashAltarPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

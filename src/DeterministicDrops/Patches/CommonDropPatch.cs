@@ -5,7 +5,7 @@ using Terraria.GameContent.ItemDropRules;
 namespace DeterministicDrops.Patches;
 
 [HarmonyPatch(typeof(CommonDrop), nameof(CommonDrop.TryDroppingItem))]
-internal sealed class CommonDropPatch
+internal static class CommonDropPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

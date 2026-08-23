@@ -4,7 +4,7 @@ using Terraria;
 namespace BetterTravelingMerchant.Patches;
 
 [HarmonyPatch(typeof(Main), "UpdateTime")]
-internal sealed class MainPatch
+internal static class MainPatch
 {
     private const int BaseSpawnChanceDenominator = 108000;
 

@@ -5,7 +5,7 @@ using Terraria.GameContent.ItemDropRules;
 namespace RareDropNotification.Patches;
 
 [HarmonyPatch(typeof(ItemDropResolver), "ResolveRule")]
-internal sealed class ResolveRulePatch
+internal static class ResolveRulePatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 

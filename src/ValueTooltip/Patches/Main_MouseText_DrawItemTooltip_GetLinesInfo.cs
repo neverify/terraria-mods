@@ -7,7 +7,7 @@ using Terraria.ID;
 namespace ValueTooltip.Patches;
 
 [HarmonyPatch(typeof(Main), nameof(Main.MouseText_DrawItemTooltip_GetLinesInfo))]
-internal sealed class MouseText_DrawItemTooltip_GetLinesInfoPatch
+internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 
