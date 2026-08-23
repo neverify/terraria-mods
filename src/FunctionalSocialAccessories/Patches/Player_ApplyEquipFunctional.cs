@@ -23,9 +23,8 @@ internal static class ApplyEquipFunctionalPatch
         {
             GrantPrefixBenefits(__instance, socialEffectiveArmor);
             GrantArmorBenefits(__instance, socialEffectiveArmor);
+            ApplyEquipFunctional(__instance, itemSlot, socialEffectiveArmor);
         }
-
-        ApplyEquipFunctional(__instance, 0, socialEffectiveArmor);
     }
 
     [HarmonyReversePatch]
