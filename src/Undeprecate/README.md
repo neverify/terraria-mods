@@ -6,6 +6,10 @@ There are many items in Terraria that are marked as deprecated in the code. Thes
 
 The mod prevents Terraria from removing these items completely. Your items are safe as long as other players without the mod don't use them.
 
+The mod doesn't provide a way to obtain these items directly. There is a journey mode player save file with all items researched and all of the deprecated items in the inventory available for download. This is the easiest way to get access to the items.
+
+You can also use an inventory editor such as [Terrasavr](https://yal.cc/r/terrasavr/) to add the items. There is an inventory file available for Terrasavr, if you want to add these items to an existing character. To use that file, open the Inventory tab in Terrasavr, then press the "Load" button and select the file.
+
 The mod should work in multiplayer.
 
 ## Development
