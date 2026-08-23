@@ -12,7 +12,7 @@ internal static class ApplyEquipFunctionalPatch
     [HarmonyPatch("ApplyEquipFunctional")]
     private static void Prefix(Player __instance, int itemSlot)
     {
-        if (!Mod.Instance.Config.EnableFunctionalSocialAccessories)
+        if (!Mod.Instance.Config.FunctionalSocialSlots)
             return;
 
         int socialSlot = itemSlot + 10;

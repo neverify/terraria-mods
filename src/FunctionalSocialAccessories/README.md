@@ -2,17 +2,17 @@
 
 Make accessories in social slots functional.
 
-This mod provides a simple way to increase the amount of accessories available. It makes accessories function in social slots just like they do in regular accessory slots.
+This mod provides a simple way to increase the amount of accessories available. It makes accessories in social slots function the same as in normal slots.
 
-The vanity effects of accessories in social slots are unchanged – they are always visible, just like in vanilla.
+The vanity effects of accessories in social slots are unchanged. They are also always visible on the character, like in vanilla.
 
 The mod works in multiplayer.
 
 ## Configuration
 
-### Enable Functional Social Accessories
+### Functional Social Slots
 
-Make social accessories function the same as regular accessories.
+Make accessories in social slots function the same as in normal slots.
 
 ## Development
 
@@ -48,7 +48,7 @@ public void UpdateEquips(int i)
 
     // ...
 
-    // Apply the effects of accessories in functional accessory slots (3-9).
+    // Apply the effects of accessories in normal accessory slots (3-9).
     for (int m = 3; m < 10; m++)
     {
         if (IsItemSlotUnlockedAndUsable(m))
@@ -76,9 +76,9 @@ This method handles the application of stat boosts and other effects of both arm
 
 Because of this weird order in which the effects are applied, patching the `ApplyEquipVanity()` would mean those few accessories that are handled before the vanity effects of accessories in the social slots are handled wouldn't be handled properly. This is why the `ApplyEquipFunctional()` method is patched instead.
 
-The mod applies a prefix patch to the `ApplyEquipFunctional()` method to apply the functional effects of the accessory in the social counterpart of each functional slot. The patch first checks if the item in the corresponding social slot fulfills the necessary conditions, after which the `GrantPrefixBenefits()`, `GrantArmorBenefits()` and `ApplyEquipFunctional()` methods are invoked for it. Because the patch is a prefix, the `ApplyEquipFunctional()` method of the functional accessory slot is called after the social slot. This allows wings to retain their normal logic of the stats of the wings in the functional slot being used.
+The mod applies a prefix patch to the `ApplyEquipFunctional()` method to apply the functional effects of the accessory in the social counterpart of each normal slot. The patch first checks if the item in the corresponding social slot fulfills the necessary conditions, after which the `GrantPrefixBenefits()`, `GrantArmorBenefits()` and `ApplyEquipFunctional()` methods are invoked for it. Because the patch is a prefix, the `ApplyEquipFunctional()` method of the normal accessory slot is called after the social slot. This allows wings to retain their normal logic of the stats of the wings in the normal slot being used.
 
-The `ApplyEquipFunctional()` method uses the `itemSlot` parameter to determine if the accessory equipped in that slot is currently hidden. This is done via the `hideVisibleAccessory` array, which is a boolean array of size 10, covering the armor slots and the functional accessory slots. Passing the slot ID of the social slot would cause an `IndexOutOfRangeException`, since the slot IDs of social accessory slots extend beyond the array. This is why the `ìtemSlot` parameter of the functional slot is passed instead. Because the `ApplyEquipVanity()` method is ran after the functional effects have been added, the effects of that flag get overridden anyway.
+The `ApplyEquipFunctional()` method uses the `itemSlot` parameter to determine if the accessory equipped in that slot is currently hidden. This is done via the `hideVisibleAccessory` array, which is a boolean array of size 10, covering the armor slots and the normal accessory slots. Passing the slot ID of the social slot would cause an `IndexOutOfRangeException`, since the slot IDs of social accessory slots extend beyond the array. This is why the `ìtemSlot` parameter of the normal slot is passed instead. Because the `ApplyEquipVanity()` method is ran after the functional effects have been added, the effects of that flag get overridden anyway.
 
 Since the `ApplyEquipFunctional()`, `GrantPrefixBenefits()` and `GrantArmorBenefits()` methods are `private`, the mod uses a reverse harmony patch to access them. This allows the invocations to incur no performance penalties, which the naive implementation of using reflection would have. This is especially important because the `ApplyEquipVanity()` method is called every frame. This is the recommended pattern for calling private methods in harmony patches.
 

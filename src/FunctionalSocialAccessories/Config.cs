@@ -8,8 +8,8 @@ public class Config : ModConfig
 
     [
         Client,
-        Label("Enable Functional Social Accessories"),
-        Description("Make social accessories function the same as regular accessories.")
+        Label("Functional Social Slots"),
+        Description("Make accessories in social slots function the same as in normal slots.")
     ]
-    public bool EnableFunctionalSocialAccessories { get; set; } = true;
+    public bool FunctionalSocialSlots { get; set; } = true;
 }
