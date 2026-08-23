@@ -1,0 +1,12 @@
+{
+  "id": "undeprecate",
+  "name": "Undeprecate",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Prevent Terraria from removing deprecated items.",
+  "homepage": "",
+
+  "entry_dll": "Undeprecate.dll",
+  "framework_version": ">=0.4.0",
+  "terraria_version": "1.4.5"
+}

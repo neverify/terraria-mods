@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Undeprecate</AssemblyName>
+    <ModId>undeprecate</ModId>
+    <RootNamespace>Undeprecate</RootNamespace>
+  </PropertyGroup>
+</Project>
