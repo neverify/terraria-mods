@@ -4,7 +4,7 @@ Prevent Terraria from removing deprecated items.
 
 There are many items in Terraria that are marked as deprecated in the code. These items are unobtainable within the game, and Terraria scans for and removes these items if players obtain them using an inventory editor or similar tool.
 
-This mod prevents Terraria from removing these items completely. Your items are safe as long as other players without the mod don't use them.
+The mod prevents Terraria from removing these items completely. Your items are safe as long as other players without the mod don't use them.
 
 The mod should work in multiplayer.
 
