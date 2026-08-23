@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-08-23
+
+### Changed
+
+- Remove the "Not Functional in Social Slot" tooltip line only if the mod is enabled.
+- Renamed config option "Enable Functional Social Accessories" to "Functional Social Slots"
+- Renamed "functional accessories" to "normal accessories" in config descriptions.
+
 ## [1.0.1] - 2026-08-23
 
 ### Added
