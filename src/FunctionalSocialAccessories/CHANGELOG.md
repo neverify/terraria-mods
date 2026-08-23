@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-23
+
+### Added
+
+- Removed the "Not Functional in Social Slot" tooltip line from accessories in social slots.
+
+### Fixed
+
+- The effects of some accessories not applying correctly in social slots.
+- The stats of wings in a social slot being used instead of the ones in the corresponding functional slot.
+
 ## [1.0.0] - 2026-08-22
 
 ### Added
