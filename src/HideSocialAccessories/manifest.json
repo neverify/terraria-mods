@@ -3,7 +3,7 @@
   "name": "Hide Social Accessories",
   "version": "1.0.0",
   "author": "neverify",
-  "description": "Allow hiding accessories in social slots.",
+  "description": "Hide accessories in social slots on the player.",
   "homepage": "",
 
   "entry_dll": "HideSocialAccessories.dll",
