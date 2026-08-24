@@ -1,0 +1,12 @@
+{
+  "id": "hide-social-accessories",
+  "name": "Hide Social Accessories",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Allow hiding accessories in social slots.",
+  "homepage": "",
+
+  "entry_dll": "HideSocialAccessories.dll",
+  "framework_version": ">=0.4.0",
+  "terraria_version": "1.4.5"
+}

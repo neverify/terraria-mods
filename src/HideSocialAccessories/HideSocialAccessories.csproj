@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>HideSocialAccessories</AssemblyName>
+    <ModId>hide-social-accessories</ModId>
+    <RootNamespace>HideSocialAccessories</RootNamespace>
+  </PropertyGroup>
+</Project>
