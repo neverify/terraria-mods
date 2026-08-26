@@ -9,13 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.3] - 2026-08-26
 
-## Changed
+### Changed
 
 - Updated mod icon.
 
 ## [1.0.2] - 2026-08-16
 
-## Fixed
+### Fixed
 
 - Disabling the mod in TerrariaModder Vault causing a crash.
 

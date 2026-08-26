@@ -9,19 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.3] - 2026-08-26
 
-## Changed
+### Changed
 
 - Updated mod icon.
 
 ## [1.1.2] - 2026-08-18
 
-## Fixed
+### Fixed
 
 - Eater of Worlds and Brain of Cthulhu boss bags having incorrect conditions for dropping the evil ores and Shadow Scales/Tissue Samples.
 
 ## [1.1.1] - 2026-08-16
 
-## Fixed
+### Fixed
 
 - Disabling the mod in TerrariaModder Vault causing a crash.
 
