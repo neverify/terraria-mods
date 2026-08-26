@@ -8,7 +8,7 @@ public class Mod : ModBase<Mod, Config>, IModLifecycle
 {
     public override string Id => "deterministic-drops";
     public override string Name => "Deterministic Drops";
-    public override string Version => "1.1.2";
+    public override string Version => "1.1.3";
 
     internal DropStateStore DropStateStore { get; private set; }
 

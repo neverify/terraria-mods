@@ -8,7 +8,7 @@ public class Mod : ModBase<Mod, Config>
 {
     public override string Id => "undeprecate";
     public override string Name => "Undeprecate";
-    public override string Version => "1.0.0";
+    public override string Version => "1.0.1";
 
     protected override void Initialize()
     {

@@ -7,7 +7,7 @@ public class Mod : ModBase<Mod, Config>
 {
     public override string Id => "full-bright";
     public override string Name => "Fullbright";
-    public override string Version => "1.1.2";
+    public override string Version => "1.1.3";
 
     public static void OnGameReady()
     {
