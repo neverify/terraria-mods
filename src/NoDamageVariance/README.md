@@ -6,7 +6,7 @@ In vanilla Terraria, almost all sources of damage are subject to a random varian
 
 This mod disables that variance completely. This is useful for testing different damage setups, as the DPS meter will fluctuate much less. Additionally, this allows fine-tuning damage to for example always one-shot certain NPCs.
 
-This mod should work in multiplayer.
+The mod should work in multiplayer.
 
 ## Configuration
 
