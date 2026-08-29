@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "neverify",
   "description": "Disable the ±15% damage variance for all sources of damage.",
-  "homepage": "",
+  "homepage": "https://www.nexusmods.com/terraria/mods/241",
 
   "entry_dll": "NoDamageVariance.dll",
   "framework_version": ">=0.4.0",
