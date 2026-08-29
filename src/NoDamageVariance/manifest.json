@@ -1,0 +1,12 @@
+{
+  "id": "no-damage-variance",
+  "name": "No Damage Variance",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Disable the ±15% damage variance for all sources of damage.",
+  "homepage": "",
+
+  "entry_dll": "NoDamageVariance.dll",
+  "framework_version": ">=0.4.0",
+  "terraria_version": "1.4.5"
+}
