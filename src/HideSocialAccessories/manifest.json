@@ -4,7 +4,7 @@
   "version": "1.0.1",
   "author": "neverify",
   "description": "Hide accessories in social slots on the player.",
-  "homepage": "",
+  "homepage": "https://www.nexusmods.com/terraria/mods/234",
 
   "entry_dll": "HideSocialAccessories.dll",
   "framework_version": ">=0.4.0",
