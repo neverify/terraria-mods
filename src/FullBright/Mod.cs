@@ -9,13 +9,7 @@ public class Mod : ModBase<Mod, Config>
     public override string Name => "Fullbright";
     public override string Version => "1.1.3";
 
-    public static void OnGameReady()
-    {
-        if (Instance is null)
-            return;
+    protected override void Initialize() => LightingQuality.Update();
 
-        LightingQuality.SetQuality();
-    }
-
-    public void OnConfigChanged() => LightingQuality.SetQuality();
+    public void OnConfigChanged() => LightingQuality.Update();
 }
