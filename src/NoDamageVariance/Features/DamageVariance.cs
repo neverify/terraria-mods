@@ -4,6 +4,6 @@ namespace NoDamageVariance.Features;
 
 internal static class DamageVariance
 {
-    internal static void Update() =>
+    public static void Update() =>
         DebugOptions.NoDamageVar = Mod.Instance.Config.DisableDamageVariance;
 }
