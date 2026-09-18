@@ -7,6 +7,6 @@
   "homepage": "https://www.nexusmods.com/terraria/mods/233",
 
   "entry_dll": "Undeprecate.dll",
-  "framework_version": ">=0.4.0",
-  "terraria_version": "1.4.5"
+  "framework_version": "^0.4.1",
+  "terraria_version": "=1.4.5"
 }
