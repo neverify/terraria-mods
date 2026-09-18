@@ -1,7 +1,7 @@
 {
   "id": "no-damage-variance",
   "name": "No Damage Variance",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "neverify",
   "description": "Disable the ±15% damage variance for all sources of damage.",
   "homepage": "https://www.nexusmods.com/terraria/mods/241",
