@@ -6,11 +6,7 @@ namespace Undeprecate;
 
 public class Mod : ModBase<Mod, Config>
 {
-    public override string Id => "undeprecate";
-    public override string Name => "Undeprecate";
-    public override string Version => "1.0.1";
-
-    protected override void Initialize()
+    protected override void OnInitialize()
     {
         Array.Clear(ItemID.Sets.Deprecated, 0, ItemID.Sets.Deprecated.Length);
         Array.Clear(

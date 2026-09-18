@@ -6,10 +6,6 @@ namespace MinimapMode;
 
 public class Mod : ModBase<Mod, Config>, IModLifecycle
 {
-    public override string Id => "minimap-mode";
-    public override string Name => "Minimap Mode";
-    public override string Version => "1.0.3";
-
     public void OnWorldLoad()
     {
         if (!Config.ForceMinimapMode)

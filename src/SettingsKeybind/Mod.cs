@@ -4,11 +4,7 @@ namespace SettingsKeybind;
 
 public class Mod : ModBase<Mod, Config>
 {
-    public override string Id => "settings-keybind";
-    public override string Name => "Settings Keybind";
-    public override string Version => "1.0.3";
-
-    protected override void Initialize() => Keybinds.Register();
+    protected override void OnInitialize() => Keybinds.Register();
 
     public void OnConfigChanged() { }
 }
