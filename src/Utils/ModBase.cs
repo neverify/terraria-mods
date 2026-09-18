@@ -6,14 +6,10 @@ using TerrariaModder.Core.Logging;
 
 namespace Utils;
 
-public abstract class ModBase<TMod, TConfig> : IMod
+public abstract class ModBase<TMod, TConfig> : ModBase
     where TMod : ModBase<TMod, TConfig>
     where TConfig : ModConfig
 {
-    public abstract string Id { get; }
-    public abstract string Name { get; }
-    public abstract string Version { get; }
-
     private Harmony _harmony;
     private string HarmonyId => $"com.neverify.{Id}";
 
@@ -23,7 +19,7 @@ public abstract class ModBase<TMod, TConfig> : IMod
     internal TConfig Config { get; private set; }
     internal ModContext Context { get; private set; }
 
-    void IMod.Initialize(ModContext context)
+    public sealed override void Initialize(ModContext context)
     {
         Instance = (TMod)this;
 
@@ -42,21 +38,21 @@ public abstract class ModBase<TMod, TConfig> : IMod
             Log.Error("Patching failed.", ex);
         }
 
-        Initialize();
+        OnInitialize();
     }
 
-    protected virtual void Initialize() { }
+    protected virtual void OnInitialize() { }
 
     // Awaiting https://github.com/Inidar1/terraria-modder/issues/15.
     // public virtual void OnConfigChanged() { }
 
-    void IMod.Unload()
+    public sealed override void Unload()
     {
         _harmony.UnpatchAll(HarmonyId);
 
-        Unload();
+        OnUnload();
         Log.Info("Unloaded.");
     }
 
-    protected virtual void Unload() { }
+    protected virtual void OnUnload() { }
 }
