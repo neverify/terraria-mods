@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>EnableDebugCommands</AssemblyName>
+    <ModId>enable-debug-commands</ModId>
+    <RootNamespace>EnableDebugCommands</RootNamespace>
+  </PropertyGroup>
+</Project>

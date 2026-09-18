@@ -1,0 +1,12 @@
+{
+  "id": "enable-debug-commands",
+  "name": "Enable Debug Commands",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "Enable the debug commands in the game.",
+  "homepage": "",
+
+  "entry_dll": "EnableDebugCommands.dll",
+  "framework_version": ">=0.4.0",
+  "terraria_version": "1.4.5"
+}
