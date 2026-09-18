@@ -5,6 +5,8 @@ if (-not (Test-Path $DestinationDirectory)) {
     New-Item -ItemType Directory -Path $DestinationDirectory | Out-Null
 }
 
+Remove-Item (Join-Path $DestinationDirectory "*.zip") -Force
+
 Get-ChildItem -Path $SourceDirectory -Directory | ForEach-Object {
     $Folder = $_.FullName
     $ManifestPath = Join-Path $Folder "manifest.json"
@@ -28,10 +30,6 @@ Get-ChildItem -Path $SourceDirectory -Directory | ForEach-Object {
     }
 
     $ZipFile = Join-Path $DestinationDirectory ("$($_.Name)-$Version.zip")
-
-    if (Test-Path $ZipFile) {
-        Remove-Item $ZipFile -Force
-    }
 
     Compress-Archive -Path $Folder -DestinationPath $ZipFile
 }
