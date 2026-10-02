@@ -29,7 +29,7 @@ Install [TerrariaModder](https://inidar1.github.io/terraria-modder/installation/
 
 ### With TerrariaModder Vault
 
-Enter the ID of the mod in the search bar of the "Browse Nexus" section and press Enter. The mod should appear in the list and be able to be installed normally. The ID of the mod is the number at the end of the URL of the mod's page on Nexus Mods.
+You can find all of the mods in the "Browse Nexus" tab.
 
 ### Manually
 
