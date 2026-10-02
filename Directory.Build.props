@@ -45,7 +45,7 @@
 
   <!--
     TerrariaModder Core project is referenced instead of the compiled assembly if present.
-    This allows Intellisense to display the XML documentation, since TerrariaModder does not ship it with the assembly.
+    This allows IntelliSense to display the XML documentation, since TerrariaModder does not ship it with the assembly.
     The source is otherwise not needed for building mods, as with all other assemblies.
   -->
   <ItemGroup>
