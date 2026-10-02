@@ -5,7 +5,7 @@ if (-not (Test-Path $DestinationDirectory)) {
     New-Item -ItemType Directory -Path $DestinationDirectory | Out-Null
 }
 
-Remove-Item (Join-Path $DestinationDirectory "*.zip") -Force
+Remove-Item (Join-Path $DestinationDirectory "*.zip")
 
 Get-ChildItem -Path $SourceDirectory -Directory | ForEach-Object {
     $Folder = $_.FullName
