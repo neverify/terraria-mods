@@ -6,7 +6,7 @@ The game rolls a 1 in 108000 chance each tick to attempt to spawn the Traveling 
 
 This mod alleviates these frustrations by increasing the spawn rate of the Traveling Merchant by a configurable amount and forcing the most useful items to always be sold.
 
-The mod should work in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
 ## Configuration
 

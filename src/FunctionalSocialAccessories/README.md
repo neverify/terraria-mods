@@ -6,7 +6,7 @@ This mod provides a simple way to increase the amount of accessories available. 
 
 The vanity effects of accessories in social slots are unchanged. They are also always visible on the character, like in vanilla.
 
-The mod works in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works in multiplayer.
 
 ## Configuration
 

@@ -10,7 +10,7 @@ And because the shimmer exists, there are no downsides to having the alternative
 
 This mod fixes these frustrations by allowing selecting which ores are generated. The generation of pre-hardmode ores takes place during worldgen; outside of that the mod has no effect on them. **It won't change ores in existing worlds**. For hardmode ores, the mod intercepts the altar smashing event.
 
-The mod works at least partially in multiplayer. World generation is always client-side, so pre-hardmode ore generation works. Altar smashing might work in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works at least partially in multiplayer. World generation is always client-side, so pre-hardmode ore generation works. Altar smashing might work in multiplayer.
 
 ## Configuration
 

@@ -6,7 +6,7 @@ I have always found the absence of a dedicated settings keybind frustrating. Acc
 
 This mod solves the problem by adding a keybind to toggle the settings menu. The keybind works regardless of if the inventory or a shop is open.
 
-The mod works in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works in multiplayer.
 
 ## Configuration
 

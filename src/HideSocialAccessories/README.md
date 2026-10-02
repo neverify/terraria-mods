@@ -6,7 +6,7 @@ Accessories in normal slots can be hidden, which causes them to not be displayed
 
 This mod makes the visibility toggle on each normal accessory slot also control the visibility of the corresponding social slot. Thus you can hide all accessories, social slot or not.
 
-The mod works in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works in multiplayer.
 
 ## Development
 

@@ -6,7 +6,7 @@ Terraria has a lot of item drops, so it is easy to miss the rare ones. This mod 
 
 The mod only shows notifications for drops with a 1/x chance. Drops that always occur and pick from a list of alternatives with equal odds, such as mimics and many boss drops, are not notified.
 
-The mod should work in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
 ## Configuration
 

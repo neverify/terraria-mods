@@ -6,7 +6,7 @@ In vanilla Terraria the minimap style is not persisted between game launches. Ha
 
 This mod fixes this issue by allowing you to set a default minimap mode that will be applied when loading into a world.
 
-The mod works in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works in multiplayer.
 
 ## Configuration
 

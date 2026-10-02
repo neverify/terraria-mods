@@ -12,7 +12,7 @@ There is also a journey mode player save file available for download, with all i
 
 You can also use an inventory editor such as [Terrasavr](https://yal.cc/r/terrasavr/) to add the items. There is an inventory file available for Terrasavr for quickly adding all of these items. To use that file, open the Inventory tab in Terrasavr, then press the "Load" button and select the file.
 
-The mod should work in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
 ## Development
 

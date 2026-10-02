@@ -8,7 +8,7 @@ The mod also allows overriding the brightness of the map, so it will actually re
 
 The mod modifies the lighting engine of the "Color" lighting mode, so other lighting modes are unaffected.
 
-The mod should work in multiplayer.
+The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
 ## Configuration
 
