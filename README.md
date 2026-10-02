@@ -2,7 +2,7 @@
 
 This is a monorepo containing all of my Terraria mods for the [TerrariaModder](https://inidar1.github.io/terraria-modder/) framework.
 
-All mods are built for the latest version of Terraria (1.4.5.8) and require TerrariaModder 0.4.1 or later.
+All mods are built for **Terraria 1.4.5.8** and require **TerrariaModder 0.4.1**.
 
 None of the mods have explicit multiplayer support, but might still work at least partially.
 
