@@ -1,4 +1,13 @@
+param(
+    [switch]$DeployNewMods
+)
+
 $srcPath = Join-Path $PSScriptRoot "src"
+$buildProperties = @()
+
+if ($DeployNewMods) {
+    $buildProperties += "-p:DeployAbsent=true"
+}
 
 Get-ChildItem -Path $srcPath -Directory | ForEach-Object {
     $modId = $_.Name
@@ -7,7 +16,7 @@ Get-ChildItem -Path $srcPath -Directory | ForEach-Object {
     if (Test-Path $csproj) {
         Write-Host "Building $modId..." -ForegroundColor Cyan
 
-        dotnet build $csproj -c Release
+        dotnet build $csproj -c Release @buildProperties
 
         Write-Host
     }

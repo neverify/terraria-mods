@@ -23,7 +23,7 @@
   <Target
     Name="DeployToTerrariaModder"
     AfterTargets="CopyMetadata"
-    Condition="'$(DeployToGame)' == 'true' and '$(DeployPath)' != '' and '$(ModId)' != ''"
+    Condition="'$(DeployToGame)' == 'true' and '$(DeployPath)' != '' and '$(ModId)' != '' and (Exists('$(DeployPath)\$(ModId)') or '$(DeployAbsent)' == 'true')"
   >
     <Message Text="Deploying mod '$(ModId)' to '$(DeployPath)'" Importance="high" />
     <ItemGroup>
