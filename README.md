@@ -69,17 +69,20 @@ Each mod has its own `README.md` file documenting the mod's logic.
 5. To enable automatic deployment, set the following values:
    - `DeployToGame=true`
    - `DeployPath` pointing to `Terraria/TerrariaModder/mods/`
+
+   Mods that are not already present in the deploy destination are not deployed by default. To override this, provide the `-p:DeployAbsent=true` argument in the build command.
+
 6. Build a mod with `dotnet build`:
 
-   ```bash
-   dotnet build src/<ModName>/<ModName>.csproj -c Release
+   ```pwsh
+   dotnet build src/<ModName> -c Release
    ```
 
    Build output is written to `build/<mod-id>/`. The mod's `manifest.json` and `icon.png` are automatically copied as well.
 
    If automatic deployment is enabled, the build is also copied over to `Terraria/TerrariaModder/mods/`.
 
-The script `build-all.ps1` builds all projects at once. This is mostly useful when all mods need to be rebuilt due to a common change.
+The script `build-all.ps1` builds all projects at once. This is mostly useful when all mods need to be rebuilt due to a common change. To deploy absent mods, provide the flag `-DeployAbsent`.
 
 The script `zip-all.ps1` creates a versioned zip of all built projects. This is mostly useful for creating releases.
 
