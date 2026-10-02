@@ -2,7 +2,7 @@ param(
     [switch]$DeployNewMods
 )
 
-$srcPath = Join-Path $PSScriptRoot "src"
+$srcPath = Join-Path $PSScriptRoot "..\src"
 $buildProperties = @()
 
 if ($DeployNewMods) {

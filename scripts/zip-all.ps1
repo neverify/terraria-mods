@@ -1,5 +1,5 @@
-$SourceDirectory = Join-Path $PSScriptRoot "build"
-$DestinationDirectory = Join-Path $PSScriptRoot "zips"
+$SourceDirectory = Join-Path $PSScriptRoot "..\build"
+$DestinationDirectory = Join-Path $PSScriptRoot "..\zips"
 
 if (-not (Test-Path $DestinationDirectory)) {
     New-Item -ItemType Directory -Path $DestinationDirectory | Out-Null

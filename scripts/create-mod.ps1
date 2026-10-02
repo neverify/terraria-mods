@@ -15,8 +15,9 @@ if (Test-Path $destinationDirectory) {
     throw "A mod named '$internalName' already exists at '$destinationDirectory'."
 }
 
-$templateDirectory = Join-Path $PSScriptRoot "src\ModTemplate"
-Copy-Item -Path $templateDirectory -Destination $destinationDirectory -Recurse -Exclude "obj"
+# Copy the template
+$templateDirectory = Join-Path $PSScriptRoot "..\templates\ModTemplate"
+Copy-Item -Path $templateDirectory -Destination $destinationDirectory -Recurse -Exclude "obj", "bin"
 
 Get-ChildItem -Path $destinationDirectory -Recurse -File | ForEach-Object {
     # Replace placeholders in the file name
