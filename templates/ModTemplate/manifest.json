@@ -1,0 +1,12 @@
+{
+  "id": "mod-template",
+  "name": "Mod Template",
+  "version": "1.0.0",
+  "author": "neverify",
+  "description": "",
+  "homepage": "",
+
+  "entry_dll": "ModTemplate.dll",
+  "framework_version": ">=0.4.0",
+  "terraria_version": "1.4.5"
+}
