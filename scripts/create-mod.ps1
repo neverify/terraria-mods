@@ -24,6 +24,10 @@ Get-ChildItem -Path $destinationDirectory -Recurse -File | ForEach-Object {
     $newFileName = $_.Name.Replace("ModTemplate", $internalName)
     $newFilePath = Join-Path $_.DirectoryName $newFileName
 
+    if ($newFilePath -ne $_.FullName) {
+        Move-Item -Path $_.FullName -Destination $newFilePath
+    }
+
     # Replace placeholders in the file content
     $content = Get-Content -Path $_.FullName -Raw
     $content = $content.
