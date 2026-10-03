@@ -57,7 +57,15 @@ def main() -> None:
     except ValueError as exc:
         fail(f"Failed to parse tag: {exc}")
 
-    mod_dir = Path("src") / mod
+    normalized_mod = mod.replace("-", "").casefold()
+    mod_dir = next(
+        (
+            candidate
+            for candidate in Path("src").iterdir()
+            if candidate.is_dir() and candidate.name.casefold() == normalized_mod
+        ),
+        Path("src") / mod,
+    )
     manifest_file = mod_dir / "manifest.json"
     changelog_file = mod_dir / "CHANGELOG.md"
 
