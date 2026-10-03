@@ -10,7 +10,7 @@ if ([string]::IsNullOrWhiteSpace($Name)) {
 $internalName = $Name -replace "\s+", ""
 $modId = ($Name -replace "\s+", "-").ToLower()
 
-$destinationDirectory = Join-Path $PSScriptRoot "src\$internalName"
+$destinationDirectory = Join-Path $PSScriptRoot "..\src\$internalName"
 if (Test-Path $destinationDirectory) {
     throw "A mod named '$internalName' already exists at '$destinationDirectory'."
 }
@@ -29,13 +29,13 @@ Get-ChildItem -Path $destinationDirectory -Recurse -File | ForEach-Object {
     }
 
     # Replace placeholders in the file content
-    $content = Get-Content -Path $_.FullName -Raw
+    $content = Get-Content -Path $newFilePath -Raw
     $content = $content.
         Replace("Mod Template", $Name).
         Replace("ModTemplate", $internalName).
         Replace("mod-template", $modId)
 
-    Set-Content -Path $_.FullName -Value $content -NoNewline
+    Set-Content -Path $newFilePath -Value $content -NoNewline
 }
 
 Write-Host "Created mod '$Name' at '$destinationDirectory'."
