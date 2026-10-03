@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Terraria;
 
 namespace FunctionalSocialAccessories.Patches;
 
+[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(Player))]
 internal static class ApplyEquipFunctionalPatch
 {

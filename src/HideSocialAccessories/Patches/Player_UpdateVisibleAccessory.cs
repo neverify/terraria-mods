@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Terraria;
 
 namespace HideSocialAccessories.Patches;
 
+[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(Player), "UpdateVisibleAccessory")]
 internal static class UpdateVisibleAccessoryPatch
 {

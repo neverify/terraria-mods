@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using RareDropNotification.Features;
 using Terraria.GameContent.ItemDropRules;
 
 namespace RareDropNotification.Patches;
 
+[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(ItemDropResolver), "ResolveRule")]
 internal static class ResolveRulePatch
 {

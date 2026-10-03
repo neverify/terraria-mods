@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Light;
 
 namespace FullBright.Patches;
 
+[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(LightingEngine), "GetColor")]
 internal static class GetColorPatch
 {

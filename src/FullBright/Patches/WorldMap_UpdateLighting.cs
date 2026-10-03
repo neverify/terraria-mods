@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Terraria.Map;
 
 namespace FullBright.Patches;
 
+[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(WorldMap), "UpdateLighting")]
 internal static class UpdateLightingPatch
 {

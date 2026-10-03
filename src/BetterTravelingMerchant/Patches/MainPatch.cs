@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Terraria;
 
 namespace BetterTravelingMerchant.Patches;
 
+[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(Main), "UpdateTime")]
 internal static class MainPatch
 {
