@@ -87,6 +87,8 @@ def main() -> None:
     if not isinstance(title, str) or not title.strip():
         fail(f"{manifest_file} does not contain a non-empty 'name'")
 
+    title += f" {version}"
+
     try:
         notes = extract_changelog(changelog_file, version)
     except ValueError as exc:
@@ -98,8 +100,6 @@ def main() -> None:
     output_file = Path(os.environ["GITHUB_OUTPUT"])
 
     with output_file.open("a", encoding="utf-8") as output:
-        # output.write(f"mod={mod}\n")
-        # output.write(f"version={version}\n")
         output.write(f"title={title}\n")
 
 
