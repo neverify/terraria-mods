@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\shared\FileUtils.cs" />
+    <Compile Include="..\..\shared\RandomExtension.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" ExcludeAssets="runtime" />
   </ItemGroup>
 </Project>

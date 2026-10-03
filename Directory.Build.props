@@ -61,8 +61,8 @@
     </Reference>
   </ItemGroup>
 
-  <!-- Shared Utilities -->
-  <ItemGroup Condition="'$(MSBuildProjectFile)' != 'Utils.csproj'">
-    <Compile Include="$(MSBuildThisFileDirectory)src\Utils\**\*.cs"></Compile>
+  <!-- Shared Source Files -->
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)shared\ModBase.cs" />
   </ItemGroup>
 </Project>
