@@ -7,14 +7,10 @@ if (-not (Test-Path $DestinationDirectory)) {
 
 Remove-Item (Join-Path $DestinationDirectory "*.zip")
 
-Get-ChildItem -Path $SourceDirectory -Directory | ForEach-Object {
-    $Folder = $_.FullName
-    $ManifestPath = Join-Path $Folder "manifest.json"
+$ZipCount = 0
 
-    if (-not (Test-Path $ManifestPath)) {
-        Write-Warning "Skipping '$($_.Name)': manifest.json was not found."
-        return
-    }
+Get-ChildItem -Path $SourceDirectory -Directory | ForEach-Object {
+    $ManifestPath = Join-Path $_.FullName "manifest.json"
 
     try {
         $Manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json
@@ -25,13 +21,15 @@ Get-ChildItem -Path $SourceDirectory -Directory | ForEach-Object {
         }
     }
     catch {
-        Write-Warning "Skipping '$($_.Name)': Failed to read version from manifest.json. $_"
+        Write-Warning "Skipping '$($_.Name)': Failed to read version from manifest.json."
         return
     }
 
     $ZipFile = Join-Path $DestinationDirectory ("$($_.Name)-$Version.zip")
 
-    Compress-Archive -Path $Folder -DestinationPath $ZipFile
+    Compress-Archive -Path $_.FullName -DestinationPath $ZipFile
+
+    $ZipCount += 1
 }
 
-Write-Host "Finished creating ZIP files."
+Write-Host "Created $ZipCount ZIP files."

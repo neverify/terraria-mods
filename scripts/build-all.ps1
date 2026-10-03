@@ -10,17 +10,9 @@ if ($DeployNewMods) {
 }
 
 Get-ChildItem -Path $srcPath -Directory | ForEach-Object {
-    $modId = $_.Name
-    $csproj = Join-Path $_.FullName "$modId.csproj"
+    Write-Host "Building $($_.Name)..." -ForegroundColor Cyan
 
-    if (Test-Path $csproj) {
-        Write-Host "Building $modId..." -ForegroundColor Cyan
+    dotnet build $_.FullName -c Release @buildProperties
 
-        dotnet build $csproj -c Release @buildProperties
-
-        Write-Host
-    }
-    else {
-        Write-Host "Skipping $modId (no $modId.csproj found)" -ForegroundColor Yellow
-    }
+    Write-Host
 }
