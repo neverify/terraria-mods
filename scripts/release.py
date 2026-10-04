@@ -387,13 +387,19 @@ def main() -> None:
         return
 
     # Release mods
+    success_count = 0
+    fail_count = 0
     for mod in candidates:
         if args.slow:
             time.sleep(1)
         try:
             release_mod(mod, args.publish)
+            success_count += 1
         except ValueError as exc:
             console.print(f"[red]Failed to build {mod.name}: [/red]{exc}")
+            fail_count += 1
+
+    console.print(f"Finished: {success_count} successful, {fail_count} failed.")
 
 
 if __name__ == "__main__":
