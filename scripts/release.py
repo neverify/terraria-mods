@@ -8,6 +8,7 @@
 import argparse
 import json
 import re
+import shlex
 import subprocess
 import time
 import zipfile
@@ -78,7 +79,19 @@ def succeed(message: str) -> None:
 
 
 def run(command: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=True)
+    try:
+        return subprocess.run(
+            command,
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        details = getattr(exc, "stderr", None) or str(exc)
+        raise ModReleaseError(
+            f"command failed ({shlex.join(command)}): {details.strip()}"
+        ) from exc
 
 
 def parse_version(version: str) -> tuple[int, int, int, str]:
@@ -143,7 +156,7 @@ def load_mod(path: Path) -> Mod | None:
     try:
         manifest = load_manifest(manifest_file)
     except ValueError as exc:
-        console.print(f"[red]Error:[/red] {exc}")
+        console.print(f"[red]Failed to load manifest {manifest_file}: [/red]{exc}")
         return None
 
     mod_id = manifest["id"]
@@ -166,6 +179,10 @@ def load_mod(path: Path) -> Mod | None:
 def load_mods(selected: set[str] | None) -> list[Mod]:
     mods = []
     directories = sorted(path for path in SRC_DIR.iterdir() if path.is_dir())
+
+    console.print("Fetching remote tags...", end=" ")
+    run(["git", "fetch", "--all"])
+    console.print("[green]done[/green]")
 
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -366,9 +383,12 @@ def main() -> None:
             "[yellow]Working tree is not clean; commit changes before releasing.[/yellow]"
         )
 
-    # Determine status of mods
-    selected = {value.casefold() for value in args.mods} if args.mods else None
-    mods = load_mods(selected)
+    try:
+        # Determine status of mods
+        selected = {value.casefold() for value in args.mods} if args.mods else None
+        mods = load_mods(selected)
+    except ModReleaseError as exc:
+        fail(f"[red]Unable to load release status: [/red]{exc}")
 
     # Show status of mods
     show_status(mods)
@@ -395,8 +415,8 @@ def main() -> None:
         try:
             release_mod(mod, args.publish, args.slow)
             success_count += 1
-        except ValueError as exc:
-            console.print(f"[red]Failed to build {mod.name}: [/red]{exc}")
+        except (ModReleaseError, ValueError) as exc:
+            console.print(f"[red]Failed to release {mod.name}: [/red]{exc}")
             fail_count += 1
 
     console.print(f"Finished: {success_count} successful, {fail_count} failed.")
