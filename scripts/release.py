@@ -9,6 +9,7 @@ import argparse
 import json
 import re
 import subprocess
+import time
 import zipfile
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
@@ -67,8 +68,13 @@ class Mod:
 
 
 def fail(message: str) -> None:
-    console.print(f"[red]Error:[/red] {message}")
+    console.print(f"{message}")
     raise SystemExit(1)
+
+
+def succeed(message: str) -> None:
+    console.print(f"{message}")
+    raise SystemExit(0)
 
 
 def run(command: list[str]) -> subprocess.CompletedProcess[str]:
@@ -234,7 +240,7 @@ class Step:
     result: str | None = None
 
 
-def run_steps(steps: Sequence[Step]) -> dict[str, Any]:
+def run_steps(steps: Sequence[Step], delay: float = 0.0) -> dict[str, Any]:
     if not steps:
         raise ValueError("at least one progress step is required")
 
@@ -254,6 +260,8 @@ def run_steps(steps: Sequence[Step]) -> dict[str, Any]:
             if step.result is not None:
                 results[step.result] = result
             progress.advance(task)
+            if delay > 0:
+                time.sleep(delay)
 
     return results
 
@@ -346,12 +354,17 @@ def main() -> None:
     parser.add_argument(
         "--yes", action="store_true", help="skip the release confirmation prompt"
     )
+    parser.add_argument(
+        "--slow", action="store_true", help="add a fixed 1s delay between operations"
+    )
     args = parser.parse_args()
 
     # Check if the working tree is clean
     status = run(["git", "status", "--porcelain"]).stdout.strip()
     if status and not args.dry_run:
-        fail("working tree is not clean; commit changes before releasing")
+        fail(
+            "[yellow]Working tree is not clean; commit changes before releasing.[/yellow]"
+        )
 
     # Determine status of mods
     selected = {value.casefold() for value in args.mods} if args.mods else None
@@ -365,17 +378,19 @@ def main() -> None:
     # Confirm release
     candidates = [mod for mod in mods if mod.updated and mod.release_notes]
     if not candidates:
-        fail("no mods are ready for release")
+        succeed("[yellow]No mods ready for release.[/yellow]")
     if not args.yes and not Confirm.ask(f"Release {len(candidates)} mod(s)?"):
-        console.print("Release cancelled.")
+        console.print("[yellow]Release cancelled.[/yellow]")
         return
 
     # Release mods
     for mod in candidates:
+        if args.slow:
+            time.sleep(1)
         try:
             release_mod(mod, args.publish)
         except ValueError as exc:
-            console.print(f"[red]Error:[/red] {mod.name}: {exc}")
+            console.print(f"[red]Failed to build {mod.name}: [/red]{exc}")
 
 
 if __name__ == "__main__":
