@@ -298,7 +298,7 @@ def create_github_release(mod: Mod, archive: Path, publish: bool) -> None:
     run(command)
 
 
-def release_mod(mod: Mod, publish: bool) -> None:
+def release_mod(mod: Mod, publish: bool, slow: bool = False) -> None:
     steps = [
         Step(
             f"Building {mod.name}",
@@ -331,7 +331,7 @@ def release_mod(mod: Mod, publish: bool) -> None:
         ),
     ]
 
-    run_steps(steps)
+    run_steps(steps, delay=1.0 if slow else 0.0)
 
 
 def main() -> None:
@@ -393,7 +393,7 @@ def main() -> None:
         if args.slow:
             time.sleep(1)
         try:
-            release_mod(mod, args.publish)
+            release_mod(mod, args.publish, args.slow)
             success_count += 1
         except ValueError as exc:
             console.print(f"[red]Failed to build {mod.name}: [/red]{exc}")
