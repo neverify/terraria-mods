@@ -6,3 +6,6 @@ zips/
 
 # Local assembly references
 Directory.Build.local.props
+
+# Python
+__pycache__/
