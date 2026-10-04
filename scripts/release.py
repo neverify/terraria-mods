@@ -372,13 +372,16 @@ def main() -> None:
 
     # Show status of mods
     show_status(mods)
+
+    candidates = [mod for mod in mods if mod.updated and mod.release_notes]
+    if not candidates:
+        succeed("[yellow]No mods ready for release.[/yellow]")
+    console.print(f"[green]{len(candidates)} mod(s) ready for release.[/green]")
+
     if args.dry_run:
         return
 
     # Confirm release
-    candidates = [mod for mod in mods if mod.updated and mod.release_notes]
-    if not candidates:
-        succeed("[yellow]No mods ready for release.[/yellow]")
     if not args.yes and not Confirm.ask(f"Release {len(candidates)} mod(s)?"):
         console.print("[yellow]Release cancelled.[/yellow]")
         return
