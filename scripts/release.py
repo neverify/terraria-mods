@@ -38,7 +38,7 @@ class ModReleaseError(Exception):
 class Mod:
     directory: Path
     manifest: dict
-    updated: bool = False
+    releases: list[str] | None
     release_notes: str | None = None
 
     @property
@@ -48,6 +48,14 @@ class Mod:
     @property
     def version(self) -> str:
         return self.manifest["version"]
+
+    @property
+    def last_release(self) -> str | None:
+        return self.releases[-1] if self.releases else None
+
+    @property
+    def updated(self) -> bool:
+        return not self.last_release or self.version > self.last_release
 
     @property
     def tag(self) -> str:
@@ -139,17 +147,14 @@ def load_mod(path: Path) -> Mod | None:
     except (OSError, ValueError):
         release_notes = None
 
-    previous_versions = []
+    releases = []
     for tag in run(["git", "tag", "--list", f"{mod_id}-v*"]).stdout.splitlines():
         try:
-            previous_versions.append(parse_tag(tag)[1])
+            releases.append(parse_tag(tag)[1])
         except ValueError:
             continue
 
-    updated = not previous_versions or version != max(
-        previous_versions, key=parse_version
-    )
-    return Mod(path, manifest, updated, release_notes)
+    return Mod(path, manifest, releases, release_notes)
 
 
 def load_mods(selected: set[str] | None) -> list[Mod]:
@@ -184,16 +189,18 @@ def load_mods(selected: set[str] | None) -> list[Mod]:
 def show_status(mods: list[Mod]) -> None:
     table = Table(title="Release Status")
     table.add_column("Mod")
-    table.add_column("Version")
-    table.add_column("Updated")
+    table.add_column("Latest Release")
+    table.add_column("Current Version")
     table.add_column("Release Notes")
     table.add_column("Release")
     for mod in mods:
         ready = mod.updated and mod.release_notes is not None
         table.add_row(
             mod.name,
-            mod.version,
-            "[green]yes[/green]" if mod.updated else "[yellow]no[/yellow]",
+            mod.last_release or "[dim]N/A[/dim]",
+            f"[green]{mod.version}[/green]"
+            if mod.updated
+            else f"[yellow]{mod.version}[/yellow]",
             "[green]yes[/green]" if mod.release_notes is not None else "[red]no[/red]",
             "[green]ready[/green]" if ready else "[dim]skipped[/dim]",
         )
