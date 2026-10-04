@@ -121,47 +121,60 @@ def load_manifest(manifest_file: Path) -> dict:
     return manifest
 
 
+def load_mod(path: Path) -> Mod | None:
+    manifest_file = path / "manifest.json"
+    if not manifest_file.is_file():
+        return None
+
+    try:
+        manifest = load_manifest(manifest_file)
+    except ValueError as exc:
+        console.print(f"[red]Error:[/red] {exc}")
+        return None
+
+    mod_id = manifest["id"]
+    version = manifest["version"]
+    try:
+        release_notes = extract_changelog(path / "CHANGELOG.md", version)
+    except (OSError, ValueError):
+        release_notes = None
+
+    previous_versions = []
+    for tag in run(["git", "tag", "--list", f"{mod_id}-v*"]).stdout.splitlines():
+        try:
+            previous_versions.append(parse_tag(tag)[1])
+        except ValueError:
+            continue
+
+    updated = not previous_versions or version != max(
+        previous_versions, key=parse_version
+    )
+    return Mod(path, manifest, updated, release_notes)
+
+
 def load_mods(selected: set[str] | None) -> list[Mod]:
     mods = []
+    directories = sorted(path for path in SRC_DIR.iterdir() if path.is_dir())
 
-    for directory in sorted(path for path in SRC_DIR.iterdir() if path.is_dir()):
-        manifest_file = directory / "manifest.json"
-        changelog_file = directory / "CHANGELOG.md"
-        if not manifest_file.is_file():
-            continue
-
-        try:
-            manifest = load_manifest(manifest_file)
-        except ValueError as exc:
-            console.print(f"[red]Error:[/red] {exc}")
-            continue
-
-        mod_id = manifest["id"]
-        version = manifest["version"]
-
-        if (
-            selected
-            and mod_id.casefold() not in selected
-            and directory.name.casefold() not in selected
-        ):
-            continue
-
-        try:
-            release_notes = extract_changelog(changelog_file, version)
-        except (OSError, ValueError):
-            release_notes = None
-
-        previous_versions = []
-        for tag in run(["git", "tag", "--list", f"{mod_id}-v*"]).stdout.splitlines():
-            try:
-                previous_versions.append(parse_tag(tag)[1])
-            except ValueError:
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        MofNCompleteColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Loading mods", total=len(directories))
+        for directory in directories:
+            mod = load_mod(directory)
+            progress.advance(task)
+            if mod is None:
                 continue
-
-        updated = not previous_versions or version != max(
-            previous_versions, key=parse_version
-        )
-        mods.append(Mod(directory, manifest, updated, release_notes))
+            if (
+                selected
+                and mod.mod_id.casefold() not in selected
+                and directory.name.casefold() not in selected
+            ):
+                continue
+            mods.append(mod)
 
     if selected and not mods:
         fail(f"no matching mods found: {', '.join(sorted(selected))}")
@@ -343,7 +356,7 @@ def main() -> None:
         return
 
     # Confirm release
-    candidates = [mod for mod in mods if mod.updated and mod.release_notes is not None]
+    candidates = [mod for mod in mods if mod.updated and mod.release_notes]
     if not candidates:
         fail("no mods are ready for release")
     if not args.yes and not Confirm.ask(f"Release {len(candidates)} mod(s)?"):
