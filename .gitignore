@@ -9,3 +9,6 @@ Directory.Build.local.props
 
 # Python
 __pycache__/
+
+# Transient script results
+/nexus-descriptions/
