@@ -222,9 +222,6 @@ def find_mods(selected: tuple[str, ...]) -> list[Path]:
 @click.command()
 @click.argument("mod_names", nargs=-1)
 @click.option(
-    "--check", is_flag=True, help="Check generated files without writing them."
-)
-@click.option(
     "--output-dir",
     type=click.Path(path_type=Path, file_okay=False),
     default=DEFAULT_OUTPUT_DIR,
@@ -239,7 +236,6 @@ def find_mods(selected: tuple[str, ...]) -> list[Path]:
 )
 def main(
     mod_names: tuple[str, ...],
-    check: bool,
     output_dir: Path,
     template_path: Path,
 ) -> None:
@@ -262,21 +258,12 @@ def main(
             try:
                 manifest = load_manifest(mod / "manifest.json")
                 content = render_description(manifest, mod / "README.md", template)
+
                 destination = output_dir / f"{manifest['id']}.txt"
-                if check:
-                    if (
-                        not destination.is_file()
-                        or destination.read_text(encoding="utf-8") != content
-                    ):
-                        raise DescriptionError(
-                            f"generated output differs: {destination}"
-                        )
-                else:
-                    output_dir.mkdir(parents=True, exist_ok=True)
-                    destination.write_text(content, encoding="utf-8", newline="\n")
-                console.print(
-                    f"[green]{'Checked' if check else 'Generated'} {destination}[/green]"
-                )
+                output_dir.mkdir(parents=True, exist_ok=True)
+
+                destination.write_text(content, encoding="utf-8", newline="\n")
+                console.print(f"[green]Generated {destination}[/green]")
             except (DescriptionError, OSError) as exc:
                 failures += 1
                 console.print(f"[red]Failed {mod.name}: {exc}[/red]")
