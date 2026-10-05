@@ -9,7 +9,9 @@
 
 import json
 import re
-from collections.abc import Iterable, Sequence
+import string
+from collections.abc import Iterable, Iterator, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 
 import click
@@ -29,15 +31,62 @@ class DescriptionError(Exception):
     """An invalid mod README or manifest."""
 
 
-def load_manifest(path: Path) -> dict[str, str]:
+@dataclass(frozen=True)
+class Manifest:
+    id: str
+    name: str
+    description: str
+    homepage: str
+
+
+@dataclass(frozen=True)
+class Readme:
+    title: str
+    overview: str
+    sections: str
+
+
+TEMPLATE_FIELDS = frozenset({"name", "overview", "sections", "files_url", "bugs_url"})
+
+
+def parse_manifest(content: str, path: Path) -> Manifest:
     try:
-        manifest = json.loads(path.read_text(encoding="utf-8"))
+        manifest = json.loads(content)
         for field in ("id", "name", "description", "homepage"):
             if not isinstance(manifest.get(field), str) or not manifest[field].strip():
                 raise ValueError(f"missing non-empty {field!r}")
-        return manifest
+        return Manifest(
+            id=manifest["id"],
+            name=manifest["name"],
+            description=manifest["description"],
+            homepage=manifest["homepage"],
+        )
     except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
         raise DescriptionError(f"invalid manifest {path}: {exc}") from exc
+
+
+def read_manifest(path: Path) -> Manifest:
+    try:
+        content = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise DescriptionError(f"unable to read manifest {path}: {exc}") from exc
+    return parse_manifest(content, path)
+
+
+def validate_template(template: str) -> None:
+    try:
+        fields = {
+            field_name
+            for _, field_name, _, _ in string.Formatter().parse(template)
+            if field_name is not None
+        }
+    except ValueError as exc:
+        raise DescriptionError(f"invalid description template: {exc}") from exc
+
+    unknown_fields = fields - TEMPLATE_FIELDS
+    if unknown_fields:
+        names = ", ".join(sorted(unknown_fields))
+        raise DescriptionError(f"unknown template field(s): {names}")
 
 
 def heading_level(token: Token) -> int:
@@ -48,7 +97,7 @@ def heading_text(token: Token) -> str:
     return token.content.strip()
 
 
-def get_sections(tokens: Sequence[Token]) -> list[list[Token]]:
+def get_description_sections(tokens: Sequence[Token]) -> list[list[Token]]:
     sections: list[list[Token]] = []
     current: list[Token] | None = None
 
@@ -98,71 +147,73 @@ def render_inline(tokens: Iterable[Token]) -> str:
     return "".join(result)
 
 
+def next_token(tokens: Iterator[Token], expected_type: str) -> Token:
+    try:
+        token = next(tokens)
+    except StopIteration as exc:
+        raise DescriptionError(f"expected {expected_type} token") from exc
+    if token.type != expected_type:
+        raise DescriptionError(f"expected {expected_type} token, got {token.type}")
+    return token
+
+
 def render_blocks(tokens: Sequence[Token]) -> str:
     result: list[tuple[str, str]] = []
-    list_stack: list[str] = []
+    list_depth = 0
 
     def append_block(content: str, separator: str = "\n\n") -> None:
-        result.append((content, separator))
+        if content:
+            result.append((content, separator))
 
-    index = 0
-    while index < len(tokens):
-        token = tokens[index]
-        if token.type == "heading_open":
-            level = heading_level(token)
-            if level not in (2, 3):
-                raise DescriptionError(f"unsupported heading level: {level}")
-            content = tokens[index + 1]
-            size = 5 if level == 2 else 4
-            append_block(
-                f"{'[line]\n' if level == 2 else ''}[size={size}][b]"
-                f"{render_inline(content.children or [])}[/b][/size]",
-                "\n" if level == 3 else "\n\n",
-            )
-            index += 3
-        elif token.type == "paragraph_open":
-            content = tokens[index + 1]
-            append_block(render_inline(content.children or []))
-            index += 3
-        elif token.type == "bullet_list_open":
-            list_stack.append("bullet")
-            append_block("[list]")
-            index += 1
-        elif token.type == "ordered_list_open":
-            list_stack.append("ordered")
-            append_block("[list=1]")
-            index += 1
-        elif token.type == "list_item_open":
-            append_block("[*]")
-            index += 1
-        elif token.type == "list_item_close":
-            append_block("[/*]")
-            index += 1
-        elif token.type == "bullet_list_close" or token.type == "ordered_list_close":
-            append_block("[/list]")
-            list_stack.pop()
-            index += 1
-        elif token.type == "fence" or token.type == "code_block":
-            append_block(token.content.rstrip("\n"))
-            index += 1
-        elif token.type in {"inline", "html_block", "blank_line"}:
-            index += 1
-        else:
-            raise DescriptionError(f"unsupported Markdown token: {token.type}")
+    token_iterator = iter(tokens)
+    while token := next(token_iterator, None):
+        match token.type:
+            case "heading_open":
+                level = heading_level(token)
+                if level not in (2, 3):
+                    raise DescriptionError(f"unsupported heading level: {level}")
+                content = next_token(token_iterator, "inline")
+                next_token(token_iterator, "heading_close")
+                size = 5 if level == 2 else 4
+                append_block(
+                    f"{'[line]\n' if level == 2 else ''}[size={size}][b]"
+                    f"{render_inline(content.children or [])}[/b][/size]",
+                    "\n" if level == 3 else "\n\n",
+                )
+            case "paragraph_open":
+                content = next_token(token_iterator, "inline")
+                next_token(token_iterator, "paragraph_close")
+                append_block(render_inline(content.children or []))
+            case "bullet_list_open":
+                list_depth += 1
+                append_block("[list]")
+            case "ordered_list_open":
+                list_depth += 1
+                append_block("[list=1]")
+            case "list_item_open":
+                append_block("[*]")
+            case "list_item_close":
+                append_block("[/*]")
+            case "bullet_list_close" | "ordered_list_close":
+                if list_depth == 0:
+                    raise DescriptionError("unexpected Markdown list close")
+                append_block("[/list]")
+                list_depth -= 1
+            case "fence" | "code_block":
+                append_block(token.content.rstrip("\n"))
+            case "inline" | "html_block" | "blank_line":
+                continue
+            case _:
+                raise DescriptionError(f"unsupported Markdown token: {token.type}")
 
-    if list_stack:
+    if list_depth:
         raise DescriptionError("unclosed Markdown list")
     return "".join(
         content + separator for content, separator in result if content
     ).strip()
 
 
-def parse_readme(path: Path) -> tuple[str, str, str]:
-    try:
-        markdown = path.read_text(encoding="utf-8")
-    except OSError as exc:
-        raise DescriptionError(f"unable to read {path}: {exc}") from exc
-
+def parse_readme(markdown: str, path: Path) -> Readme:
     tokens = MarkdownIt().parse(markdown)
 
     try:
@@ -200,24 +251,33 @@ def parse_readme(path: Path) -> tuple[str, str, str]:
 
     overview = render_blocks(tokens[first_paragraph_end + 1 : first_section])
 
-    sections = get_sections(tokens)
-    configuration = render_blocks([token for section in sections for token in section])
-    return title, overview, configuration
+    description_sections = get_description_sections(tokens)
+    sections = render_blocks(
+        [token for section in description_sections for token in section]
+    )
+    return Readme(title=title, overview=overview, sections=sections)
 
 
-def render_description(manifest: dict[str, str], readme: Path, template: str) -> str:
-    title, overview, sections = parse_readme(readme)
-    if title != manifest["name"]:
+def read_readme(path: Path) -> Readme:
+    try:
+        markdown = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise DescriptionError(f"unable to read {path}: {exc}") from exc
+    return parse_readme(markdown, path)
+
+
+def render_description(manifest: Manifest, readme: Readme, template: str) -> str:
+    if readme.title != manifest.name:
         raise DescriptionError(
-            f"README title {title!r} does not match manifest name {manifest['name']!r}"
+            f"README title {readme.title!r} does not match manifest name {manifest.name!r}"
         )
 
     description = template.format(
-        name=manifest["name"],
-        overview=overview,
-        sections=sections,
-        files_url=f"{manifest['homepage']}?tab=files",
-        bugs_url=f"{manifest['homepage']}?tab=bugs",
+        name=manifest.name,
+        overview=readme.overview,
+        sections=readme.sections,
+        files_url=f"{manifest.homepage}?tab=files",
+        bugs_url=f"{manifest.homepage}?tab=bugs",
     )
     return re.sub(r"\n{3,}", "\n\n", description).rstrip() + "\n"
 
@@ -231,10 +291,7 @@ def find_mods(selected: tuple[str, ...]) -> list[Path]:
         path
         for path in paths
         if path.name.casefold() in selected_ids
-        or json.loads((path / "manifest.json").read_text(encoding="utf-8"))[
-            "id"
-        ].casefold()
-        in selected_ids
+        or read_manifest(path / "manifest.json").id.casefold() in selected_ids
     ]
 
 
@@ -260,10 +317,17 @@ def main(
 ) -> None:
     try:
         template = template_path.read_text(encoding="utf-8")
+        validate_template(template)
         mods = find_mods(mod_names)
         if mod_names and not mods:
             raise DescriptionError(f"no matching mods found: {', '.join(mod_names)}")
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+    except (
+        DescriptionError,
+        OSError,
+        TypeError,
+        ValueError,
+        json.JSONDecodeError,
+    ) as exc:
         raise click.ClickException(str(exc)) from exc
 
     failed_mods: dict[str, str] = {}
@@ -277,10 +341,11 @@ def main(
         for mod in mods:
             progress.update(task, description=f"Generating {mod.name}")
             try:
-                manifest = load_manifest(mod / "manifest.json")
-                content = render_description(manifest, mod / "README.md", template)
+                manifest = read_manifest(mod / "manifest.json")
+                readme = read_readme(mod / "README.md")
+                content = render_description(manifest, readme, template)
 
-                destination = output_dir / f"{manifest['id']}.txt"
+                destination = output_dir / f"{manifest.id}.txt"
                 output_dir.mkdir(parents=True, exist_ok=True)
 
                 destination.write_text(content, encoding="utf-8", newline="\n")
