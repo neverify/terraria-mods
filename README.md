@@ -84,7 +84,7 @@ Each mod has its own `README.md` file documenting the mod's logic.
 
 The script `build-all.ps1` builds all projects at once. This is mostly useful when all mods need to be rebuilt due to a common change. To deploy absent mods, provide the flag `-DeployAbsent`.
 
-The script `zip-all.ps1` creates a versioned zip of all built projects. This is mostly useful for creating releases.
+The script `release.py` builds and releases mods whose manifest version is newer than their latest Git tag. It displays the release status of each mod, validates the changelog, creates a Git tag, and creates a draft GitHub release with the built zip attached. Dependencies are defined using PEP 723 metadata; it is recommended to run the script via `uv run` or an equivalent tool. Alternatively the environment has to have all the dependencies installed. The script uses GitHub CLI to upload the release, so it has to be installed and authenticated to. Run `--help` for more information.
 
 ## Questions, Suggestions, Bug Reports and Contributing
 
