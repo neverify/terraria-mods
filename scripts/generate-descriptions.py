@@ -16,7 +16,7 @@ import click
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from rich.console import Console
-from rich.progress import MofNCompleteColumn, Progress, TextColumn
+from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "src"
@@ -247,14 +247,16 @@ def main(
     except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
         raise click.ClickException(str(exc)) from exc
 
-    failures = 0
+    failed_mods: dict[str, str] = {}
     with Progress(
         TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
         MofNCompleteColumn(),
         console=console,
     ) as progress:
         task = progress.add_task("Generating descriptions", total=len(mods))
         for mod in mods:
+            progress.update(task, description=f"Generating {mod.name}")
             try:
                 manifest = load_manifest(mod / "manifest.json")
                 content = render_description(manifest, mod / "README.md", template)
@@ -263,15 +265,17 @@ def main(
                 output_dir.mkdir(parents=True, exist_ok=True)
 
                 destination.write_text(content, encoding="utf-8", newline="\n")
-                console.print(f"[green]Generated {destination}[/green]")
             except (DescriptionError, OSError) as exc:
-                failures += 1
-                console.print(f"[red]Failed {mod.name}: {exc}[/red]")
+                failed_mods[mod.name] = str(exc)
             finally:
                 progress.advance(task)
 
-    if failures:
-        raise click.ClickException(f"{failures} description(s) failed")
+    success_count = len(mods) - len(failed_mods)
+    console.print(
+        f"Finished generating descriptions: [green]{success_count}[/green] successful, [red]{len(failed_mods)}[/red] failed."
+    )
+    for mod_name, error in failed_mods.items():
+        console.print(f"[red]- {mod_name}: {error}[/red]")
 
 
 if __name__ == "__main__":
