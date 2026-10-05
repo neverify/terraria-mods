@@ -387,7 +387,7 @@ def main(
     status = run(["git", "status", "--porcelain"]).stdout.strip()
     if status and not dry_run:
         fail(
-            "[yellow]Working tree is not clean; commit changes before releasing.[/yellow]"
+            "[yellow]Working tree is not clean; commit changes before releasing or use --dry-run to view release status.[/yellow]"
         )
 
     try:
