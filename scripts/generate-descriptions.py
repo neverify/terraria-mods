@@ -52,9 +52,9 @@ def get_sections(tokens: Sequence[Token]) -> list[list[Token]]:
     sections: list[list[Token]] = []
     current: list[Token] | None = None
 
-    for i, token in enumerate(tokens):
+    for index, token in enumerate(tokens):
         if token.type == "heading_open" and heading_level(token) == 2:
-            if heading_text(tokens[i + 1]) == "Development":
+            if heading_text(tokens[index + 1]) == "Development":
                 break
             current = [token]
             sections.append(current)
@@ -164,29 +164,41 @@ def parse_readme(path: Path) -> tuple[str, str, str]:
         raise DescriptionError(f"unable to read {path}: {exc}") from exc
 
     tokens = MarkdownIt().parse(markdown)
-    title_indexes = [
-        index
-        for index, token in enumerate(tokens)
-        if token.type == "heading_open" and heading_level(token) == 1
-    ]
-    if len(title_indexes) != 1:
-        raise DescriptionError(f"expected exactly one level-1 heading in {path}")
 
-    title_index = title_indexes[0]
-    title = render_inline(tokens[title_index + 1].children or [])
+    try:
+        title_end = next(
+            index
+            for index, token in enumerate(tokens)
+            if token.type == "heading_close" and heading_level(token) == 1
+        )
+    except StopIteration as exc:
+        raise DescriptionError(f"README has no level-one title: {path}") from exc
+
+    title = render_inline(tokens[title_end - 1].children or [])
+
+    try:
+        first_paragraph_end = next(
+            (
+                index
+                for index, token in enumerate(tokens)
+                if index > title_end and token.type == "paragraph_close"
+            ),
+        )
+    except StopIteration as exc:
+        raise DescriptionError(f"README overview is empty in {path}") from exc
+
     first_section = next(
         (
             index
             for index, token in enumerate(tokens)
-            if index > title_index
+            if index > title_end
             and token.type == "heading_open"
             and heading_level(token) == 2
         ),
         len(tokens),
     )
-    overview = render_blocks(tokens[title_index + 3 : first_section])
-    if not overview:
-        raise DescriptionError(f"README overview is empty in {path}")
+
+    overview = render_blocks(tokens[first_paragraph_end + 1 : first_section])
 
     sections = get_sections(tokens)
     configuration = render_blocks([token for section in sections for token in section])
