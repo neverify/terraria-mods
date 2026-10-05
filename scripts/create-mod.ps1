@@ -3,6 +3,8 @@ param(
     [string]$Name
 )
 
+$ErrorActionPreference = "Stop"
+
 if ([string]::IsNullOrWhiteSpace($Name)) {
     throw "The mod name cannot be empty."
 }
@@ -31,11 +33,11 @@ Get-ChildItem -Path $destinationDirectory -Recurse -File | ForEach-Object {
     # Replace placeholders in the file content
     $content = Get-Content -Path $newFilePath -Raw
     $content = $content.
-        Replace("Mod Template", $Name).
-        Replace("ModTemplate", $internalName).
-        Replace("mod-template", $modId)
+    Replace("Mod Template", $Name).
+    Replace("ModTemplate", $internalName).
+    Replace("mod-template", $modId)
 
     Set-Content -Path $newFilePath -Value $content -NoNewline
 }
 
-Write-Host "Created mod '$Name' at '$destinationDirectory'."
+Write-Host "Succesfully created mod '$Name'."-ForegroundColor Green
