@@ -2,28 +2,28 @@
 
 {overview}
 {sections}
-{section_separator}
+[line]
 [size=5][b]Installation[/b][/size]
 
-Install [url=https://inidar1.github.io/terraria-modder/installation/]TerrariaModder[/url].
+Install [url=https://inidar1.github.io/terraria-modder/installation/]TerrariaModder[/url].
 
 [size=4][b]With [url=https://www.nexusmods.com/terraria/mods/159]TerrariaModder Vault[/url][/b][/size]
 You can find the mod in the "Browse Nexus" tab.
 
 [size=4][b]Manually[/b][/size]
 [list=1]
-[*]Download the latest version of the mod from the [url={files_url}]files tab[/url] or from [url=https://github.com/neverify/terraria-mods/releases]GitHub[/url].[/*]
+[*]Download the latest version of the mod from the [url={files_url}]files tab[/url] or from [url=https://github.com/neverify/terraria-mods/releases]GitHub[/url].[/*]
 [*]Extract the downloaded .zip file and move the folder inside into Terraria/TerrariaModder/mods/.[/*]
 [/list]
 [line]
 [size=5][b]Questions, Suggestions, Bug Reports and Contributing[/b][/size]
 
-If you have any questions, suggestions or have found a bug, feel free to open an issue on [url=https://github.com/neverify/terraria-mods/]GitHub[/url] or contact me in [url=https://discord.gg/VvVD5EeYsK]the TerrariaModder Discord[/url] (@neverify). You can also report bugs in the [url={bugs_url}]bugs tab[/url] here in Nexus Mods.
+If you have any questions, suggestions or have found a bug, feel free to open an issue on [url=https://github.com/neverify/terraria-mods/]GitHub[/url] or contact me in the [url=https://discord.gg/VvVD5EeYsK]TerrariaModder Discord[/url] (@neverify). You can also report bugs in the [url={bugs_url}]bugs tab[/url] here in Nexus Mods.
 
 If you want to contribute, please contact me on Discord first :)
 [line]
 [size=5][b]Credits[/b][/size]
 
-A massive thanks to [url=https://www.nexusmods.com/profile/Inidar]Inidar1[/url] for creating the TerrariaModder framework and [url=https://www.nexusmods.com/profile/ConfuzzedCat]ConfuzzedCat[/url] for creating TerrariaInjector. They make all of these mods possible and the wait for tModLoader 1.4.5 bearable <3
+A massive thanks to [url=https://www.nexusmods.com/profile/Inidar]Inidar1[/url] for creating the TerrariaModder framework and [url=https://www.nexusmods.com/profile/ConfuzzedCat]ConfuzzedCat[/url] for creating TerrariaInjector. They make all of these mods possible and the wait for tModLoader 1.4.5 bearable <3
 
 Mod icon uses Terraria assets.

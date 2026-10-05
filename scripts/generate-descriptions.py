@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.11"
+# requires-python = ">=3.12"
 # dependencies = [
 #     "click>=8.5.0",
 #     "markdown-it-py>=3.0.0",
@@ -48,13 +48,13 @@ def heading_text(token: Token) -> str:
     return token.content.strip()
 
 
-def sections_before_development(tokens: Sequence[Token]) -> list[list[Token]]:
+def get_sections(tokens: Sequence[Token]) -> list[list[Token]]:
     sections: list[list[Token]] = []
     current: list[Token] | None = None
 
-    for index, token in enumerate(tokens):
+    for i, token in enumerate(tokens):
         if token.type == "heading_open" and heading_level(token) == 2:
-            if heading_text(tokens[index + 1]) == "Development":
+            if heading_text(tokens[i + 1]) == "Development":
                 break
             current = [token]
             sections.append(current)
@@ -68,40 +68,44 @@ def sections_before_development(tokens: Sequence[Token]) -> list[list[Token]]:
 def render_inline(tokens: Iterable[Token]) -> str:
     result: list[str] = []
     for token in tokens:
-        if token.type == "text" or token.type == "code_inline":
-            result.append(token.content)
-        elif token.type == "softbreak" or token.type == "hardbreak":
-            result.append("\n")
-        elif token.type == "strong_open":
-            result.append("[b]")
-        elif token.type == "strong_close":
-            result.append("[/b]")
-        elif token.type == "em_open":
-            result.append("[i]")
-        elif token.type == "em_close":
-            result.append("[/i]")
-        elif token.type == "s_open":
-            result.append("[s]")
-        elif token.type == "s_close":
-            result.append("[/s]")
-        elif token.type == "link_open":
-            result.append(f"[url={token.attrs['href']}]")
-        elif token.type == "link_close":
-            result.append("[/url]")
-        elif token.type == "image":
-            result.append(token.content or str(token.attrs.get("alt", "")))
-        elif token.children:
-            result.append(render_inline(token.children))
-        else:
-            raise DescriptionError(f"unsupported inline Markdown token: {token.type}")
+        match token.type:
+            case "text" | "code_inline":
+                result.append(token.content)
+            case "softbreak" | "hardbreak":
+                result.append("\n")
+            case "strong_open":
+                result.append("[b]")
+            case "strong_close":
+                result.append("[/b]")
+            case "em_open":
+                result.append("[i]")
+            case "em_close":
+                result.append("[/i]")
+            case "s_open":
+                result.append("[s]")
+            case "s_close":
+                result.append("[/s]")
+            case "link_open":
+                result.append(f"[url={token.attrs['href']}]")
+            case "link_close":
+                result.append("[/url]")
+            case "image":
+                result.append(token.content or str(token.attrs.get("alt", "")))
+            case _:
+                raise DescriptionError(
+                    f"unsupported inline Markdown token: {token.type}"
+                )
     return "".join(result)
 
 
 def render_blocks(tokens: Sequence[Token]) -> str:
-    result: list[str] = []
-    index = 0
+    result: list[tuple[str, str]] = []
     list_stack: list[str] = []
 
+    def append_block(content: str, separator: str = "\n\n") -> None:
+        result.append((content, separator))
+
+    index = 0
     while index < len(tokens):
         token = tokens[index]
         if token.type == "heading_open":
@@ -110,34 +114,36 @@ def render_blocks(tokens: Sequence[Token]) -> str:
                 raise DescriptionError(f"unsupported heading level: {level}")
             content = tokens[index + 1]
             size = 5 if level == 2 else 4
-            result.append(
-                f"[size={size}][b]{render_inline(content.children or [])}[/b][/size]"
+            append_block(
+                f"{'[line]\n' if level == 2 else ''}[size={size}][b]"
+                f"{render_inline(content.children or [])}[/b][/size]",
+                "\n" if level == 3 else "\n\n",
             )
             index += 3
         elif token.type == "paragraph_open":
             content = tokens[index + 1]
-            result.append(render_inline(content.children or []))
+            append_block(render_inline(content.children or []))
             index += 3
         elif token.type == "bullet_list_open":
             list_stack.append("bullet")
-            result.append("[list]")
+            append_block("[list]")
             index += 1
         elif token.type == "ordered_list_open":
             list_stack.append("ordered")
-            result.append("[list=1]")
+            append_block("[list=1]")
             index += 1
         elif token.type == "list_item_open":
-            result.append("[*]")
+            append_block("[*]")
             index += 1
         elif token.type == "list_item_close":
-            result.append("[/*]")
+            append_block("[/*]")
             index += 1
         elif token.type == "bullet_list_close" or token.type == "ordered_list_close":
-            result.append("[/list]")
+            append_block("[/list]")
             list_stack.pop()
             index += 1
         elif token.type == "fence" or token.type == "code_block":
-            result.append(token.content.rstrip("\n"))
+            append_block(token.content.rstrip("\n"))
             index += 1
         elif token.type in {"inline", "html_block", "blank_line"}:
             index += 1
@@ -146,7 +152,9 @@ def render_blocks(tokens: Sequence[Token]) -> str:
 
     if list_stack:
         raise DescriptionError("unclosed Markdown list")
-    return "\n\n".join(part for part in result if part).strip()
+    return "".join(
+        content + separator for content, separator in result if content
+    ).strip()
 
 
 def parse_readme(path: Path) -> tuple[str, str, str]:
@@ -180,7 +188,7 @@ def parse_readme(path: Path) -> tuple[str, str, str]:
     if not overview:
         raise DescriptionError(f"README overview is empty in {path}")
 
-    sections = sections_before_development(tokens)
+    sections = get_sections(tokens)
     configuration = render_blocks([token for section in sections for token in section])
     return title, overview, configuration
 
@@ -196,7 +204,6 @@ def render_description(manifest: dict[str, str], readme: Path, template: str) ->
         name=manifest["name"],
         overview=overview,
         sections=sections,
-        section_separator="[line]\n" if sections else "",
         files_url=f"{manifest['homepage']}?tab=files",
         bugs_url=f"{manifest['homepage']}?tab=bugs",
     )
