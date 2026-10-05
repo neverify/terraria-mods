@@ -1,11 +1,11 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
+#     "click>=8.5.0",
 #     "rich",
 # ]
 # ///
 
-import argparse
 import json
 import re
 import shlex
@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import click
 from rich.console import Console
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 from rich.prompt import Confirm
@@ -351,41 +352,47 @@ def release_mod(mod: Mod, publish: bool, slow: bool = False) -> None:
     run_steps(steps, delay=1.0 if slow else 0.0)
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Build and publish Terraria mod releases."
-    )
-    parser.add_argument(
-        "--mods", action="append", help="space-separated list of mod names or IDs"
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="show release status without making changes",
-    )
-    parser.add_argument(
-        "--publish",
-        action="store_true",
-        help="publish releases instead of creating drafts",
-    )
-    parser.add_argument(
-        "--yes", action="store_true", help="skip the release confirmation prompt"
-    )
-    parser.add_argument(
-        "--slow", action="store_true", help="add a fixed 1s delay between operations"
-    )
-    args = parser.parse_args()
-
+@click.command()
+@click.argument("mod_names", nargs=-1)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help="Show release status without making changes.",
+)
+@click.option(
+    "--publish",
+    is_flag=True,
+    help="Publish releases instead of creating drafts.",
+)
+@click.option(
+    "--yes",
+    "skip_confirmation",
+    is_flag=True,
+    help="Skip the release confirmation prompt.",
+)
+@click.option(
+    "--slow",
+    "add_delay",
+    is_flag=True,
+    help="Add a fixed 1s delay between operations.",
+)
+def main(
+    mod_names: tuple[str, ...],
+    dry_run: bool,
+    publish: bool,
+    skip_confirmation: bool,
+    add_delay: bool,
+) -> None:
     # Check if the working tree is clean
     status = run(["git", "status", "--porcelain"]).stdout.strip()
-    if status and not args.dry_run:
+    if status and not dry_run:
         fail(
             "[yellow]Working tree is not clean; commit changes before releasing.[/yellow]"
         )
 
     try:
         # Determine status of mods
-        selected = {value.casefold() for value in args.mods} if args.mods else None
+        selected = {value.casefold() for value in mod_names} if mod_names else None
         mods = load_mods(selected)
     except ModReleaseError as exc:
         fail(f"[red]Unable to load release status: [/red]{exc}")
@@ -398,11 +405,11 @@ def main() -> None:
         succeed("[yellow]No mods ready for release.[/yellow]")
     console.print(f"[green]{len(candidates)} mod(s) ready for release.[/green]")
 
-    if args.dry_run:
+    if dry_run:
         return
 
     # Confirm release
-    if not args.yes and not Confirm.ask(f"Release {len(candidates)} mod(s)?"):
+    if not skip_confirmation and not Confirm.ask(f"Release {len(candidates)} mod(s)?"):
         console.print("[yellow]Release cancelled.[/yellow]")
         return
 
@@ -410,10 +417,10 @@ def main() -> None:
     success_count = 0
     fail_count = 0
     for mod in candidates:
-        if args.slow:
+        if add_delay:
             time.sleep(1)
         try:
-            release_mod(mod, args.publish, args.slow)
+            release_mod(mod, publish, add_delay)
             success_count += 1
         except (ModReleaseError, ValueError) as exc:
             console.print(f"[red]Failed to release {mod.name}: [/red]{exc}")
