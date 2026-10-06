@@ -24,6 +24,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "src"
 DEFAULT_TEMPLATE = ROOT / "templates" / "nexus-description.txt"
 DEFAULT_OUTPUT_DIR = ROOT / "nexus-descriptions"
+TEMPLATE_FIELDS = frozenset({"name", "overview", "sections", "files_url", "bugs_url"})
+
 console = Console()
 
 
@@ -44,9 +46,6 @@ class Readme:
     title: str
     overview: str
     sections: str
-
-
-TEMPLATE_FIELDS = frozenset({"name", "overview", "sections", "files_url", "bugs_url"})
 
 
 def parse_manifest(content: str, path: Path) -> Manifest:
