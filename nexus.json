@@ -1,0 +1,52 @@
+{
+  "mods": {
+    "better-traveling-merchant": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "deterministic-drops": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "full-bright": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "functional-social-accessories": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "hide-social-accessories": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "minimap-mode": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "no-damage-variance": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "rare-drop-notification": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "select-ores": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "settings-keybind": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "undeprecate": {
+      "mod_id": null,
+      "file_id": null
+    },
+    "value-tooltip": {
+      "mod_id": null,
+      "file_id": null
+    }
+  }
+}

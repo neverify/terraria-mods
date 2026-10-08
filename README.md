@@ -86,6 +86,8 @@ The script `build-all.ps1` builds all projects at once. This is mostly useful wh
 
 The script `release.py` builds and releases mods whose manifest version is newer than their latest Git tag. It displays the release status of each mod, validates the changelog, creates a Git tag, and creates a draft GitHub release with the built zip attached. Dependencies are defined using PEP 723 metadata; it is recommended to run the script via `uv run` or an equivalent tool. Alternatively the environment has to have all the dependencies installed. The script uses GitHub CLI to upload the release, so it has to be installed and authenticated to. Run `--help` for more information.
 
+Published GitHub releases are uploaded to Nexus Mods by `.github/workflows/upload-to-nexus.yml`. The workflow constructs the details of the release with the `scripts/prepare-nexus-upload.py` Python script, downloads the release zip with GitHub CLI and uses the Nexus Mods GitHub action to perform the update.
+
 ## Questions, Suggestions, Bug Reports and Contributing
 
 If you have any questions, suggestions or have found a bug, feel free to open an issue or contact me in the [TerrariaModder Discord](https://discord.gg/VvVD5EeYsK) (@neverify). You can also report bugs in the `Bugs` tab of the Nexus Mods page of the respective mod.

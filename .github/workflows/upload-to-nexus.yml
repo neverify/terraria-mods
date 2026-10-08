@@ -1,0 +1,51 @@
+name: Upload release to Nexus Mods
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Download release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          mkdir release-assets
+          gh release download "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern '*.zip' \
+            --dir release-assets
+
+      - name: Prepare Nexus upload
+        id: prepare
+        run: python scripts/prepare-nexus-upload.py --asset-dir release-assets
+
+      - name: Upload to Nexus Mods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.9
+        with:
+          api_key: ${{ secrets.NEXUS_MODS_API_KEY }}
+          file_id: ${{ steps.prepare.outputs.file_id }}
+          filename: ${{ steps.prepare.outputs.filename }}
+          version: ${{ steps.prepare.outputs.version }}
+          display_name: ${{ steps.prepare.outputs.display_name }}
+          description: ${{ steps.prepare.outputs.changelog }}
+          allow_mod_manager_download: false
+          update_mod_version: true
+          mod_id: ${{ steps.prepare.outputs.mod_id }}
+          changelog: ${{ steps.prepare.outputs.changelog }}
