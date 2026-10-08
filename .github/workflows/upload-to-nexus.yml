@@ -44,7 +44,6 @@ jobs:
           filename: ${{ steps.prepare.outputs.filename }}
           version: ${{ steps.prepare.outputs.version }}
           display_name: ${{ steps.prepare.outputs.display_name }}
-          description: ${{ steps.prepare.outputs.changelog }}
           allow_mod_manager_download: false
           update_mod_version: true
           mod_id: ${{ steps.prepare.outputs.mod_id }}
