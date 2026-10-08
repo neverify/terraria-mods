@@ -4,7 +4,6 @@
   "version": "1.0.4",
   "author": "neverify",
   "description": "Add a configurable keybind to toggle the settings menu.",
-  "homepage": "https://www.nexusmods.com/terraria/mods/211",
 
   "entry_dll": "SettingsKeybind.dll",
   "framework_version": "^0.4.1",
