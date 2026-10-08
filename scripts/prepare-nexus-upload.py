@@ -90,6 +90,8 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     if not isinstance(body, str) or not body.strip():
         raise NexusUploadError("release description is empty")
 
+    changelog = format_changelog(body)
+
     tag_match = TAG_RE.fullmatch(tag)
     if tag_match is None:
         raise NexusUploadError(
@@ -127,7 +129,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     write_output(output, "mod_id", str(nexus_mod_id))
     write_output(output, "version", version)
     write_output(output, "display_name", str(manifest["name"]))
-    write_output(output, "changelog", format_changelog(body))
+    write_output(output, "changelog", changelog)
     write_output(output, "filename", str(assets[0]))
 
 
