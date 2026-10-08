@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import TextIO
 
 ROOT = Path(__file__).resolve().parent.parent
+CONFIG = Path(ROOT / "nexus.json")
 TAG_RE = re.compile(r"^(?P<mod_id>.+)-v(?P<version>\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$")
 HEADING_RE = re.compile(r"^###\s+(?P<category>\S.*?)\s*$")
 BULLET_RE = re.compile(r"^\s*[-*+]\s+(?P<entry>\S.*?)\s*$")
@@ -81,9 +82,7 @@ def write_output(output: TextIO, name: str, value: str) -> None:
     output.write(f"{name}<<{delimiter}\n{value}\n{delimiter}\n")
 
 
-def prepare(
-    event_path: Path, config_path: Path, asset_dir: Path, output: TextIO
-) -> None:
+def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     event = load_json(event_path)
     release = event.get("release")
     if not isinstance(release, dict):
@@ -105,7 +104,7 @@ def prepare(
     version = tag_match.group("version")
     manifest = find_manifest(mod_id)
 
-    config = load_json(config_path).get("mods")
+    config = load_json(CONFIG).get("mods")
     if not isinstance(config, dict) or mod_id not in config:
         raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
     nexus_ids = config[mod_id]
@@ -139,19 +138,15 @@ def prepare(
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--event", type=Path, default=Path(os.environ["GITHUB_EVENT_PATH"])
-    )
-    parser.add_argument("--config", type=Path, default=ROOT / "nexus.json")
     parser.add_argument("--asset-dir", type=Path, required=True)
-    parser.add_argument(
-        "--output", type=Path, default=Path(os.environ["GITHUB_OUTPUT"])
-    )
     args = parser.parse_args()
 
+    event = Path(os.environ["GITHUB_EVENT_PATH"])
+    output = Path(os.environ["GITHUB_OUTPUT"])
+
     try:
-        with args.output.open("a", encoding="utf-8", newline="") as output:
-            prepare(args.event, args.config, args.asset_dir, output)
+        with output.open("a", encoding="utf-8", newline="") as output:
+            prepare(event, args.asset_dir, output)
     except (NexusUploadError, KeyError, OSError, TypeError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
