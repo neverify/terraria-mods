@@ -1,52 +1,52 @@
 {
   "mods": {
     "better-traveling-merchant": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045722,
+      "file_id": 7683927
     },
     "deterministic-drops": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045723,
+      "file_id": 7683948
     },
     "full-bright": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045711,
+      "file_id": 7645913
     },
     "functional-social-accessories": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045736,
+      "file_id": 7845405
     },
     "hide-social-accessories": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045738,
+      "file_id": 7857327
     },
     "minimap-mode": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045712,
+      "file_id": 7646279
     },
     "no-damage-variance": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045745,
+      "file_id": 7881219
     },
     "rare-drop-notification": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045713,
+      "file_id": 7646339
     },
     "select-ores": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045714,
+      "file_id": 7646384
     },
     "settings-keybind": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045715,
+      "file_id": 7646426
     },
     "undeprecate": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045737,
+      "file_id": 7851132
     },
     "value-tooltip": {
-      "mod_id": null,
-      "file_id": null
+      "mod_id": 2357937045716,
+      "file_id": 7646477
     }
   }
 }
