@@ -104,7 +104,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     config = load_json(CONFIG).get("mods")
     if not isinstance(config, dict) or mod_id not in config:
         raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
-    nexus_ids = config[mod_id]
+    nexus_ids = config.get(mod_id)
     if not isinstance(nexus_ids, dict):
         raise NexusUploadError(f"Nexus configuration for {mod_id!r} must be an object")
 
