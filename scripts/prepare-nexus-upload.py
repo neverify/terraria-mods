@@ -3,6 +3,7 @@ import json
 import os
 import re
 import sys
+import uuid
 from pathlib import Path
 from typing import TextIO
 
@@ -72,7 +73,7 @@ def format_changelog(body: str) -> str:
 
 
 def write_output(output: TextIO, name: str, value: str) -> None:
-    delimiter = f"nexus-output-{os.getpid()}-{name}"
+    delimiter = f"nexus-output-{uuid.uuid4()}"
     output.write(f"{name}<<{delimiter}\n{value}\n{delimiter}\n")
 
 
