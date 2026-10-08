@@ -42,42 +42,32 @@ def load_manifest(mod_id: str) -> dict:
 def format_changelog(body: str) -> str:
     entries: list[str] = []
     category: str | None = None
-    pending: str | None = None
 
-    def add_pending() -> None:
-        if pending is not None:
-            entries.append(f"{category}: {pending}")
+    def add_entry(entry: str) -> None:
+        if category is None:
+            raise ValueError(
+                "release description contains a changelog entry before a category heading"
+            )
+        entries.append(f"{category}: {entry}")
 
     for line in body.splitlines():
         heading = HEADING_RE.match(line)
         if heading:
-            if pending is not None:
-                add_pending()
-                pending = None
             category = heading.group("category").strip()
             continue
 
         bullet = BULLET_RE.match(line)
         if bullet:
-            if category is None:
-                raise NexusUploadError(
-                    "release description contains a changelog entry before a category heading"
-                )
-            if pending is not None:
-                add_pending()
-            pending = bullet.group("entry").strip()
+            add_entry(bullet.group("entry").strip())
             continue
 
         if not line.strip():
             continue
-        if pending is None:
-            raise NexusUploadError(f"unsupported line in release description: {line!r}")
-        pending = f"{pending} {line.strip()}"
 
-    if pending is not None:
-        add_pending()
+        raise ValueError(f"unsupported line in release description: {line!r}")
+
     if not entries:
-        raise NexusUploadError("release description contains no changelog entries")
+        raise ValueError("release description contains no changelog entries")
     return "\n".join(entries)
 
 
