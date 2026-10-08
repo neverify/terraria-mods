@@ -20,19 +20,23 @@ class NexusUploadError(Exception):
 def load_json(path: Path) -> dict:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise NexusUploadError(f"unable to read {path}: {exc}") from exc
-    if not isinstance(value, dict):
-        raise NexusUploadError(f"expected an object in {path}")
+    except OSError as exc:
+        raise ValueError(f"Unable to read {path}: {exc}") from exc
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON in {path}: {exc}") from exc
     return value
 
 
-def find_manifest(mod_id: str) -> dict:
-    for manifest_path in sorted((ROOT / "src").glob("*/manifest.json")):
-        manifest = load_json(manifest_path)
-        if manifest.get("id") == mod_id:
-            return manifest
-    raise NexusUploadError(f"no manifest found for release mod ID {mod_id!r}")
+def load_manifest(mod_id: str) -> dict:
+    try:
+        return next(
+            load_json(mod_folder / "manifest.json")
+            for mod_folder in (ROOT / "src").glob("*")
+            if mod_folder.is_dir()
+            and mod_folder.name.casefold() == mod_id.replace("-", "").casefold()
+        )
+    except StopIteration:
+        raise ValueError(f"no manifest found for release mod ID {mod_id!r}")
 
 
 def format_changelog(body: str) -> str:
@@ -102,7 +106,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
         )
     mod_id = tag_match.group("mod_id")
     version = tag_match.group("version")
-    manifest = find_manifest(mod_id)
+    manifest = load_manifest(mod_id)
 
     config = load_json(CONFIG).get("mods")
     if not isinstance(config, dict) or mod_id not in config:
