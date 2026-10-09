@@ -81,7 +81,7 @@ def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
         if not webbrowser.open_new_tab(url):
             console.print(f"[yellow]Could not open browser tab for {mod_id}[/yellow]")
         click.confirm(
-            f"[{index}/{len(mod_ids)}] {mod_id}",
+            f"[{index:>{len(str(len(mod_ids)))}}/{len(mod_ids)}] {mod_id}",
             default=True,
             abort=True,
         )
