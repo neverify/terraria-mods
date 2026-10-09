@@ -1,0 +1,11 @@
+{
+  "id": "test-mod",
+  "name": "Test Mod",
+  "version": "1.0.3",
+  "author": "neverify",
+  "description": "",
+
+  "entry_dll": "TestMod.dll",
+  "framework_version": ">=0.4.0",
+  "terraria_version": "1.4.5"
+}
