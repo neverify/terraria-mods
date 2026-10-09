@@ -23,6 +23,7 @@ from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "src"
 DEFAULT_TEMPLATE = ROOT / "templates" / "nexus-description.txt"
+NEXUS_CONFIG = ROOT / "nexus.json"
 DEFAULT_OUTPUT_DIR = ROOT / "nexus-descriptions"
 TEMPLATE_FIELDS = frozenset({"name", "overview", "sections", "files_url", "bugs_url"})
 
@@ -38,7 +39,6 @@ class Manifest:
     id: str
     name: str
     description: str
-    homepage: str
 
 
 @dataclass(frozen=True)
@@ -48,17 +48,35 @@ class Readme:
     sections: str
 
 
+def read_nexus_mod_page_ids(path: Path) -> dict[str, int]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        mods = data.get("mods")
+        if not isinstance(mods, dict):
+            raise TypeError("'mods' must be an object")
+        page_ids: dict[str, int] = {}
+        for mod_id, mod_data in mods.items():
+            if not isinstance(mod_id, str) or not isinstance(mod_data, dict):
+                raise TypeError("each mod entry must be an object")
+            page_id = mod_data["mod_page_id"]
+            if isinstance(page_id, bool) or not isinstance(page_id, int):
+                raise TypeError(f"{mod_id!r} mod_page_id must be a number")
+            page_ids[mod_id] = page_id
+        return page_ids
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise DescriptionError(f"invalid Nexus configuration {path}: {exc}") from exc
+
+
 def parse_manifest(content: str, path: Path) -> Manifest:
     try:
         manifest = json.loads(content)
-        for field in ("id", "name", "description", "homepage"):
+        for field in ("id", "name", "description"):
             if not isinstance(manifest.get(field), str) or not manifest[field].strip():
                 raise ValueError(f"missing non-empty {field!r}")
         return Manifest(
             id=manifest["id"],
             name=manifest["name"],
             description=manifest["description"],
-            homepage=manifest["homepage"],
         )
     except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
         raise DescriptionError(f"invalid manifest {path}: {exc}") from exc
@@ -265,7 +283,9 @@ def read_readme(path: Path) -> Readme:
     return parse_readme(markdown, path)
 
 
-def render_description(manifest: Manifest, readme: Readme, template: str) -> str:
+def render_description(
+    manifest: Manifest, readme: Readme, template: str, mod_page_id: int
+) -> str:
     if readme.title != manifest.name:
         raise DescriptionError(
             f"README title {readme.title!r} does not match manifest name {manifest.name!r}"
@@ -275,8 +295,8 @@ def render_description(manifest: Manifest, readme: Readme, template: str) -> str
         name=manifest.name,
         overview=readme.overview,
         sections=readme.sections,
-        files_url=f"{manifest.homepage}?tab=files",
-        bugs_url=f"{manifest.homepage}?tab=bugs",
+        files_url=f"https://www.nexusmods.com/terraria/mods/{mod_page_id}?tab=files",
+        bugs_url=f"https://www.nexusmods.com/terraria/mods/{mod_page_id}?tab=bugs",
     )
     return re.sub(r"\n{3,}", "\n\n", description).rstrip() + "\n"
 
@@ -317,6 +337,7 @@ def main(
     try:
         template = template_path.read_text(encoding="utf-8")
         validate_template(template)
+        nexus_mod_page_ids = read_nexus_mod_page_ids(NEXUS_CONFIG)
         mods = find_mods(mod_names)
         if mod_names and not mods:
             raise DescriptionError(f"no matching mods found: {', '.join(mod_names)}")
@@ -342,7 +363,13 @@ def main(
             try:
                 manifest = read_manifest(mod / "manifest.json")
                 readme = read_readme(mod / "README.md")
-                content = render_description(manifest, readme, template)
+
+                mod_page_id = nexus_mod_page_ids.get(manifest.id)
+                if not mod_page_id:
+                    raise DescriptionError(
+                        f"no Nexus configuration found for mod {manifest.id!r}"
+                    )
+                content = render_description(manifest, readme, template, mod_page_id)
 
                 destination = output_dir / f"{manifest.id}.txt"
                 output_dir.mkdir(parents=True, exist_ok=True)
