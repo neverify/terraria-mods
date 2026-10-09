@@ -28,20 +28,23 @@ class UpdateError(Exception):
     """An error preparing the manual description update workflow."""
 
 
-def read_nexus_config(path: Path) -> dict[str, int]:
+def load_nexus_ids(path: Path) -> dict[str, int]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
         mods = data.get("mods")
         if not isinstance(mods, dict):
-            raise TypeError("'mods' must be an object")
-
+            raise TypeError("invalid Nexus configuration: 'mods' must be an object")
         page_ids: dict[str, int] = {}
         for mod_id, mod_data in mods.items():
-            if not isinstance(mod_id, str) or not isinstance(mod_data, dict):
-                raise TypeError("each mod entry must be an object")
+            if not isinstance(mod_id, str):
+                raise TypeError(f"invalid mod ID: {mod_id!r}")
+            if not isinstance(mod_data, dict):
+                raise TypeError(f"invalid mod data for {mod_id!r}: must be an object")
             page_id = mod_data.get("mod_page_id")
-            if isinstance(page_id, bool) or not isinstance(page_id, int):
-                raise TypeError(f"{mod_id!r} mod_page_id must be a number")
+            if not isinstance(page_id, int):
+                raise TypeError(
+                    f"invalid 'mod_page_id' for {mod_id!r}: must be a number"
+                )
             page_ids[mod_id] = page_id
         return page_ids
     except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
@@ -116,7 +119,7 @@ def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
 @click.argument("mod_names", nargs=-1)
 def main(mod_names: tuple[str, ...]) -> None:
     try:
-        page_ids = read_nexus_config(NEXUS_CONFIG)
+        page_ids = load_nexus_ids(NEXUS_CONFIG)
         selected_ids = resolve_mod_ids(mod_names, set(page_ids))
         available_ids = load_available_descriptions(selected_ids)
         update_descriptions(available_ids, page_ids)
