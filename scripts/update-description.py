@@ -28,9 +28,11 @@ class UpdateError(Exception):
     """An error preparing the manual description update workflow."""
 
 
-def load_nexus_ids(path: Path) -> dict[str, int]:
+def load_page_ids(path: Path) -> dict[str, int]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise TypeError("invalid Nexus configuration: root must be an object")
         mods = data.get("mods")
         if not isinstance(mods, dict):
             raise TypeError("invalid Nexus configuration: 'mods' must be an object")
@@ -41,7 +43,7 @@ def load_nexus_ids(path: Path) -> dict[str, int]:
             if not isinstance(mod_data, dict):
                 raise TypeError(f"invalid mod data for {mod_id!r}: must be an object")
             page_id = mod_data.get("mod_page_id")
-            if not isinstance(page_id, int):
+            if isinstance(page_id, bool) or not isinstance(page_id, int):
                 raise TypeError(
                     f"invalid 'mod_page_id' for {mod_id!r}: must be a number"
                 )
@@ -51,41 +53,23 @@ def load_nexus_ids(path: Path) -> dict[str, int]:
         raise UpdateError(f"invalid Nexus configuration {path}: {exc}") from exc
 
 
-def resolve_mod_ids(selected: tuple[str, ...], configured_ids: set[str]) -> list[str]:
-    if not selected:
-        return sorted(configured_ids)
+def find_descriptions_to_update(
+    selected_ids: tuple[str, ...], page_ids: dict[str, int]
+) -> tuple[list[str], list[str], list[str]]:
+    mod_ids = tuple(selected_ids) if selected_ids else tuple(sorted(page_ids))
+    available_ids: list[str] = []
+    unknown_ids: list[str] = []
+    unavailable_ids: list[str] = []
 
-    configured_by_name = {mod_id.casefold(): mod_id for mod_id in configured_ids}
-    mod_ids: list[str] = []
-    unknown: list[str] = []
-    for value in selected:
-        mod_id = configured_by_name.get(value.casefold())
-        if mod_id is None:
-            unknown.append(value)
-        else:
-            mod_ids.append(mod_id)
-    if unknown:
-        raise UpdateError(
-            f"no Nexus configuration found for mod(s): {', '.join(unknown)}"
-        )
-    return mod_ids
-
-
-def load_available_descriptions(mod_ids: list[str]) -> list[str]:
-    available: list[str] = []
     for mod_id in mod_ids:
-        description_path = DESCRIPTION_DIR / f"{mod_id}.txt"
-        if description_path.is_file():
-            available.append(mod_id)
+        if mod_id not in page_ids:
+            unknown_ids.append(mod_id)
+        elif (DESCRIPTION_DIR / f"{mod_id}.txt").is_file():
+            available_ids.append(mod_id)
         else:
-            console.print(
-                f"[yellow]Skipping {mod_id}: description not found at "
-                f"{description_path}[/yellow]"
-            )
+            unavailable_ids.append(mod_id)
 
-    if not available:
-        raise UpdateError(f"no descriptions available in {DESCRIPTION_DIR}")
-    return available
+    return available_ids, unknown_ids, unavailable_ids
 
 
 def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
@@ -119,9 +103,23 @@ def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
 @click.argument("mod_names", nargs=-1)
 def main(mod_names: tuple[str, ...]) -> None:
     try:
-        page_ids = load_nexus_ids(NEXUS_CONFIG)
-        selected_ids = resolve_mod_ids(mod_names, set(page_ids))
-        available_ids = load_available_descriptions(selected_ids)
+        page_ids = load_page_ids(NEXUS_CONFIG)
+
+        available_ids, unknown_ids, unavailable_ids = find_descriptions_to_update(
+            mod_names, page_ids
+        )
+        if unknown_ids:
+            console.print(
+                f"[yellow]No Nexus page IDs found for mod(s): {', '.join(unknown_ids)}.[/yellow]"
+            )
+        if unavailable_ids:
+            console.print(
+                f"[yellow]No descriptions found for mod(s): {', '.join(unavailable_ids)}.[/yellow]"
+            )
+        if not available_ids:
+            console.print("[red]No descriptions available.[/red]")
+            return
+
         update_descriptions(available_ids, page_ids)
     except (OSError, UpdateError) as exc:
         raise click.ClickException(str(exc)) from exc
