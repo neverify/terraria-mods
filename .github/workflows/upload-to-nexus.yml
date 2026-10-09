@@ -37,7 +37,7 @@ jobs:
         run: python scripts/prepare-nexus-upload.py --asset-dir release-assets
 
       - name: Upload to Nexus Mods
-        uses: Nexus-Mods/upload-action@v1.0.0-beta.9
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.10
         with:
           api_key: ${{ secrets.NEXUS_MODS_API_KEY }}
           file_id: ${{ steps.prepare.outputs.file_id }}
