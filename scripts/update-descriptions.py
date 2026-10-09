@@ -14,7 +14,6 @@ from pathlib import Path
 import click
 import pyperclip
 from rich.console import Console
-from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 
 ROOT = Path(__file__).resolve().parent.parent
 DESCRIPTION_DIR = ROOT / "nexus-descriptions"
@@ -73,30 +72,19 @@ def find_descriptions_to_update(
 
 
 def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
-    with Progress(
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        MofNCompleteColumn(),
-        console=console,
-    ) as progress:
-        task = progress.add_task("Preparing descriptions", total=len(mod_ids))
-        for mod_id in mod_ids:
-            description_path = DESCRIPTION_DIR / f"{mod_id}.txt"
-            content = description_path.read_text(encoding="utf-8")
-            pyperclip.copy(content)
+    for index, mod_id in enumerate(mod_ids, start=1):
+        description_path = DESCRIPTION_DIR / f"{mod_id}.txt"
+        content = description_path.read_text(encoding="utf-8")
+        pyperclip.copy(content)
 
-            progress.update(task, description=f"Ready: {mod_id}")
-            url = NEXUS_MOD_URL.format(page_id=page_ids[mod_id])
-            if not webbrowser.open_new_tab(url):
-                console.print(
-                    f"[yellow]Could not open browser tab for {mod_id}[/yellow]"
-                )
-            click.confirm(
-                f"Paste and save {mod_id}, then continue",
-                default=True,
-                abort=True,
-            )
-            progress.advance(task)
+        url = NEXUS_MOD_URL.format(page_id=page_ids[mod_id])
+        if not webbrowser.open_new_tab(url):
+            console.print(f"[yellow]Could not open browser tab for {mod_id}[/yellow]")
+        click.confirm(
+            f"[{index}/{len(mod_ids)}] {mod_id}",
+            default=True,
+            abort=True,
+        )
 
 
 @click.command()
