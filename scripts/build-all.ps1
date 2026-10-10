@@ -1,11 +1,11 @@
 param(
-    [switch]$DeployNewMods
+    [switch]$DeployAbsent
 )
 
 $srcPath = Join-Path $PSScriptRoot "..\src"
 $buildProperties = @()
 
-if ($DeployNewMods) {
+if ($DeployAbsent) {
     $buildProperties += "-p:DeployAbsent=true"
 }
 
