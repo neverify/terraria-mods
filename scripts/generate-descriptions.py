@@ -124,8 +124,7 @@ def get_description_sections(tokens: Sequence[Token]) -> list[list[Token]]:
                 break
             current = [token]
             sections.append(current)
-            continue
-        if current is not None:
+        elif current is not None:
             current.append(token)
 
     return sections
