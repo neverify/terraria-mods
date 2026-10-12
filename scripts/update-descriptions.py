@@ -8,7 +8,6 @@
 # ///
 
 import webbrowser
-from pathlib import Path
 
 import click
 import pyperclip
@@ -25,14 +24,14 @@ class UpdateError(Exception):
     """An error preparing the manual description update workflow."""
 
 
-def load_page_ids(path: Path) -> dict[str, int]:
+def load_page_ids() -> dict[str, int]:
     try:
         return {
             mod_id: nexus_mod.mod_page_id
-            for mod_id, nexus_mod in load_nexus_configs(path).items()
+            for mod_id, nexus_mod in load_nexus_configs(NEXUS_CONFIG).items()
         }
     except ValueError as exc:
-        raise UpdateError(f"invalid Nexus configuration {path}: {exc}") from exc
+        raise UpdateError(f"invalid Nexus configuration {NEXUS_CONFIG}: {exc}") from exc
 
 
 def find_descriptions_to_update(
@@ -74,7 +73,7 @@ def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
 @click.argument("mod_names", nargs=-1)
 def main(mod_names: tuple[str, ...]) -> None:
     try:
-        page_ids = load_page_ids(NEXUS_CONFIG)
+        page_ids = load_page_ids()
 
         available_ids, unknown_ids, unavailable_ids = find_descriptions_to_update(
             mod_names, page_ids
