@@ -31,20 +31,10 @@ CHANGELOG_RE = re.compile(r"^##\s+\[(?P<version>[^\]]+)\](?:\s+-.*)?\s*$", re.MU
 console = Console()
 
 
-@dataclass
-class Mod:
-    directory: Path
-    manifest: dict
+@dataclass(frozen=True)
+class Mod(SourceMod):
     releases: list[str] | None
     release_notes: str | None = None
-
-    @property
-    def mod_id(self) -> str:
-        return self.manifest["id"]
-
-    @property
-    def version(self) -> str:
-        return self.manifest["version"]
 
     @property
     def last_release(self) -> str | None:
@@ -59,10 +49,6 @@ class Mod:
     @property
     def tag(self) -> str:
         return f"{self.mod_id}-v{self.version}"
-
-    @property
-    def name(self) -> str:
-        return self.manifest["name"]
 
 
 def fail(message: str) -> None:
