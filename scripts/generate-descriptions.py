@@ -235,7 +235,7 @@ def parse_readme(markdown: str, path: Path) -> Readme:
     return Readme(title=title, overview=overview, sections=sections)
 
 
-def read_readme(path: Path) -> Readme:
+def load_readme(path: Path) -> Readme:
     try:
         markdown = path.read_text(encoding="utf-8")
     except OSError as exc:
@@ -298,7 +298,7 @@ def main(
         for mod in mods:
             progress.update(task, description=f"Generating {mod.directory.name}")
             try:
-                readme = read_readme(mod.directory / "README.md")
+                readme = load_readme(mod.directory / "README.md")
 
                 mod_page_id = nexus_mod_page_ids.get(mod.mod_id)
                 if not mod_page_id:
