@@ -24,10 +24,6 @@ class Mod:
     def version(self) -> str:
         return self.manifest["version"]
 
-    @property
-    def normalized_id(self) -> str:
-        return self.mod_id.replace("-", "").casefold()
-
 
 def find_mods(mod_names: Iterable[str] | None = None) -> list[Mod]:
     normalized_mod_names = (
