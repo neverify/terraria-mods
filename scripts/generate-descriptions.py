@@ -7,7 +7,6 @@
 # ]
 # ///
 
-import json
 import re
 import string
 from collections.abc import Iterable, Iterator, Sequence
@@ -18,7 +17,7 @@ import click
 from common.mods import Mod, find_mods
 from common.nexus_config import load_nexus_configs
 from common.paths import DESCRIPTION_DIR as DEFAULT_OUTPUT_DIR
-from common.paths import NEXUS_CONFIG, ROOT
+from common.paths import ROOT
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from rich.console import Console
@@ -39,16 +38,6 @@ class Readme:
     title: str
     overview: str
     sections: str
-
-
-def read_nexus_mod_page_ids(path: Path) -> dict[str, int]:
-    try:
-        return {
-            mod_id: nexus_mod.mod_page_id
-            for mod_id, nexus_mod in load_nexus_configs(path).items()
-        }
-    except ValueError as exc:
-        raise DescriptionError(f"invalid Nexus configuration {path}: {exc}") from exc
 
 
 def validate_template(template: str) -> None:
@@ -276,14 +265,13 @@ def main(
     try:
         template = TEMPLATE.read_text(encoding="utf-8")
         validate_template(template)
-        nexus_mod_page_ids = read_nexus_mod_page_ids(NEXUS_CONFIG)
+        nexus_configs = load_nexus_configs()
         mods = find_mods(mod_names)
     except (
         DescriptionError,
         OSError,
         TypeError,
         ValueError,
-        json.JSONDecodeError,
     ) as exc:
         raise click.ClickException(str(exc)) from exc
 
@@ -300,12 +288,14 @@ def main(
             try:
                 readme = load_readme(mod.directory / "README.md")
 
-                mod_page_id = nexus_mod_page_ids.get(mod.mod_id)
-                if not mod_page_id:
+                nexus_mod = nexus_configs.get(mod.mod_id)
+                if not nexus_mod:
                     raise DescriptionError(
                         f"no Nexus configuration found for mod {mod.mod_id!r}"
                     )
-                content = render_description(mod, readme, template, mod_page_id)
+                content = render_description(
+                    mod, readme, template, nexus_mod.mod_page_id
+                )
 
                 destination = output_dir / f"{mod.mod_id}.txt"
                 output_dir.mkdir(parents=True, exist_ok=True)

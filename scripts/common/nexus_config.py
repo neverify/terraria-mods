@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from pathlib import Path
 
 from .json import JsonLoadError, load_json
+from .paths import NEXUS_CONFIG
 
 
 @dataclass(frozen=True)
@@ -11,11 +11,11 @@ class NexusConfig:
     file_id: int
 
 
-def load_nexus_configs(path: Path) -> dict[str, NexusConfig]:
+def load_nexus_configs() -> dict[str, NexusConfig]:
     try:
-        data = load_json(path)
+        data = load_json(NEXUS_CONFIG)
     except JsonLoadError as exc:
-        raise ValueError(f"invalid Nexus configuration {path}: {exc}") from exc
+        raise ValueError(f"invalid Nexus configuration {NEXUS_CONFIG}: {exc}") from exc
     try:
         mods = data["mods"]
         if not isinstance(mods, dict):
@@ -35,7 +35,7 @@ def load_nexus_configs(path: Path) -> dict[str, NexusConfig]:
                 raise TypeError(f"invalid data for mod {mod_id}: {exc}") from exc
         return configs
     except (KeyError, TypeError, ValueError) as exc:
-        raise ValueError(f"invalid Nexus configuration {path}: {exc}") from exc
+        raise ValueError(f"invalid Nexus configuration {NEXUS_CONFIG}: {exc}") from exc
 
 
 def _positive_int(data: dict, field: str) -> int:

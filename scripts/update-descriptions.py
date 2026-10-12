@@ -12,8 +12,8 @@ from collections.abc import Collection
 
 import click
 import pyperclip
-from common.nexus_config import load_nexus_configs
-from common.paths import DESCRIPTION_DIR, NEXUS_CONFIG
+from common.nexus_config import NexusConfig, load_nexus_configs
+from common.paths import DESCRIPTION_DIR
 from rich.console import Console
 
 NEXUS_MOD_URL = "https://www.nexusmods.com/games/terraria/mods/{page_id}/edit/general"
@@ -25,26 +25,16 @@ class UpdateError(Exception):
     """An error preparing the manual description update workflow."""
 
 
-def load_page_ids() -> dict[str, int]:
-    try:
-        return {
-            mod_id: nexus_mod.mod_page_id
-            for mod_id, nexus_mod in load_nexus_configs(NEXUS_CONFIG).items()
-        }
-    except ValueError as exc:
-        raise UpdateError(f"invalid Nexus configuration {NEXUS_CONFIG}: {exc}") from exc
-
-
 def find_descriptions_to_update(
-    mod_names: Collection[str], page_ids: dict[str, int]
+    mod_names: Collection[str], nexus_configs: dict[str, NexusConfig]
 ) -> tuple[list[str], list[str], list[str]]:
-    mod_names = tuple(mod_names) if mod_names else tuple(sorted(page_ids))
+    mod_names = tuple(mod_names) if mod_names else tuple(sorted(nexus_configs))
     available_names: list[str] = []
     unknown_names: list[str] = []
     unavailable_names: list[str] = []
 
     for name in mod_names:
-        if name not in page_ids:
+        if name not in nexus_configs:
             unknown_names.append(name)
         elif (DESCRIPTION_DIR / f"{name}.txt").is_file():
             available_names.append(name)
@@ -54,13 +44,15 @@ def find_descriptions_to_update(
     return available_names, unknown_names, unavailable_names
 
 
-def update_descriptions(mod_names: list[str], page_ids: dict[str, int]) -> None:
+def update_descriptions(
+    mod_names: list[str], nexus_configs: dict[str, NexusConfig]
+) -> None:
     for index, name in enumerate(mod_names, start=1):
         description_path = DESCRIPTION_DIR / f"{name}.txt"
         content = description_path.read_text(encoding="utf-8")
         pyperclip.copy(content)
 
-        url = NEXUS_MOD_URL.format(page_id=page_ids[name])
+        url = NEXUS_MOD_URL.format(page_id=nexus_configs[name].mod_page_id)
         if not webbrowser.open_new_tab(url):
             console.print(f"[yellow]Could not open browser tab for {name}[/yellow]")
         click.confirm(
@@ -74,10 +66,10 @@ def update_descriptions(mod_names: list[str], page_ids: dict[str, int]) -> None:
 @click.argument("mod_names", nargs=-1)
 def main(mod_names: tuple[str, ...]) -> None:
     try:
-        page_ids = load_page_ids()
+        nexus_configs = load_nexus_configs()
 
         available_names, unknown_names, unavailable_names = find_descriptions_to_update(
-            mod_names, page_ids
+            mod_names, nexus_configs
         )
         if unknown_names:
             console.print(
@@ -91,7 +83,7 @@ def main(mod_names: tuple[str, ...]) -> None:
             console.print("[red]No descriptions available.[/red]")
             return
 
-        update_descriptions(available_names, page_ids)
+        update_descriptions(available_names, nexus_configs)
     except (OSError, UpdateError) as exc:
         raise click.ClickException(str(exc)) from exc
 
