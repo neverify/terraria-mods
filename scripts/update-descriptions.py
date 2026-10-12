@@ -7,17 +7,15 @@
 # ]
 # ///
 
-import json
 import webbrowser
 from pathlib import Path
 
 import click
 import pyperclip
+from common.config import load_nexus_config
+from common.paths import DESCRIPTION_DIR, NEXUS_CONFIG
 from rich.console import Console
 
-ROOT = Path(__file__).resolve().parent.parent
-DESCRIPTION_DIR = ROOT / "nexus-descriptions"
-NEXUS_CONFIG = ROOT / "nexus.json"
 NEXUS_MOD_URL = "https://www.nexusmods.com/games/terraria/mods/{page_id}/edit/general"
 
 console = Console()
@@ -29,26 +27,11 @@ class UpdateError(Exception):
 
 def load_page_ids(path: Path) -> dict[str, int]:
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        if not isinstance(data, dict):
-            raise TypeError("invalid Nexus configuration: root must be an object")
-        mods = data.get("mods")
-        if not isinstance(mods, dict):
-            raise TypeError("invalid Nexus configuration: 'mods' must be an object")
-        page_ids: dict[str, int] = {}
-        for mod_id, mod_data in mods.items():
-            if not isinstance(mod_id, str):
-                raise TypeError(f"invalid mod ID: {mod_id!r}")
-            if not isinstance(mod_data, dict):
-                raise TypeError(f"invalid mod data for {mod_id!r}: must be an object")
-            page_id = mod_data.get("mod_page_id")
-            if isinstance(page_id, bool) or not isinstance(page_id, int):
-                raise TypeError(
-                    f"invalid 'mod_page_id' for {mod_id!r}: must be a number"
-                )
-            page_ids[mod_id] = page_id
-        return page_ids
-    except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        return {
+            mod_id: nexus_mod.mod_page_id
+            for mod_id, nexus_mod in load_nexus_config(path).items()
+        }
+    except ValueError as exc:
         raise UpdateError(f"invalid Nexus configuration {path}: {exc}") from exc
 
 

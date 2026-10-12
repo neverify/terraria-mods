@@ -6,35 +6,29 @@
 # ]
 # ///
 
-import json
 import re
 import shlex
 import subprocess
 import time
 import zipfile
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import click
+from common.mods import Mod as SourceMod
+from common.mods import find_mods
+from common.paths import BUILD_DIR, ROOT, ZIPS_DIR
+from common.versions import parse_tag, parse_version
 from rich.console import Console
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 from rich.prompt import Confirm
 from rich.table import Table
 
-ROOT = Path(__file__).resolve().parent.parent
-SRC_DIR = ROOT / "src"
-BUILD_DIR = ROOT / "build"
-ZIPS_DIR = ROOT / "zips"
-TAG_RE = re.compile(r"^(?P<mod>.+)-v(?P<version>\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$")
 CHANGELOG_RE = re.compile(r"^##\s+\[(?P<version>[^\]]+)\](?:\s+-.*)?\s*$", re.MULTILINE)
-VERSION_RE = re.compile(r"^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$")
+
 console = Console()
-
-
-class ModReleaseError(Exception):
-    """An error that should skip one mod without stopping the release run."""
 
 
 @dataclass
@@ -58,7 +52,9 @@ class Mod:
 
     @property
     def updated(self) -> bool:
-        return not self.last_release or self.version > self.last_release
+        return not self.last_release or parse_version(self.version) > parse_version(
+            self.last_release
+        )
 
     @property
     def tag(self) -> str:
@@ -90,28 +86,9 @@ def run(command: list[str]) -> subprocess.CompletedProcess[str]:
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         details = getattr(exc, "stderr", None) or str(exc)
-        raise ModReleaseError(
+        raise RuntimeError(
             f"command failed ({shlex.join(command)}): {details.strip()}"
         ) from exc
-
-
-def parse_version(version: str) -> tuple[int, int, int, str]:
-    match = VERSION_RE.fullmatch(version)
-    if not match:
-        raise ValueError(f"invalid semantic version: {version}")
-    return (
-        int(match.group(1)),
-        int(match.group(2)),
-        int(match.group(3)),
-        match.group(4) or "",
-    )
-
-
-def parse_tag(tag: str) -> tuple[str, str]:
-    match = TAG_RE.fullmatch(tag)
-    if not match:
-        raise ValueError(f"Invalid tag: {tag}")
-    return match.group("mod"), match.group("version")
 
 
 def extract_changelog(changelog: Path, version: str) -> str:
@@ -132,43 +109,18 @@ def extract_changelog(changelog: Path, version: str) -> str:
     raise ValueError(f"changelog section [{version}] not found in {changelog}")
 
 
-def load_manifest(manifest_file: Path) -> dict:
+def load_mod(source_mod: SourceMod) -> Mod:
+    path = source_mod.directory
+    manifest = source_mod.manifest
     try:
-        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
-        mod_id = manifest["id"]
-        name = manifest["name"]
-        version = manifest["version"]
-        parse_version(version)
-        if not all(
-            isinstance(value, str) and value.strip()
-            for value in (mod_id, name, version)
-        ):
-            raise ValueError("id, name, and version must be non-empty strings")
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
-        raise ValueError(f"invalid manifest {manifest_file}: {exc}") from exc
-    return manifest
-
-
-def load_mod(path: Path) -> Mod | None:
-    manifest_file = path / "manifest.json"
-    if not manifest_file.is_file():
-        return None
-
-    try:
-        manifest = load_manifest(manifest_file)
-    except ValueError as exc:
-        console.print(f"[red]Failed to load manifest {manifest_file}: [/red]{exc}")
-        return None
-
-    mod_id = manifest["id"]
-    version = manifest["version"]
-    try:
-        release_notes = extract_changelog(path / "CHANGELOG.md", version)
+        release_notes = extract_changelog(path / "CHANGELOG.md", source_mod.version)
     except (OSError, ValueError):
         release_notes = None
 
     releases = []
-    for tag in run(["git", "tag", "--list", f"{mod_id}-v*"]).stdout.splitlines():
+    for tag in run(
+        ["git", "tag", "--list", f"{source_mod.mod_id}-v*"]
+    ).stdout.splitlines():
         try:
             releases.append(parse_tag(tag)[1])
         except ValueError:
@@ -177,13 +129,13 @@ def load_mod(path: Path) -> Mod | None:
     return Mod(path, manifest, releases, release_notes)
 
 
-def load_mods(selected: set[str] | None) -> list[Mod]:
-    mods = []
-    directories = sorted(path for path in SRC_DIR.iterdir() if path.is_dir())
-
+def load_mods(selected: Iterable[str] | None) -> list[Mod]:
     console.print("Fetching remote tags...", end=" ")
     run(["git", "fetch", "--all"])
     console.print("[green]done[/green]")
+
+    source_mods = find_mods(selected)
+    mods = []
 
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -191,22 +143,11 @@ def load_mods(selected: set[str] | None) -> list[Mod]:
         MofNCompleteColumn(),
         console=console,
     ) as progress:
-        task = progress.add_task("Loading mods", total=len(directories))
-        for directory in directories:
-            mod = load_mod(directory)
+        task = progress.add_task("Loading mods", total=len(source_mods))
+        for source_mod in source_mods:
+            mod = load_mod(source_mod)
             progress.advance(task)
-            if mod is None:
-                continue
-            if (
-                selected
-                and mod.mod_id.casefold() not in selected
-                and directory.name.casefold() not in selected
-            ):
-                continue
             mods.append(mod)
-
-    if selected and not mods:
-        fail(f"no matching mods found: {', '.join(sorted(selected))}")
     return mods
 
 
@@ -390,11 +331,10 @@ def main(
             "[yellow]Working tree is not clean; commit changes before releasing or use --dry-run to view release status.[/yellow]"
         )
 
+    # Load status of mods
     try:
-        # Determine status of mods
-        selected = {value.casefold() for value in mod_names} if mod_names else None
-        mods = load_mods(selected)
-    except ModReleaseError as exc:
+        mods = load_mods(mod_names)
+    except RuntimeError as exc:
         fail(f"[red]Unable to load release status: [/red]{exc}")
 
     # Show status of mods
@@ -422,7 +362,7 @@ def main(
         try:
             release_mod(mod, publish, add_delay)
             success_count += 1
-        except (ModReleaseError, ValueError) as exc:
+        except ValueError as exc:
             console.print(f"[red]Failed to release {mod.name}: [/red]{exc}")
             fail_count += 1
 

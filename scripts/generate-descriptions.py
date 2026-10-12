@@ -15,16 +15,16 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import click
+from common.config import load_nexus_config
+from common.mods import find_mods
+from common.paths import DESCRIPTION_DIR as DEFAULT_OUTPUT_DIR
+from common.paths import NEXUS_CONFIG, ROOT
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from rich.console import Console
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 
-ROOT = Path(__file__).resolve().parent.parent
-SRC_DIR = ROOT / "src"
-DEFAULT_TEMPLATE = ROOT / "templates" / "nexus-description.txt"
-NEXUS_CONFIG = ROOT / "nexus.json"
-DEFAULT_OUTPUT_DIR = ROOT / "nexus-descriptions"
+TEMPLATE = ROOT / "templates" / "nexus-description.txt"
 TEMPLATE_FIELDS = frozenset({"name", "overview", "sections", "files_url", "bugs_url"})
 
 console = Console()
@@ -50,20 +50,11 @@ class Readme:
 
 def read_nexus_mod_page_ids(path: Path) -> dict[str, int]:
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        mods = data.get("mods")
-        if not isinstance(mods, dict):
-            raise TypeError("'mods' must be an object")
-        page_ids: dict[str, int] = {}
-        for mod_id, mod_data in mods.items():
-            if not isinstance(mod_id, str) or not isinstance(mod_data, dict):
-                raise TypeError("each mod entry must be an object")
-            page_id = mod_data["mod_page_id"]
-            if isinstance(page_id, bool) or not isinstance(page_id, int):
-                raise TypeError(f"{mod_id!r} mod_page_id must be a number")
-            page_ids[mod_id] = page_id
-        return page_ids
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        return {
+            mod_id: nexus_mod.mod_page_id
+            for mod_id, nexus_mod in load_nexus_config(path).items()
+        }
+    except ValueError as exc:
         raise DescriptionError(f"invalid Nexus configuration {path}: {exc}") from exc
 
 
@@ -300,19 +291,6 @@ def render_description(
     return re.sub(r"\n{3,}", "\n\n", description).rstrip() + "\n"
 
 
-def find_mods(selected: tuple[str, ...]) -> list[Path]:
-    selected_ids = {value.casefold() for value in selected}
-    paths = sorted(path for path in SRC_DIR.iterdir() if path.is_dir())
-    if not selected_ids:
-        return paths
-    return [
-        path
-        for path in paths
-        if path.name.casefold() in selected_ids
-        or read_manifest(path / "manifest.json").id.casefold() in selected_ids
-    ]
-
-
 @click.command()
 @click.argument("mod_names", nargs=-1)
 @click.option(
@@ -321,25 +299,15 @@ def find_mods(selected: tuple[str, ...]) -> list[Path]:
     default=DEFAULT_OUTPUT_DIR,
     show_default=True,
 )
-@click.option(
-    "--template",
-    "template_path",
-    type=click.Path(path_type=Path, dir_okay=False, exists=True),
-    default=DEFAULT_TEMPLATE,
-    show_default=True,
-)
 def main(
     mod_names: tuple[str, ...],
     output_dir: Path,
-    template_path: Path,
 ) -> None:
     try:
-        template = template_path.read_text(encoding="utf-8")
+        template = TEMPLATE.read_text(encoding="utf-8")
         validate_template(template)
         nexus_mod_page_ids = read_nexus_mod_page_ids(NEXUS_CONFIG)
         mods = find_mods(mod_names)
-        if mod_names and not mods:
-            raise DescriptionError(f"no matching mods found: {', '.join(mod_names)}")
     except (
         DescriptionError,
         OSError,
@@ -358,10 +326,10 @@ def main(
     ) as progress:
         task = progress.add_task("Generating descriptions", total=len(mods))
         for mod in mods:
-            progress.update(task, description=f"Generating {mod.name}")
+            progress.update(task, description=f"Generating {mod.directory.name}")
             try:
-                manifest = read_manifest(mod / "manifest.json")
-                readme = read_readme(mod / "README.md")
+                manifest = read_manifest(mod.directory / "manifest.json")
+                readme = read_readme(mod.directory / "README.md")
 
                 mod_page_id = nexus_mod_page_ids.get(manifest.id)
                 if not mod_page_id:

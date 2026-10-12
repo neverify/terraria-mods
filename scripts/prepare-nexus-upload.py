@@ -1,5 +1,4 @@
 import argparse
-import json
 import os
 import re
 import sys
@@ -7,9 +6,13 @@ import uuid
 from pathlib import Path
 from typing import TextIO
 
-ROOT = Path(__file__).resolve().parent.parent
-CONFIG = Path(ROOT / "nexus.json")
-TAG_RE = re.compile(r"^(?P<mod_id>.+)-v(?P<version>\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$")
+from common.config import load_nexus_config
+from common.json import load_json
+from common.mods import find_mod_directory
+from common.mods import load_manifest as read_manifest
+from common.paths import NEXUS_CONFIG as CONFIG
+from common.versions import parse_tag
+
 HEADING_RE = re.compile(r"^###\s+(?P<category>\S.*?)\s*$")
 BULLET_RE = re.compile(r"^\s*[-*+]\s+(?P<entry>\S.*?)\s*$")
 
@@ -18,26 +21,8 @@ class NexusUploadError(Exception):
     """An invalid release or Nexus configuration."""
 
 
-def load_json(path: Path) -> dict:
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except OSError as exc:
-        raise ValueError(f"Unable to read {path}: {exc}") from exc
-    except json.JSONDecodeError as exc:
-        raise ValueError(f"Invalid JSON in {path}: {exc}") from exc
-    return value
-
-
 def load_manifest(mod_id: str) -> dict:
-    try:
-        return next(
-            load_json(mod_folder / "manifest.json")
-            for mod_folder in (ROOT / "src").glob("*")
-            if mod_folder.is_dir()
-            and mod_folder.name.casefold() == mod_id.replace("-", "").casefold()
-        )
-    except StopIteration:
-        raise ValueError(f"no manifest found for release mod ID {mod_id!r}")
+    return read_manifest(find_mod_directory(mod_id) / "manifest.json")
 
 
 def format_changelog(body: str) -> str:
@@ -92,32 +77,20 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
 
     changelog = format_changelog(body)
 
-    tag_match = TAG_RE.fullmatch(tag)
-    if tag_match is None:
+    try:
+        mod_id, version = parse_tag(tag)
+    except ValueError:
         raise NexusUploadError(
             f"release tag {tag!r} does not match '<mod-id>-v<version>'"
         )
-    mod_id = tag_match.group("mod_id")
-    version = tag_match.group("version")
     manifest = load_manifest(mod_id)
 
-    config = load_json(CONFIG).get("mods")
-    if not isinstance(config, dict) or mod_id not in config:
+    config = load_nexus_config(CONFIG)
+    if mod_id not in config:
         raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
-    nexus_ids = config.get(mod_id)
-    if not isinstance(nexus_ids, dict):
-        raise NexusUploadError(f"Nexus configuration for {mod_id!r} must be an object")
-
-    nexus_mod_id = nexus_ids.get("mod_id")
-    nexus_file_id = nexus_ids.get("file_id")
-    if not isinstance(nexus_mod_id, int) or nexus_mod_id <= 0:
-        raise NexusUploadError(
-            f"Nexus mod_id for {mod_id!r} must be a positive integer"
-        )
-    if not isinstance(nexus_file_id, int) or nexus_file_id <= 0:
-        raise NexusUploadError(
-            f"Nexus file_id for {mod_id!r} must be a positive integer"
-        )
+    nexus_ids = config[mod_id]
+    nexus_mod_id = nexus_ids.mod_id
+    nexus_file_id = nexus_ids.file_id
 
     assets = list(asset_dir.glob("*.zip"))
     if len(assets) != 1:
