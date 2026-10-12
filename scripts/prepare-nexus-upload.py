@@ -7,8 +7,7 @@ from pathlib import Path
 from typing import TextIO
 
 from common.json import JsonLoadError, load_json
-from common.mods import find_mod_directory
-from common.mods import load_manifest as read_manifest
+from common.mods import find_mods
 from common.nexus_config import load_nexus_configs
 from common.paths import NEXUS_CONFIG as CONFIG
 from common.versions import parse_tag
@@ -19,10 +18,6 @@ BULLET_RE = re.compile(r"^\s*[-*+]\s+(?P<entry>\S.*?)\s*$")
 
 class NexusUploadError(Exception):
     """An invalid release or Nexus configuration."""
-
-
-def load_manifest(mod_id: str) -> dict:
-    return read_manifest(find_mod_directory(mod_id) / "manifest.json")
 
 
 def format_changelog(body: str) -> str:
@@ -70,10 +65,10 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
 
     release = event.get("release")
     if not isinstance(release, dict):
-        raise NexusUploadError("GitHub event does not contain a release")
+        raise NexusUploadError("GitHub event does not contain a release object")
 
-    tag = release.get("tag_name")
-    body = release.get("body")
+    tag = release["tag_name"]
+    body = release["body"]
     if not isinstance(tag, str) or not tag:
         raise NexusUploadError("release tag is missing")
     if not isinstance(body, str) or not body.strip():
@@ -87,12 +82,15 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
         raise NexusUploadError(
             f"release tag {tag!r} does not match '<mod-id>-v<version>'"
         )
-    manifest = load_manifest(mod_id)
+    try:
+        mod = find_mods(mod_id)[0]
+    except ValueError:
+        raise NexusUploadError(f"no mod found for ID {mod_id!r}")
 
-    config = load_nexus_configs(CONFIG)
-    if mod_id not in config:
+    configs = load_nexus_configs(CONFIG)
+    if mod_id not in configs:
         raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
-    nexus_ids = config[mod_id]
+    nexus_ids = configs[mod_id]
     nexus_mod_id = nexus_ids.mod_id
     nexus_file_id = nexus_ids.file_id
 
@@ -105,7 +103,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     write_output(output, "file_id", str(nexus_file_id))
     write_output(output, "mod_id", str(nexus_mod_id))
     write_output(output, "version", version)
-    write_output(output, "display_name", str(manifest["name"]))
+    write_output(output, "display_name", mod.name)
     write_output(output, "changelog", changelog)
     write_output(output, "filename", str(assets[0]))
 
