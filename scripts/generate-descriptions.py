@@ -15,8 +15,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import click
-from common.config import load_nexus_config
 from common.mods import find_mods
+from common.nexus_config import load_nexus_configs
 from common.paths import DESCRIPTION_DIR as DEFAULT_OUTPUT_DIR
 from common.paths import NEXUS_CONFIG, ROOT
 from markdown_it import MarkdownIt
@@ -52,7 +52,7 @@ def read_nexus_mod_page_ids(path: Path) -> dict[str, int]:
     try:
         return {
             mod_id: nexus_mod.mod_page_id
-            for mod_id, nexus_mod in load_nexus_config(path).items()
+            for mod_id, nexus_mod in load_nexus_configs(path).items()
         }
     except ValueError as exc:
         raise DescriptionError(f"invalid Nexus configuration {path}: {exc}") from exc

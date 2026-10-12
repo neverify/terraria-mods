@@ -6,10 +6,10 @@ import uuid
 from pathlib import Path
 from typing import TextIO
 
-from common.config import load_nexus_config
 from common.json import JsonLoadError, load_json
 from common.mods import find_mod_directory
 from common.mods import load_manifest as read_manifest
+from common.nexus_config import load_nexus_configs
 from common.paths import NEXUS_CONFIG as CONFIG
 from common.versions import parse_tag
 
@@ -89,7 +89,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
         )
     manifest = load_manifest(mod_id)
 
-    config = load_nexus_config(CONFIG)
+    config = load_nexus_configs(CONFIG)
     if mod_id not in config:
         raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
     nexus_ids = config[mod_id]

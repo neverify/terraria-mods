@@ -12,7 +12,7 @@ from pathlib import Path
 
 import click
 import pyperclip
-from common.config import load_nexus_config
+from common.nexus_config import load_nexus_configs
 from common.paths import DESCRIPTION_DIR, NEXUS_CONFIG
 from rich.console import Console
 
@@ -29,7 +29,7 @@ def load_page_ids(path: Path) -> dict[str, int]:
     try:
         return {
             mod_id: nexus_mod.mod_page_id
-            for mod_id, nexus_mod in load_nexus_config(path).items()
+            for mod_id, nexus_mod in load_nexus_configs(path).items()
         }
     except ValueError as exc:
         raise UpdateError(f"invalid Nexus configuration {path}: {exc}") from exc
