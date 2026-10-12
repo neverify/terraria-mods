@@ -9,7 +9,6 @@ from typing import TextIO
 from common.json import JsonLoadError, load_json
 from common.mods import find_mods
 from common.nexus_config import load_nexus_configs
-from common.paths import NEXUS_CONFIG as CONFIG
 from common.versions import parse_tag
 
 HEADING_RE = re.compile(r"^###\s+(?P<category>\S.*?)\s*$")
@@ -87,7 +86,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     except ValueError:
         raise NexusUploadError(f"no mod found for ID {mod_id!r}")
 
-    configs = load_nexus_configs(CONFIG)
+    configs = load_nexus_configs()
     if mod_id not in configs:
         raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
     nexus_ids = configs[mod_id]
