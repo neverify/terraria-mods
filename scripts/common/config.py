@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from .json import load_json
+from .json import JsonLoadError, load_json
 
 
 @dataclass(frozen=True)
@@ -14,6 +14,9 @@ class NexusMod:
 def load_nexus_config(path: Path) -> dict[str, NexusMod]:
     try:
         data = load_json(path)
+    except JsonLoadError as exc:
+        raise ValueError(f"invalid Nexus configuration {path}: {exc}") from exc
+    try:
         mods = data["mods"]
         if not isinstance(mods, dict):
             raise TypeError("'mods' must be an object")

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .json import load_json
+from .json import JsonLoadError, load_json
 from .paths import SRC_DIR
 
 
@@ -34,7 +34,10 @@ class Mod:
 
 
 def load_manifest(path: Path) -> dict[str, Any]:
-    manifest = load_json(path)
+    try:
+        manifest = load_json(path)
+    except JsonLoadError as exc:
+        raise ValueError(f"invalid manifest {path}: {exc}") from exc
     if not isinstance(manifest, dict):
         raise TypeError(f"manifest {path} must contain an object")
 

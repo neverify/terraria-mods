@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TextIO
 
 from common.config import load_nexus_config
-from common.json import load_json
+from common.json import JsonLoadError, load_json
 from common.mods import find_mod_directory
 from common.mods import load_manifest as read_manifest
 from common.paths import NEXUS_CONFIG as CONFIG
@@ -63,7 +63,11 @@ def write_output(output: TextIO, name: str, value: str) -> None:
 
 
 def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
-    event = load_json(event_path)
+    try:
+        event = load_json(event_path)
+    except JsonLoadError as exc:
+        raise NexusUploadError(f"invalid GitHub event {event_path}: {exc}") from exc
+
     release = event.get("release")
     if not isinstance(release, dict):
         raise NexusUploadError("GitHub event does not contain a release")
