@@ -21,10 +21,6 @@ NEXUS_MOD_URL = "https://www.nexusmods.com/games/terraria/mods/{page_id}/edit/ge
 console = Console()
 
 
-class UpdateError(Exception):
-    """An error preparing the manual description update workflow."""
-
-
 def find_descriptions_to_update(
     mod_names: Collection[str], nexus_configs: dict[str, NexusConfig]
 ) -> tuple[list[str], list[str], list[str]]:
@@ -50,10 +46,17 @@ def update_descriptions(
     for index, name in enumerate(mod_names, start=1):
         description_path = DESCRIPTION_DIR / f"{name}.txt"
         content = description_path.read_text(encoding="utf-8")
-        pyperclip.copy(content)
+        try:
+            pyperclip.copy(content)
+        except pyperclip.PyperclipException as exc:
+            raise OSError(f"unable to copy description for {name}") from exc
 
         url = NEXUS_MOD_URL.format(page_id=nexus_configs[name].mod_page_id)
-        if not webbrowser.open_new_tab(url):
+        try:
+            opened = webbrowser.open_new_tab(url)
+        except webbrowser.Error as exc:
+            raise OSError(f"unable to open Nexus page for {name}") from exc
+        if not opened:
             console.print(f"[yellow]Could not open browser tab for {name}[/yellow]")
         click.confirm(
             f"[{index:>{len(str(len(mod_names)))}}/{len(mod_names)}] {name}",
@@ -84,7 +87,7 @@ def main(mod_names: tuple[str, ...]) -> None:
             return
 
         update_descriptions(available_names, nexus_configs)
-    except (OSError, UpdateError) as exc:
+    except (OSError, ValueError) as exc:
         raise click.ClickException(str(exc)) from exc
 
 

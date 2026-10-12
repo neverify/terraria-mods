@@ -42,7 +42,7 @@ def find_mods(mod_names: Iterable[str] | None = None) -> list[Mod]:
             continue
         try:
             manifest = _load_manifest(manifest_path)
-        except ValueError, TypeError:
+        except (ValueError, TypeError):
             if mod_names:
                 raise
             continue

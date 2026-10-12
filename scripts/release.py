@@ -99,7 +99,7 @@ def load_mod(mod: Mod) -> ReleaseMod:
     manifest = mod.manifest
     try:
         release_notes = extract_changelog(path / "CHANGELOG.md", mod.version)
-    except (OSError, ValueError):
+    except FileNotFoundError:
         release_notes = None
 
     releases = []
@@ -307,8 +307,11 @@ def main(
     skip_confirmation: bool,
     add_delay: bool,
 ) -> None:
-    # Check if the working tree is clean
-    status = run(["git", "status", "--porcelain"]).stdout.strip()
+    try:
+        status = run(["git", "status", "--porcelain"]).stdout.strip()
+    except RuntimeError as exc:
+        fail(f"[red]Unable to check repository status: [/red]{exc}")
+
     if status and not dry_run:
         fail(
             "[yellow]Working tree is not clean; commit changes before releasing or use --dry-run to view release status.[/yellow]"
@@ -317,7 +320,7 @@ def main(
     # Load status of mods
     try:
         mods = load_mods(mod_names)
-    except RuntimeError as exc:
+    except (OSError, RuntimeError, ValueError) as exc:
         fail(f"[red]Unable to load release status: [/red]{exc}")
 
     # Show status of mods
@@ -345,7 +348,7 @@ def main(
         try:
             release_mod(mod, publish, add_delay)
             success_count += 1
-        except ValueError as exc:
+        except (OSError, RuntimeError, ValueError) as exc:
             console.print(f"[red]Failed to release {mod.name}: [/red]{exc}")
             fail_count += 1
 

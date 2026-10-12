@@ -29,10 +29,6 @@ TEMPLATE_FIELDS = frozenset({"name", "overview", "sections", "files_url", "bugs_
 console = Console()
 
 
-class DescriptionError(Exception):
-    """An invalid mod README or manifest."""
-
-
 @dataclass(frozen=True)
 class Readme:
     title: str
@@ -48,12 +44,12 @@ def validate_template(template: str) -> None:
             if field_name is not None
         }
     except ValueError as exc:
-        raise DescriptionError(f"invalid description template: {exc}") from exc
+        raise ValueError(f"invalid description template: {exc}") from exc
 
     unknown_fields = fields - TEMPLATE_FIELDS
     if unknown_fields:
         names = ", ".join(sorted(unknown_fields))
-        raise DescriptionError(f"unknown template field(s): {names}")
+        raise ValueError(f"unknown template field(s): {names}")
 
 
 def heading_level(token: Token) -> int:
@@ -107,9 +103,7 @@ def render_inline(tokens: Iterable[Token]) -> str:
             case "image":
                 result.append(token.content or str(token.attrs.get("alt", "")))
             case _:
-                raise DescriptionError(
-                    f"unsupported inline Markdown token: {token.type}"
-                )
+                raise ValueError(f"unsupported inline Markdown token: {token.type}")
     return "".join(result)
 
 
@@ -117,9 +111,9 @@ def next_token(tokens: Iterator[Token], expected_type: str) -> Token:
     try:
         token = next(tokens)
     except StopIteration as exc:
-        raise DescriptionError(f"expected {expected_type} token") from exc
+        raise ValueError(f"expected {expected_type} token") from exc
     if token.type != expected_type:
-        raise DescriptionError(f"expected {expected_type} token, got {token.type}")
+        raise ValueError(f"expected {expected_type} token, got {token.type}")
     return token
 
 
@@ -137,7 +131,7 @@ def render_blocks(tokens: Sequence[Token]) -> str:
             case "heading_open":
                 level = heading_level(token)
                 if level not in (2, 3):
-                    raise DescriptionError(f"unsupported heading level: {level}")
+                    raise ValueError(f"unsupported heading level: {level}")
                 content = next_token(token_iterator, "inline")
                 next_token(token_iterator, "heading_close")
                 size = 5 if level == 2 else 4
@@ -162,7 +156,7 @@ def render_blocks(tokens: Sequence[Token]) -> str:
                 append_block("[/*]")
             case "bullet_list_close" | "ordered_list_close":
                 if list_depth == 0:
-                    raise DescriptionError("unexpected Markdown list close")
+                    raise ValueError("unexpected Markdown list close")
                 append_block("[/list]")
                 list_depth -= 1
             case "fence" | "code_block":
@@ -170,10 +164,10 @@ def render_blocks(tokens: Sequence[Token]) -> str:
             case "inline" | "html_block" | "blank_line":
                 continue
             case _:
-                raise DescriptionError(f"unsupported Markdown token: {token.type}")
+                raise ValueError(f"unsupported Markdown token: {token.type}")
 
     if list_depth:
-        raise DescriptionError("unclosed Markdown list")
+        raise ValueError("unclosed Markdown list")
     return "".join(
         content + separator for content, separator in result if content
     ).strip()
@@ -189,7 +183,7 @@ def parse_readme(markdown: str, path: Path) -> Readme:
             if token.type == "heading_close" and heading_level(token) == 1
         )
     except StopIteration as exc:
-        raise DescriptionError(f"README has no level-one title: {path}") from exc
+        raise ValueError(f"README has no level-one title: {path}") from exc
 
     title = render_inline(tokens[title_end - 1].children or [])
 
@@ -202,7 +196,7 @@ def parse_readme(markdown: str, path: Path) -> Readme:
             ),
         )
     except StopIteration as exc:
-        raise DescriptionError(f"README overview is empty in {path}") from exc
+        raise ValueError(f"README overview is empty in {path}") from exc
 
     first_section = next(
         (
@@ -227,8 +221,8 @@ def parse_readme(markdown: str, path: Path) -> Readme:
 def load_readme(path: Path) -> Readme:
     try:
         markdown = path.read_text(encoding="utf-8")
-    except OSError as exc:
-        raise DescriptionError(f"unable to read {path}: {exc}") from exc
+    except (OSError, UnicodeError) as exc:
+        raise OSError(f"unable to read {path}: {exc}") from exc
     return parse_readme(markdown, path)
 
 
@@ -236,7 +230,7 @@ def render_description(
     mod: Mod, readme: Readme, template: str, mod_page_id: int
 ) -> str:
     if readme.title != mod.name:
-        raise DescriptionError(
+        raise ValueError(
             f"README title {readme.title!r} does not match manifest name {mod.name!r}"
         )
 
@@ -267,12 +261,7 @@ def main(
         validate_template(template)
         nexus_configs = load_nexus_configs()
         mods = find_mods(mod_names)
-    except (
-        DescriptionError,
-        OSError,
-        TypeError,
-        ValueError,
-    ) as exc:
+    except (OSError, ValueError) as exc:
         raise click.ClickException(str(exc)) from exc
 
     failed_mods: dict[str, str] = {}
@@ -290,7 +279,7 @@ def main(
 
                 nexus_mod = nexus_configs.get(mod.mod_id)
                 if not nexus_mod:
-                    raise DescriptionError(
+                    raise ValueError(
                         f"no Nexus configuration found for mod {mod.mod_id!r}"
                     )
                 content = render_description(
@@ -301,7 +290,7 @@ def main(
                 output_dir.mkdir(parents=True, exist_ok=True)
 
                 destination.write_text(content, encoding="utf-8", newline="\n")
-            except (DescriptionError, OSError) as exc:
+            except (OSError, ValueError) as exc:
                 failed_mods[mod.name] = str(exc)
             finally:
                 progress.advance(task)

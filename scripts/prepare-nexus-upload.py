@@ -15,10 +15,6 @@ HEADING_RE = re.compile(r"^###\s+(?P<category>\S.*?)\s*$")
 BULLET_RE = re.compile(r"^\s*[-*+]\s+(?P<entry>\S.*?)\s*$")
 
 
-class NexusUploadError(Exception):
-    """An invalid release or Nexus configuration."""
-
-
 def format_changelog(body: str) -> str:
     entries: list[str] = []
     category: str | None = None
@@ -60,42 +56,45 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     try:
         event = load_json(event_path)
     except JsonLoadError as exc:
-        raise NexusUploadError(f"invalid GitHub event {event_path}: {exc}") from exc
+        raise ValueError(f"invalid GitHub event {event_path}: {exc}") from exc
+
+    if not isinstance(event, dict):
+        raise TypeError("GitHub event must contain an object")
 
     release = event.get("release")
     if not isinstance(release, dict):
-        raise NexusUploadError("GitHub event does not contain a release object")
+        raise TypeError("GitHub event does not contain a release object")
 
-    tag = release["tag_name"]
-    body = release["body"]
+    tag = release.get("tag_name")
+    body = release.get("body")
     if not isinstance(tag, str) or not tag:
-        raise NexusUploadError("release tag is missing")
+        raise ValueError("release tag is missing")
     if not isinstance(body, str) or not body.strip():
-        raise NexusUploadError("release description is empty")
+        raise ValueError("release description is empty")
 
     changelog = format_changelog(body)
 
     try:
         mod_id, version = parse_tag(tag)
-    except ValueError:
-        raise NexusUploadError(
+    except ValueError as exc:
+        raise ValueError(
             f"release tag {tag!r} does not match '<mod-id>-v<version>'"
-        )
+        ) from exc
     try:
         mod = find_mods(mod_id)[0]
-    except ValueError:
-        raise NexusUploadError(f"no mod found for ID {mod_id!r}")
+    except (IndexError, ValueError) as exc:
+        raise ValueError(f"no mod found for ID {mod_id!r}") from exc
 
     configs = load_nexus_configs()
     if mod_id not in configs:
-        raise NexusUploadError(f"no Nexus configuration found for {mod_id!r}")
+        raise ValueError(f"no Nexus configuration found for {mod_id!r}")
     nexus_ids = configs[mod_id]
     nexus_mod_id = nexus_ids.mod_id
     nexus_file_id = nexus_ids.file_id
 
     assets = list(asset_dir.glob("*.zip"))
     if len(assets) != 1:
-        raise NexusUploadError(
+        raise ValueError(
             f"expected exactly one ZIP in {asset_dir}, found {len(assets)}"
         )
 
@@ -112,13 +111,17 @@ def main() -> int:
     parser.add_argument("--asset-dir", type=Path, required=True)
     args = parser.parse_args()
 
-    event = Path(os.environ["GITHUB_EVENT_PATH"])
-    output = Path(os.environ["GITHUB_OUTPUT"])
-
     try:
-        with output.open("a", encoding="utf-8", newline="") as output:
-            prepare(event, args.asset_dir, output)
-    except (NexusUploadError, KeyError, OSError, TypeError, ValueError) as exc:
+        event_path = os.environ["GITHUB_EVENT_PATH"]
+        output_path = os.environ["GITHUB_OUTPUT"]
+        with Path(output_path).open("a", encoding="utf-8", newline="") as output:
+            prepare(Path(event_path), args.asset_dir, output)
+    except KeyError as exc:
+        print(
+            f"Error: missing GitHub environment variable {exc.args[0]}", file=sys.stderr
+        )
+        return 1
+    except (OSError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
     return 0
