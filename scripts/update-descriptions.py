@@ -8,6 +8,7 @@
 # ///
 
 import webbrowser
+from collections.abc import Collection
 
 import click
 import pyperclip
@@ -35,35 +36,35 @@ def load_page_ids() -> dict[str, int]:
 
 
 def find_descriptions_to_update(
-    selected_ids: tuple[str, ...], page_ids: dict[str, int]
+    mod_names: Collection[str], page_ids: dict[str, int]
 ) -> tuple[list[str], list[str], list[str]]:
-    mod_ids = tuple(selected_ids) if selected_ids else tuple(sorted(page_ids))
-    available_ids: list[str] = []
-    unknown_ids: list[str] = []
-    unavailable_ids: list[str] = []
+    mod_names = tuple(mod_names) if mod_names else tuple(sorted(page_ids))
+    available_names: list[str] = []
+    unknown_names: list[str] = []
+    unavailable_names: list[str] = []
 
-    for mod_id in mod_ids:
-        if mod_id not in page_ids:
-            unknown_ids.append(mod_id)
-        elif (DESCRIPTION_DIR / f"{mod_id}.txt").is_file():
-            available_ids.append(mod_id)
+    for name in mod_names:
+        if name not in page_ids:
+            unknown_names.append(name)
+        elif (DESCRIPTION_DIR / f"{name}.txt").is_file():
+            available_names.append(name)
         else:
-            unavailable_ids.append(mod_id)
+            unavailable_names.append(name)
 
-    return available_ids, unknown_ids, unavailable_ids
+    return available_names, unknown_names, unavailable_names
 
 
-def update_descriptions(mod_ids: list[str], page_ids: dict[str, int]) -> None:
-    for index, mod_id in enumerate(mod_ids, start=1):
-        description_path = DESCRIPTION_DIR / f"{mod_id}.txt"
+def update_descriptions(mod_names: list[str], page_ids: dict[str, int]) -> None:
+    for index, name in enumerate(mod_names, start=1):
+        description_path = DESCRIPTION_DIR / f"{name}.txt"
         content = description_path.read_text(encoding="utf-8")
         pyperclip.copy(content)
 
-        url = NEXUS_MOD_URL.format(page_id=page_ids[mod_id])
+        url = NEXUS_MOD_URL.format(page_id=page_ids[name])
         if not webbrowser.open_new_tab(url):
-            console.print(f"[yellow]Could not open browser tab for {mod_id}[/yellow]")
+            console.print(f"[yellow]Could not open browser tab for {name}[/yellow]")
         click.confirm(
-            f"[{index:>{len(str(len(mod_ids)))}}/{len(mod_ids)}] {mod_id}",
+            f"[{index:>{len(str(len(mod_names)))}}/{len(mod_names)}] {name}",
             default=True,
             abort=True,
         )
@@ -75,22 +76,22 @@ def main(mod_names: tuple[str, ...]) -> None:
     try:
         page_ids = load_page_ids()
 
-        available_ids, unknown_ids, unavailable_ids = find_descriptions_to_update(
+        available_names, unknown_names, unavailable_names = find_descriptions_to_update(
             mod_names, page_ids
         )
-        if unknown_ids:
+        if unknown_names:
             console.print(
-                f"[yellow]No Nexus page IDs found for mod(s): {', '.join(unknown_ids)}.[/yellow]"
+                f"[yellow]No Nexus page IDs found for mod(s): {', '.join(unknown_names)}.[/yellow]"
             )
-        if unavailable_ids:
+        if unavailable_names:
             console.print(
-                f"[yellow]No descriptions found for mod(s): {', '.join(unavailable_ids)}.[/yellow]"
+                f"[yellow]No descriptions found for mod(s): {', '.join(unavailable_names)}.[/yellow]"
             )
-        if not available_ids:
+        if not available_names:
             console.print("[red]No descriptions available.[/red]")
             return
 
-        update_descriptions(available_ids, page_ids)
+        update_descriptions(available_names, page_ids)
     except (OSError, UpdateError) as exc:
         raise click.ClickException(str(exc)) from exc
 
