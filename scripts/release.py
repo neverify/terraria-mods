@@ -17,8 +17,7 @@ from pathlib import Path
 from typing import Any
 
 import click
-from common.mods import Mod as SourceMod
-from common.mods import find_mods
+from common.mods import Mod, find_mods
 from common.paths import BUILD_DIR, ROOT, ZIPS_DIR
 from common.versions import parse_tag, parse_version
 from rich.console import Console
@@ -32,8 +31,8 @@ console = Console()
 
 
 @dataclass(frozen=True)
-class Mod(SourceMod):
-    releases: list[str] | None
+class ReleaseMod(Mod):
+    releases: tuple[str, ...] | None
     release_notes: str | None = None
 
     @property
@@ -95,27 +94,25 @@ def extract_changelog(changelog: Path, version: str) -> str:
     raise ValueError(f"changelog section [{version}] not found in {changelog}")
 
 
-def load_mod(source_mod: SourceMod) -> Mod:
-    path = source_mod.directory
-    manifest = source_mod.manifest
+def load_mod(mod: Mod) -> ReleaseMod:
+    path = mod.directory
+    manifest = mod.manifest
     try:
-        release_notes = extract_changelog(path / "CHANGELOG.md", source_mod.version)
+        release_notes = extract_changelog(path / "CHANGELOG.md", mod.version)
     except (OSError, ValueError):
         release_notes = None
 
     releases = []
-    for tag in run(
-        ["git", "tag", "--list", f"{source_mod.mod_id}-v*"]
-    ).stdout.splitlines():
+    for tag in run(["git", "tag", "--list", f"{mod.mod_id}-v*"]).stdout.splitlines():
         try:
             releases.append(parse_tag(tag)[1])
         except ValueError:
             continue
 
-    return Mod(path, manifest, releases, release_notes)
+    return ReleaseMod(path, manifest, tuple(releases), release_notes)
 
 
-def load_mods(selected: Iterable[str] | None) -> list[Mod]:
+def load_mods(selected: Iterable[str] | None) -> list[ReleaseMod]:
     console.print("Fetching remote tags...", end=" ")
     run(["git", "fetch", "--all"])
     console.print("[green]done[/green]")
@@ -137,7 +134,7 @@ def load_mods(selected: Iterable[str] | None) -> list[Mod]:
     return mods
 
 
-def show_status(mods: list[Mod]) -> None:
+def show_status(mods: list[ReleaseMod]) -> None:
     table = Table(title="Release Status")
     table.add_column("Mod")
     table.add_column("Latest Release")
@@ -211,21 +208,21 @@ def run_steps(steps: Sequence[Step], delay: float = 0.0) -> dict[str, Any]:
     return results
 
 
-def check_tag(mod: Mod) -> None:
+def check_tag(mod: ReleaseMod) -> None:
     existing = run(["git", "tag", "--list", mod.tag]).stdout.strip()
     if existing:
         raise ValueError(f"tag already exists: {mod.tag}")
 
 
-def create_tag(mod: Mod) -> None:
+def create_tag(mod: ReleaseMod) -> None:
     run(["git", "tag", "-a", mod.tag, "-m", f"{mod.name} {mod.version}"])
 
 
-def push_tag(mod: Mod) -> None:
+def push_tag(mod: ReleaseMod) -> None:
     run(["git", "push", "origin", mod.tag])
 
 
-def create_github_release(mod: Mod, archive: Path, publish: bool) -> None:
+def create_github_release(mod: ReleaseMod, archive: Path, publish: bool) -> None:
     command = [
         "gh",
         "release",
@@ -243,7 +240,7 @@ def create_github_release(mod: Mod, archive: Path, publish: bool) -> None:
     run(command)
 
 
-def release_mod(mod: Mod, publish: bool, slow: bool = False) -> None:
+def release_mod(mod: ReleaseMod, publish: bool, slow: bool = False) -> None:
     steps = [
         Step(
             f"Building {mod.name}",
