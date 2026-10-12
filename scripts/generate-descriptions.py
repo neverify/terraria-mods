@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import click
-from common.mods import find_mods
+from common.mods import Mod, find_mods
 from common.nexus_config import load_nexus_configs
 from common.paths import DESCRIPTION_DIR as DEFAULT_OUTPUT_DIR
 from common.paths import NEXUS_CONFIG, ROOT
@@ -35,13 +35,6 @@ class DescriptionError(Exception):
 
 
 @dataclass(frozen=True)
-class Manifest:
-    id: str
-    name: str
-    description: str
-
-
-@dataclass(frozen=True)
 class Readme:
     title: str
     overview: str
@@ -56,29 +49,6 @@ def read_nexus_mod_page_ids(path: Path) -> dict[str, int]:
         }
     except ValueError as exc:
         raise DescriptionError(f"invalid Nexus configuration {path}: {exc}") from exc
-
-
-def parse_manifest(content: str, path: Path) -> Manifest:
-    try:
-        manifest = json.loads(content)
-        for field in ("id", "name", "description"):
-            if not isinstance(manifest.get(field), str) or not manifest[field].strip():
-                raise ValueError(f"missing non-empty {field!r}")
-        return Manifest(
-            id=manifest["id"],
-            name=manifest["name"],
-            description=manifest["description"],
-        )
-    except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
-        raise DescriptionError(f"invalid manifest {path}: {exc}") from exc
-
-
-def read_manifest(path: Path) -> Manifest:
-    try:
-        content = path.read_text(encoding="utf-8")
-    except OSError as exc:
-        raise DescriptionError(f"unable to read manifest {path}: {exc}") from exc
-    return parse_manifest(content, path)
 
 
 def validate_template(template: str) -> None:
@@ -274,15 +244,15 @@ def read_readme(path: Path) -> Readme:
 
 
 def render_description(
-    manifest: Manifest, readme: Readme, template: str, mod_page_id: int
+    mod: Mod, readme: Readme, template: str, mod_page_id: int
 ) -> str:
-    if readme.title != manifest.name:
+    if readme.title != mod.name:
         raise DescriptionError(
-            f"README title {readme.title!r} does not match manifest name {manifest.name!r}"
+            f"README title {readme.title!r} does not match manifest name {mod.name!r}"
         )
 
     description = template.format(
-        name=manifest.name,
+        name=mod.name,
         overview=readme.overview,
         sections=readme.sections,
         files_url=f"https://www.nexusmods.com/terraria/mods/{mod_page_id}?tab=files",
@@ -328,17 +298,16 @@ def main(
         for mod in mods:
             progress.update(task, description=f"Generating {mod.directory.name}")
             try:
-                manifest = read_manifest(mod.directory / "manifest.json")
                 readme = read_readme(mod.directory / "README.md")
 
-                mod_page_id = nexus_mod_page_ids.get(manifest.id)
+                mod_page_id = nexus_mod_page_ids.get(mod.mod_id)
                 if not mod_page_id:
                     raise DescriptionError(
-                        f"no Nexus configuration found for mod {manifest.id!r}"
+                        f"no Nexus configuration found for mod {mod.mod_id!r}"
                     )
-                content = render_description(manifest, readme, template, mod_page_id)
+                content = render_description(mod, readme, template, mod_page_id)
 
-                destination = output_dir / f"{manifest.id}.txt"
+                destination = output_dir / f"{mod.mod_id}.txt"
                 output_dir.mkdir(parents=True, exist_ok=True)
 
                 destination.write_text(content, encoding="utf-8", newline="\n")
