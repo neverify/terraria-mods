@@ -100,7 +100,7 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
 
     write_output(output, "file_id", str(nexus_file_id))
     write_output(output, "mod_id", str(nexus_mod_id))
-    write_output(output, "version", version)
+    write_output(output, "version", str(version))
     write_output(output, "display_name", mod.name)
     write_output(output, "changelog", changelog)
     write_output(output, "filename", str(assets[0]))

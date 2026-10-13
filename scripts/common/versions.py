@@ -14,6 +14,9 @@ class Version:
     patch: int
     prerelease: str = ""
 
+    def __str__(self) -> str:
+        return f"{self.major}.{self.minor}.{self.patch}{('-' + self.prerelease) if self.prerelease else ''}"
+
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, Version):
             return NotImplemented
@@ -51,7 +54,14 @@ class Version:
         )
 
 
-def parse_version(version: str) -> Version:
+def parse_tag(tag: str) -> tuple[str, Version]:
+    match = TAG_RE.fullmatch(tag)
+    if not match:
+        raise ValueError(f"invalid release tag: {tag}")
+    return match.group("mod_id"), _parse_version(match.group("version"))
+
+
+def _parse_version(version: str) -> Version:
     match = VERSION_RE.fullmatch(version)
     if not match:
         raise ValueError(f"invalid semantic version: {version}")
@@ -61,10 +71,3 @@ def parse_version(version: str) -> Version:
         int(match.group(3)),
         match.group(4) or "",
     )
-
-
-def parse_tag(tag: str) -> tuple[str, str]:
-    match = TAG_RE.fullmatch(tag)
-    if not match:
-        raise ValueError(f"invalid release tag: {tag}")
-    return match.group("mod_id"), match.group("version")

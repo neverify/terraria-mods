@@ -19,7 +19,7 @@ from typing import Any
 import click
 from common.mods import Mod, find_mods
 from common.paths import BUILD_DIR, ROOT, ZIPS_DIR
-from common.versions import parse_tag, parse_version
+from common.versions import Version, parse_tag
 from rich.console import Console
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 from rich.prompt import Confirm
@@ -32,18 +32,16 @@ console = Console()
 
 @dataclass(frozen=True)
 class ReleaseMod(Mod):
-    releases: tuple[str, ...] | None
+    releases: tuple[Version, ...] | None
     release_notes: str | None = None
 
     @property
-    def last_release(self) -> str | None:
-        return self.releases[-1] if self.releases else None
+    def last_release(self) -> Version | None:
+        return max(self.releases) if self.releases else None
 
     @property
     def updated(self) -> bool:
-        return not self.last_release or parse_version(self.version) > parse_version(
-            self.last_release
-        )
+        return not self.last_release or self.version > self.last_release
 
     @property
     def tag(self) -> str:
@@ -145,7 +143,7 @@ def show_status(mods: list[ReleaseMod]) -> None:
         ready = mod.updated and mod.release_notes is not None
         table.add_row(
             mod.name,
-            mod.last_release or "[dim]N/A[/dim]",
+            str(mod.last_release) if mod.last_release else "[dim]N/A[/dim]",
             f"[green]{mod.version}[/green]"
             if mod.updated
             else f"[yellow]{mod.version}[/yellow]",
