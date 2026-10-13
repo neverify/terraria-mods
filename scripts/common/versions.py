@@ -23,7 +23,17 @@ class Version:
             return base < other_base
         if not self.prerelease or not other.prerelease:
             return bool(self.prerelease) and not bool(other.prerelease)
-        return self.prerelease.split(".") < other.prerelease.split(".")
+        for left, right in zip(self.prerelease.split("."), other.prerelease.split(".")):
+            if left == right:
+                continue
+            left_numeric = left.isdigit()
+            right_numeric = right.isdigit()
+            if left_numeric and right_numeric:
+                return int(left) < int(right)
+            if left_numeric != right_numeric:
+                return left_numeric
+            return left < right
+        return len(self.prerelease.split(".")) < len(other.prerelease.split("."))
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Version):
