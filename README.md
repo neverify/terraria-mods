@@ -38,18 +38,18 @@ You can find all of the mods in the "Browse Nexus" tab.
 
 ## Development
 
-Mods are located in `src/` where each mod is a separate C# project.
+Mods are located in [`src/`](src/) where each mod is a separate C# project.
 
-The `src/Utils/` folder contains shared utilities.
+The [`shared/`](shared/) folder contains shared utilities, most notably the [`ModBase`](shared/ModBase.cs) class.
 
-`Directory.Build.props` contains MSBuild properties common to all projects. These include
+[`Directory.Build.props`](Directory.Build.props) contains MSBuild properties common to all projects. These include
 
 - Framework and language settings
 - Code analysis settings
 - Assembly references
 
-`Directory.Build.targets` configures the build output directories and the optional automatic deployment on build.
-`Directory.Build.local.props` contains the assembly reference paths.
+[`Directory.Build.targets`](Directory.Build.targets) configures the build output directories and the optional automatic deployment on build.
+`Directory.Build.local.props` contains the Terraria installation path and automatic deployment toggle.
 
 Each mod has its own `README.md` file documenting the mod's logic.
 
@@ -59,16 +59,9 @@ Each mod has its own `README.md` file documenting the mod's logic.
    - [.NET 10](https://dotnet.microsoft.com/en-us/download)
    - [.NET Framework 4.8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 2. Clone the repository.
-3. Copy and rename `Directory.Build.local.props.example` to `Directory.Build.local.props`.
-4. Add paths for the assembly references in `Directory.Build.local.props`:
-   - `TerrariaModderCoreProject` or `TerrariaModderCoreDll`
-   - `TerrariaExe`
-   - `HarmonyDll`
-   - `XnaFrameworkGameDll` (has default install location)
-   - `XnaFrameworkDll` (has default install location)
-5. To enable automatic deployment, set the following values:
-   - `DeployToGame=true`
-   - `DeployPath` pointing to `Terraria/TerrariaModder/mods/`
+3. Copy and rename [`Directory.Build.local.props.example`](Directory.Build.local.props.example) to `Directory.Build.local.props`.
+4. Set the `TerrariaPath` property in `Directory.Build.local.props` to your Terraria installation path.
+5. To enable automatic deployment, set the `DeployToGame` property to `true`.
 
    Mods that are not already present in the deploy destination are not deployed by default. To override this, provide the `-p:DeployAbsent=true` argument in the build command.
 
