@@ -21,16 +21,16 @@
   </PropertyGroup>
 
   <!-- Local Assembly Reference Paths -->
-  <Import Project="Directory.Build.local.props" Condition="Exists('Directory.Build.local.props')" />
+  <Import Project="Directory.Build.local.props" />
 
   <!-- Assembly References -->
   <ItemGroup>
     <Reference Include="Terraria">
-      <HintPath>$(TerrariaExe)</HintPath>
+      <HintPath>$(TerrariaPath)\Terraria.exe</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>$(HarmonyDll)</HintPath>
+      <HintPath>$(TerrariaPath)\TerrariaModder\core\deps\0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework">
@@ -56,7 +56,7 @@
       <Private>false</Private>
     </ProjectReference>
     <Reference Include="TerrariaModder.Core" Condition="!Exists('$(TerrariaModderCoreProject)')">
-      <HintPath>$(TerrariaModderCoreDll)</HintPath>
+      <HintPath>$(TerrariaPath)\TerrariaModder\core\TerrariaModder.Core.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
