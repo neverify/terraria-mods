@@ -14,9 +14,6 @@ class NexusConfig:
 def load_nexus_configs() -> dict[str, NexusConfig]:
     try:
         data = load_json(NEXUS_CONFIG)
-    except JsonLoadError as exc:
-        raise ValueError(f"invalid Nexus configuration {NEXUS_CONFIG}: {exc}") from exc
-    try:
         mods = data["mods"]
         if not isinstance(mods, dict):
             raise TypeError("'mods' must be an object")
@@ -34,7 +31,7 @@ def load_nexus_configs() -> dict[str, NexusConfig]:
             except TypeError as exc:
                 raise TypeError(f"invalid data for mod {mod_id}: {exc}") from exc
         return configs
-    except (KeyError, TypeError, ValueError) as exc:
+    except (JsonLoadError, KeyError, TypeError, ValueError) as exc:
         raise ValueError(f"invalid Nexus configuration {NEXUS_CONFIG}: {exc}") from exc
 
 
