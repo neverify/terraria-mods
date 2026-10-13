@@ -11,6 +11,7 @@ if ([string]::IsNullOrWhiteSpace($Name)) {
 
 $internalName = $Name -replace "\s+", ""
 $modId = ($Name -replace "\s+", "-").ToLower()
+$textExtensions = @(".csproj", ".cs", ".json", ".md")
 
 $destinationDirectory = Join-Path $PSScriptRoot "..\src\$internalName"
 if (Test-Path $destinationDirectory) {
@@ -30,14 +31,16 @@ Get-ChildItem -Path $destinationDirectory -Recurse -File | ForEach-Object {
         Move-Item -Path $_.FullName -Destination $newFilePath
     }
 
-    # Replace placeholders in the file content
-    $content = Get-Content -Path $newFilePath -Raw
-    $content = $content.
-    Replace("Mod Template", $Name).
-    Replace("ModTemplate", $internalName).
-    Replace("mod-template", $modId)
+    if ($textExtensions -contains [IO.Path]::GetExtension($newFilePath).ToLowerInvariant()) {
+        # Replace placeholders in text file content
+        $content = Get-Content -Path $newFilePath -Raw -Encoding UTF8
+        $content = $content.
+        Replace("Mod Template", $Name).
+        Replace("ModTemplate", $internalName).
+        Replace("mod-template", $modId)
 
-    Set-Content -Path $newFilePath -Value $content -NoNewline
+        Set-Content -Path $newFilePath -Value $content -NoNewline -Encoding UTF8
+    }
 }
 
 Write-Host "Succesfully created mod '$Name'."-ForegroundColor Green
