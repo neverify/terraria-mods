@@ -41,10 +41,10 @@ class Version:
         )
 
 
-def parse_version(value: str) -> Version:
-    match = VERSION_RE.fullmatch(value)
+def parse_version(version: str) -> Version:
+    match = VERSION_RE.fullmatch(version)
     if not match:
-        raise ValueError(f"invalid semantic version: {value}")
+        raise ValueError(f"invalid semantic version: {version}")
     return Version(
         int(match.group(1)),
         int(match.group(2)),
@@ -53,8 +53,8 @@ def parse_version(value: str) -> Version:
     )
 
 
-def parse_tag(value: str) -> tuple[str, str]:
-    match = TAG_RE.fullmatch(value)
+def parse_tag(tag: str) -> tuple[str, str]:
+    match = TAG_RE.fullmatch(tag)
     if not match:
-        raise ValueError(f"invalid release tag: {value}")
+        raise ValueError(f"invalid release tag: {tag}")
     return match.group("mod_id"), match.group("version")
