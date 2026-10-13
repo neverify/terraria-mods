@@ -167,7 +167,7 @@ dotnet_diagnostic.IDE0045.severity = warning
 dotnet_style_prefer_conditional_expression_over_assignment = true
 
 # Use conditional expression for return (IDE0046)
-dotnet_diagnostic.IDE0046.severity = warning
+dotnet_diagnostic.IDE0046.severity = suggestion
 dotnet_style_prefer_conditional_expression_over_return = true
 
 # Convert anonymous type to tuple (IDE0050)
