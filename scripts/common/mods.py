@@ -37,20 +37,32 @@ def find_mods(mod_names: Iterable[str] | None = None) -> list[Mod]:
             _normalized(directory.name) in normalized_mod_names
         ):
             continue
-        manifest_path = directory / "manifest.json"
-        if not manifest_path.is_file():
-            continue
-        try:
-            manifest = _load_manifest(manifest_path)
-        except (ValueError, TypeError):
-            if mod_names:
-                raise
-            continue
-
-        mods.append(Mod(directory, manifest))
+        mod = _load_mod(directory, strict=bool(mod_names))
+        if mod is not None:
+            mods.append(mod)
     if mod_names and not mods:
         raise ValueError(f"no matching mods found: {', '.join(sorted(mod_names))}")
     return mods
+
+
+def find_mod(mod_name: str) -> Mod:
+    mods = find_mods((mod_name,))
+    if len(mods) != 1:
+        raise ValueError(f"expected exactly one mod for {mod_name!r}")
+    return mods[0]
+
+
+def _load_mod(directory: Path, strict: bool) -> Mod | None:
+    manifest_path = directory / "manifest.json"
+    if not manifest_path.is_file():
+        return None
+    try:
+        manifest = _load_manifest(manifest_path)
+    except (ValueError, TypeError):
+        if strict:
+            raise
+        return None
+    return Mod(directory, manifest)
 
 
 def _load_manifest(path: Path) -> dict[str, Any]:

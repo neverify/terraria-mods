@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TextIO
 
 from common.json import JsonLoadError, load_json
-from common.mods import find_mods
+from common.mods import find_mod
 from common.nexus_config import load_nexus_configs
 from common.versions import parse_tag
 
@@ -81,8 +81,8 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
             f"release tag {tag!r} does not match '<mod-id>-v<version>'"
         ) from exc
     try:
-        mod = find_mods(mod_id)[0]
-    except (IndexError, ValueError) as exc:
+        mod = find_mod(mod_id)
+    except ValueError as exc:
         raise ValueError(f"no mod found for ID {mod_id!r}") from exc
 
     configs = load_nexus_configs()
