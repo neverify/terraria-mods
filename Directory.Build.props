@@ -20,7 +20,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
-  <!-- Local Assembly Reference Paths -->
+  <!-- Terraria Install Path & Automatic Deployment -->
   <Import Project="Directory.Build.local.props" />
 
   <!-- Assembly References -->
@@ -29,34 +29,20 @@
       <HintPath>$(TerrariaPath)\Terraria.exe</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="TerrariaModder.Core">
+      <HintPath>$(TerrariaPath)\TerrariaModder\core\TerrariaModder.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="0Harmony">
       <HintPath>$(TerrariaPath)\TerrariaModder\core\deps\0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework">
-      <HintPath>$(XnaFrameworkDll)</HintPath>
+      <HintPath>$(WINDIR)\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework.Game">
-      <HintPath>$(XnaFrameworkGameDll)</HintPath>
-      <Private>false</Private>
-    </Reference>
-  </ItemGroup>
-
-  <!--
-    TerrariaModder Core project is referenced instead of the compiled assembly if present.
-    This allows IntelliSense to display the XML documentation, since TerrariaModder does not ship it with the assembly.
-    The source is otherwise not needed for building mods, as with all other assemblies.
-  -->
-  <ItemGroup>
-    <ProjectReference
-      Include="$(TerrariaModderCoreProject)"
-      Condition="Exists('$(TerrariaModderCoreProject)')"
-    >
-      <Private>false</Private>
-    </ProjectReference>
-    <Reference Include="TerrariaModder.Core" Condition="!Exists('$(TerrariaModderCoreProject)')">
-      <HintPath>$(TerrariaPath)\TerrariaModder\core\TerrariaModder.Core.dll</HintPath>
+      <HintPath>$(WINDIR)\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Game\v4.0_4.0_4.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Game.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
