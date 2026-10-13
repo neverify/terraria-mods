@@ -318,7 +318,7 @@ def main(
     # Load status of mods
     try:
         mods = load_mods(mod_names)
-    except (OSError, RuntimeError, ValueError) as exc:
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
         fail(f"[red]Unable to load release status: [/red]{exc}")
 
     # Show status of mods
@@ -346,7 +346,7 @@ def main(
         try:
             release_mod(mod, publish, add_delay)
             success_count += 1
-        except (OSError, RuntimeError, ValueError) as exc:
+        except (OSError, RuntimeError, TypeError, ValueError) as exc:
             console.print(f"[red]Failed to release {mod.name}: [/red]{exc}")
             fail_count += 1
 

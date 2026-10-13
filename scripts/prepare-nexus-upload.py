@@ -121,7 +121,7 @@ def main() -> int:
             f"Error: missing GitHub environment variable {exc.args[0]}", file=sys.stderr
         )
         return 1
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, TypeError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
     return 0

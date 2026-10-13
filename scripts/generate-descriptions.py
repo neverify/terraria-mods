@@ -261,7 +261,7 @@ def main(
         validate_template(template)
         nexus_configs = load_nexus_configs()
         mods = find_mods(mod_names)
-    except (OSError, ValueError) as exc:
+    except (OSError, TypeError, ValueError) as exc:
         raise click.ClickException(str(exc)) from exc
 
     failed_mods: dict[str, str] = {}
@@ -290,7 +290,7 @@ def main(
                 output_dir.mkdir(parents=True, exist_ok=True)
 
                 destination.write_text(content, encoding="utf-8", newline="\n")
-            except (OSError, ValueError) as exc:
+            except (OSError, TypeError, ValueError) as exc:
                 failed_mods[mod.name] = str(exc)
             finally:
                 progress.advance(task)

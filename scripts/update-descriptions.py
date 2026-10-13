@@ -87,7 +87,7 @@ def main(mod_names: tuple[str, ...]) -> None:
             return
 
         update_descriptions(available_names, nexus_configs)
-    except (OSError, ValueError) as exc:
+    except (OSError, TypeError, ValueError) as exc:
         raise click.ClickException(str(exc)) from exc
 
 
