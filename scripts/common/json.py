@@ -4,7 +4,7 @@ from typing import Any
 
 
 class JsonLoadError(Exception):
-    """Raised when the loaded file is missing or contains invalid JSON."""
+    """Raised when the loaded file can't be accessed or contains invalid JSON."""
 
 
 def load_json(path: Path) -> Any:
