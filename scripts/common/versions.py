@@ -58,10 +58,10 @@ def parse_tag(tag: str) -> tuple[str, Version]:
     match = TAG_RE.fullmatch(tag)
     if not match:
         raise ValueError(f"invalid release tag: {tag}")
-    return match.group("mod_id"), _parse_version(match.group("version"))
+    return match.group("mod_id"), parse_version(match.group("version"))
 
 
-def _parse_version(version: str) -> Version:
+def parse_version(version: str) -> Version:
     match = VERSION_RE.fullmatch(version)
     if not match:
         raise ValueError(f"invalid semantic version: {version}")

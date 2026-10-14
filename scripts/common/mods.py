@@ -5,24 +5,15 @@ from typing import Any
 
 from .json import JsonLoadError, load_json
 from .paths import SRC_DIR
+from .versions import Version, parse_version
 
 
 @dataclass(frozen=True)
 class Mod:
     directory: Path
-    manifest: dict[str, Any]
-
-    @property
-    def mod_id(self) -> str:
-        return self.manifest["id"]
-
-    @property
-    def name(self) -> str:
-        return self.manifest["name"]
-
-    @property
-    def version(self) -> str:
-        return self.manifest["version"]
+    mod_id: str
+    name: str
+    version: Version
 
 
 def find_mods(mod_names: Iterable[str] | None = None) -> list[Mod]:
@@ -58,11 +49,18 @@ def _load_mod(directory: Path, strict: bool) -> Mod | None:
         return None
     try:
         manifest = _load_manifest(manifest_path)
+        version = parse_version(manifest["version"])
     except (ValueError, TypeError):
         if strict:
             raise
         return None
-    return Mod(directory, manifest)
+
+    return Mod(
+        directory,
+        manifest["id"],
+        manifest["name"],
+        version,
+    )
 
 
 def _load_manifest(path: Path) -> dict[str, Any]:

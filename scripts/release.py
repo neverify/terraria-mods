@@ -32,20 +32,10 @@ console = Console()
 
 @dataclass(frozen=True)
 class ReleaseMod(Mod):
-    releases: tuple[Version, ...] | None
-    release_notes: str | None = None
-
-    @property
-    def last_release(self) -> Version | None:
-        return max(self.releases) if self.releases else None
-
-    @property
-    def updated(self) -> bool:
-        return not self.last_release or self.version > self.last_release
-
-    @property
-    def tag(self) -> str:
-        return f"{self.mod_id}-v{self.version}"
+    last_release: Version | None
+    updated: bool
+    tag: str
+    release_notes: str | None
 
 
 def fail(message: str) -> None:
@@ -74,12 +64,12 @@ def run(command: list[str]) -> subprocess.CompletedProcess[str]:
         ) from exc
 
 
-def extract_changelog(changelog: Path, version: str) -> str:
+def extract_changelog(changelog: Path, version: Version) -> str:
     text = changelog.read_text(encoding="utf-8")
     matches = list(CHANGELOG_RE.finditer(text))
 
     for index, match in enumerate(matches):
-        if match.group("version") != version:
+        if match.group("version") != str(version):
             continue
 
         start = match.end()
@@ -93,21 +83,32 @@ def extract_changelog(changelog: Path, version: str) -> str:
 
 
 def load_mod(mod: Mod) -> ReleaseMod:
-    path = mod.directory
-    manifest = mod.manifest
     try:
-        release_notes = extract_changelog(path / "CHANGELOG.md", mod.version)
+        release_notes = extract_changelog(mod.directory / "CHANGELOG.md", mod.version)
     except FileNotFoundError:
         release_notes = None
 
-    releases = []
+    releases = set()
     for tag in run(["git", "tag", "--list", f"{mod.mod_id}-v*"]).stdout.splitlines():
         try:
-            releases.append(parse_tag(tag)[1])
+            releases.add(parse_tag(tag)[1])
         except ValueError:
             continue
 
-    return ReleaseMod(path, manifest, tuple(releases), release_notes)
+    last_release = max(releases) if releases else None
+    updated = not last_release or mod.version > last_release
+    tag = f"{mod.mod_id}-v{mod.version}"
+
+    return ReleaseMod(
+        mod.directory,
+        mod.mod_id,
+        mod.name,
+        mod.version,
+        last_release,
+        updated,
+        tag,
+        release_notes,
+    )
 
 
 def load_mods(selected: Iterable[str] | None) -> list[ReleaseMod]:
