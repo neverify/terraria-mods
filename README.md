@@ -75,11 +75,11 @@ Each mod has its own `README.md` file documenting the mod's logic.
 
    If automatic deployment is enabled, the build is also copied over to `Terraria/TerrariaModder/mods/`.
 
-The script `build-all.ps1` builds all projects at once. This is mostly useful when all mods need to be rebuilt due to a common change. To deploy absent mods, provide the flag `-DeployAbsent`.
+The script [`build-all.ps1`](/scripts/build-all.ps1) builds all projects at once. This is mostly useful when all mods need to be rebuilt due to a common change. To deploy absent mods, provide the flag `-DeployAbsent`.
 
-The script `release.py` builds and releases mods whose manifest version is newer than their latest Git tag. It displays the release status of each mod, validates the changelog, creates a Git tag, and creates a draft GitHub release with the built zip attached. Dependencies are defined using PEP 723 metadata; it is recommended to run the script via `uv run` or an equivalent tool. Alternatively the environment has to have all the dependencies installed. The script uses GitHub CLI to upload the release, so it has to be installed and authenticated to. Run `--help` for more information.
+The script [`release.py`](/scripts/release.py) builds and releases mods whose manifest version is newer than their latest Git tag. It displays the release status of each mod, validates the changelog, creates a Git tag, and creates a draft GitHub release with the built zip attached. Dependencies are defined using PEP 723 metadata; it is recommended to run the script with [`uv`](https://docs.astral.sh/uv/) or an equivalent tool. Alternatively the environment has to have all the dependencies installed. The script uses [GitHub CLI](https://cli.github.com/) to upload the release, so it has to be installed and authenticated to. Run `--help` for more information.
 
-Published GitHub releases are uploaded to Nexus Mods by `.github/workflows/upload-to-nexus.yml`. The workflow constructs the details of the release with the `scripts/prepare-nexus-upload.py` Python script, downloads the release zip with GitHub CLI and uses the Nexus Mods GitHub action to perform the update.
+Published GitHub releases are uploaded to Nexus Mods by the GitHub Action workflow [`upload-to-nexus.yml`](.github/workflows/upload-to-nexus.yml). It constructs the details of the release with the [`scripts/prepare-nexus-upload.py`](scripts/prepare-nexus-upload.py) Python script, downloads the release zip with [GitHub CLI](https://cli.github.com/) and uses the [Nexus Mods GitHub Action](https://github.com/marketplace/actions/upload-to-nexus-mods) to perform the update.
 
 ## Questions, Suggestions, Bug Reports and Contributing
 
