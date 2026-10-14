@@ -1,7 +1,7 @@
 {
   "id": "settings-keybind",
   "name": "Settings Keybind",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "neverify",
   "description": "Add a configurable keybind to toggle the settings menu.",
 
