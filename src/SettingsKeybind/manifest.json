@@ -7,14 +7,5 @@
 
   "entry_dll": "SettingsKeybind.dll",
   "framework_version": "^0.4.1",
-  "terraria_version": "=1.4.5",
-
-  "keybinds": [
-    {
-      "id": "toggle-settings",
-      "label": "Toggle Settings",
-      "description": "Toggle the settings menu.",
-      "default": "Escape"
-    }
-  ]
+  "terraria_version": "=1.4.5"
 }
