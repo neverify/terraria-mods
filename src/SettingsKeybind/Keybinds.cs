@@ -4,7 +4,7 @@ namespace SettingsKeybind;
 
 internal static class Keybinds
 {
-    internal static void Register()
+    public static void Register()
     {
         Mod.Instance.Context.RegisterKeybind(
             "toggle-settings",
