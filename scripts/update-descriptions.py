@@ -41,7 +41,7 @@ def find_descriptions_to_update(
         if nexus_config is None:
             missing_nexus_configs.append(mod)
 
-        description_exists = (DESCRIPTION_DIR / f"{mod.name}.txt").is_file()
+        description_exists = (DESCRIPTION_DIR / f"{mod.mod_id}.txt").is_file()
         if not description_exists:
             missing_descriptions.append(mod)
 
@@ -54,7 +54,7 @@ def find_descriptions_to_update(
 def update_descriptions(updates: list[DescriptionUpdate]) -> None:
     for index, update in enumerate(updates, start=1):
         mod = update.mod
-        description_path = DESCRIPTION_DIR / f"{mod.name}.txt"
+        description_path = DESCRIPTION_DIR / f"{mod.mod_id}.txt"
         content = description_path.read_text(encoding="utf-8")
         try:
             pyperclip.copy(content)
