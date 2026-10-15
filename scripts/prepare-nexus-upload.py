@@ -88,9 +88,9 @@ def prepare(event_path: Path, asset_dir: Path, output: TextIO) -> None:
     configs = load_nexus_configs()
     if mod_id not in configs:
         raise ValueError(f"no Nexus configuration found for {mod_id!r}")
-    nexus_ids = configs[mod_id]
-    nexus_mod_id = nexus_ids.mod_id
-    nexus_file_id = nexus_ids.file_id
+    nexus_config = configs[mod_id]
+    nexus_mod_id = nexus_config.mod_id
+    nexus_file_id = nexus_config.file_id
 
     assets = list(asset_dir.glob("*.zip"))
     if len(assets) != 1:
