@@ -54,6 +54,10 @@ class Version:
         )
 
 
+def format_tag(mod_id: str, version: Version) -> str:
+    return f"{mod_id}-v{version}"
+
+
 def parse_tag(tag: str) -> tuple[str, Version]:
     match = TAG_RE.fullmatch(tag)
     if not match:

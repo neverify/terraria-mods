@@ -19,7 +19,7 @@ from typing import Any
 import click
 from common.mods import Mod, find_mods
 from common.paths import BUILD_DIR, ROOT, ZIPS_DIR
-from common.versions import Version, parse_tag
+from common.versions import Version, format_tag, parse_tag
 from rich.console import Console
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 from rich.prompt import Confirm
@@ -48,14 +48,14 @@ def succeed(message: str) -> None:
     raise SystemExit(0)
 
 
-def run(command: list[str]) -> subprocess.CompletedProcess[str]:
+def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
     try:
         return subprocess.run(
             command,
             cwd=ROOT,
             text=True,
             capture_output=True,
-            check=True,
+            check=check,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         details = getattr(exc, "stderr", None) or str(exc)
@@ -97,7 +97,7 @@ def load_mod(mod: Mod) -> ReleaseMod:
 
     last_release = max(releases) if releases else None
     updated = not last_release or mod.version > last_release
-    tag = f"{mod.mod_id}-v{mod.version}"
+    tag = format_tag(mod.mod_id, mod.version)
 
     return ReleaseMod(
         mod.directory,
@@ -211,6 +211,30 @@ def check_tag(mod: ReleaseMod) -> None:
     existing = run(["git", "tag", "--list", mod.tag]).stdout.strip()
     if existing:
         raise ValueError(f"tag already exists: {mod.tag}")
+
+
+def readme_updated(mod: ReleaseMod) -> bool:
+    if mod.last_release is None:
+        return False
+
+    previous_tag = format_tag(mod.mod_id, mod.last_release)
+    new_tag = format_tag(mod.mod_id, mod.version)
+    result = run(
+        [
+            "git",
+            "diff",
+            "--quiet",
+            previous_tag,
+            new_tag,
+            "--",
+            str(mod.directory.relative_to(ROOT) / "README.md"),
+        ],
+        check=False,
+    )
+
+    if result.returncode not in (0, 1):
+        raise RuntimeError(f"git diff failed: {result.stderr}")
+    return result.returncode == 1
 
 
 def create_tag(mod: ReleaseMod) -> None:
@@ -341,17 +365,24 @@ def main(
     # Release mods
     success_count = 0
     fail_count = 0
+    readme_updates: list[Mod] = []
     for mod in candidates:
         if add_delay:
             time.sleep(1)
         try:
             release_mod(mod, publish, add_delay)
             success_count += 1
+            if readme_updated(mod):
+                readme_updates.append(mod)
         except (OSError, RuntimeError, TypeError, ValueError) as exc:
             console.print(f"[red]Failed to release {mod.name}: [/red]{exc}")
             fail_count += 1
 
     console.print(f"Finished: {success_count} successful, {fail_count} failed.")
+    if readme_updates:
+        console.print(
+            f"README of following mod(s) was updated: {', '.join(mod.name for mod in readme_updates)}"
+        )
 
 
 if __name__ == "__main__":
