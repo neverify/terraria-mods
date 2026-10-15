@@ -34,6 +34,20 @@ Override the brightness of map lighting.
 
 The brightness to set map tiles to. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
 
+## Keybinds
+
+### Toggle Brightness Override
+
+Toggle the brightness override. Default: N/A.
+
+### Increase Brightness
+
+Increase fullbright brightness. Default: N/A.
+
+### Decrease Brightness
+
+Decrease fullbright brightness. Default: N/A.
+
 ## Development
 
 ### Harmony Patches
