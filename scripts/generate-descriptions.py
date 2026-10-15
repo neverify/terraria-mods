@@ -132,12 +132,16 @@ def render_blocks(tokens: Sequence[Token]) -> str:
                 level = heading_level(token)
                 if level not in (2, 3):
                     raise ValueError(f"unsupported heading level: {level}")
+                if level == 2 and result:
+                    result[-1] = (result[-1][0], "\n")
                 content = next_token(token_iterator, "inline")
                 next_token(token_iterator, "heading_close")
                 size = 5 if level == 2 else 4
                 append_block(
-                    f"{'[line]\n' if level == 2 else ''}[size={size}][b]"
-                    f"{render_inline(content.children or [])}[/b][/size]",
+                    f"{'[line]\n' if level == 2 else ''}"
+                    f"[size={size}][b]"
+                    f"{render_inline(content.children or [])}"
+                    f"[/b][/size]",
                     "\n" if level == 3 else "\n\n",
                 )
             case "paragraph_open":
@@ -241,7 +245,7 @@ def render_description(
         files_url=f"https://www.nexusmods.com/terraria/mods/{mod_page_id}?tab=files",
         bugs_url=f"https://www.nexusmods.com/terraria/mods/{mod_page_id}?tab=bugs",
     )
-    return re.sub(r"\n{3,}", "\n\n", description).rstrip() + "\n"
+    return re.sub(r"\n{3,}", "\n\n", description).rstrip()
 
 
 @click.command()
