@@ -4,4 +4,8 @@
     <ModId>rare-drop-notification</ModId>
     <RootNamespace>RareDropNotification</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\shared\PlaceholderFormatter.cs" />
+  </ItemGroup>
 </Project>

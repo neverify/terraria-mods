@@ -4,4 +4,8 @@
     <ModId>value-tooltip</ModId>
     <RootNamespace>ValueTooltip</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\shared\PlaceholderFormatter.cs" />
+  </ItemGroup>
 </Project>

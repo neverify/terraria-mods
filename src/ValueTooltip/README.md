@@ -4,7 +4,7 @@ Display the sell value of items in their tooltip even outside of shops.
 
 Knowing the value of items is a very useful thing in Terraria. Especially in the early-game when inventory space is limited, knowing which items are worth picking up matters. Since this information is not available outside of shops, you have to manually look it up in the Wiki, which is slow and annoying.
 
-This mod fixes the issue by adding a line to all items' tooltips that displays their sell value. Coins and items that do not have a sell value are excluded from this. Stacked items show the total value with the base value displayed in parentheses.
+This mod fixes the issue by adding a line to all items' tooltips that displays their sell value. Coins and items that do not have a sell value are excluded from this. Stacked items show the total value with the base value displayed in parentheses. The tooltip can be customized.
 
 The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
@@ -13,6 +13,14 @@ The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**.
 ### Show Value Tooltips
 
 Show the sell value of items in their tooltip.
+
+### Singular Item Tooltip Format
+
+Placeholders: `{value}`.
+
+### Stacked Item Tooltip Format
+
+Placeholders: `{value}`, `{totalValue}`.
 
 ## Development
 

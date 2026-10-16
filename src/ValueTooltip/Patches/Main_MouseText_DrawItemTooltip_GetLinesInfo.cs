@@ -3,6 +3,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Utils;
 
 namespace ValueTooltip.Patches;
 
@@ -37,9 +38,15 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
 
     private static string CreateValueTooltip(int sellValue, int stack)
     {
-        string valueText = GetValueText(sellValue * stack);
+        string value = GetValueText(sellValue);
+        string totalValue = GetValueText(sellValue * stack);
 
-        return stack <= 1 ? valueText : $"{valueText} ({GetValueText(sellValue)})";
+        string format =
+            stack <= 1
+                ? Mod.Instance.Config.SingularItemTooltipFormat
+                : Mod.Instance.Config.StackedItemTooltipFormat;
+
+        return PlaceholderFormatter.Format(format, ("value", value), ("totalValue", totalValue));
     }
 
     private static string GetValueText(int value)

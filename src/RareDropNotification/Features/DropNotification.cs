@@ -1,9 +1,9 @@
 using System;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Utils;
 
 namespace RareDropNotification.Features;
 
@@ -18,11 +18,11 @@ internal static class DropNotification
 
         string itemName = ContentSamples.ItemsByType[drop.itemId].Name;
 
-        string message = FormatNotificationMessage(
-            Mod.Instance.Config.DropNotificationFormat,
-            drop.itemId,
-            itemName,
-            chance
+        string message = PlaceholderFormatter.Format(
+            Mod.Instance.Config.NotificationFormat,
+            ("itemId", drop.itemId.ToString()),
+            ("itemName", itemName),
+            ("chance", (chance * 100).ToString("F2"))
         );
 
         Color color = GetColor(chance, Mod.Instance.Config.NotificationThreshold);
@@ -33,39 +33,10 @@ internal static class DropNotification
     private static void ShowNotification(string message, Color color) =>
         Main.NewText(message, color);
 
-    private static string FormatNotificationMessage(
-        string format,
-        int itemId,
-        string itemName,
-        float chance
-    )
-    {
-        float chancePercent = chance * 100;
-
-        string result = Regex.Replace(
-            format,
-            @"\{(\w+)\}",
-            m =>
-            {
-                string placeholder = m.Groups[1].Value;
-
-                return placeholder switch
-                {
-                    "itemId" => itemId.ToString(),
-                    "itemName" => itemName,
-                    "chance" => chancePercent.ToString("F2"),
-                    _ => m.Value,
-                };
-            }
-        );
-
-        return result;
-    }
-
     private static Color GetColor(float chance, float threshold)
     {
-        Color lowColor = ParseHex(Mod.Instance.Config.NotificationColorLow);
-        Color highColor = ParseHex(Mod.Instance.Config.NotificationColorHigh);
+        Color lowColor = ParseHex(Mod.Instance.Config.LowRarityNotificationColor);
+        Color highColor = ParseHex(Mod.Instance.Config.HighRarityNotificationColor);
 
         // Calculate interpolation factor.
         float t = threshold > 0 ? chance / threshold : 1f;

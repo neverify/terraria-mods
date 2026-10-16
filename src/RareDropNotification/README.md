@@ -4,7 +4,7 @@ Show a configurable chat message when a rare item is dropped.
 
 Terraria has a lot of item drops, so it is easy to miss the rare ones. This mod makes sure you never miss a drop you care about again.
 
-The mod only shows notifications for drops with a 1/x chance. Drops that always occur and pick from a list of alternatives with equal odds, such as mimics and many boss drops, are not notified.
+The mod only shows notifications for drops with a simple 1/x chance. Drops that always occur and pick from a list of alternatives with equal odds, such as mimics and many boss drops, are not notified.
 
 The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
@@ -18,17 +18,17 @@ Show a chat message when a rare item is dropped.
 
 The minimum drop chance for the chat message to be sent. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
 
-### Drop Notification Format
+### Notification Format
 
-The format of the chat message. The following placeholders are available: `{itemId}`, `{itemName}`, `{chance}`. This config option can't be edited in-game due to framework limitations.
+Placeholders: `{itemId}`, `{itemName}`, `{chance}`.
 
 ### Low Rarity Notification Color
 
-The gradient edge for low rarity drops. Hex color code. This config option can't be edited in-game due to framework limitations.
+Color of low rarity drops. Hex color code (`#RRGGBB`).
 
 ### High Rarity Notification Color
 
-The gradient edge for high rarity drops. Hex color code. This config option can't be edited in-game due to framework limitations.
+Color of high rarity drops. Hex color code (`#RRGGBB`).
 
 ## Development
 

@@ -13,7 +13,7 @@ internal static class ResolveRulePatch
 
     private static void Postfix(IItemDropRule rule, ItemDropAttemptResult __result)
     {
-        if (!Mod.Instance.Config.Enabled)
+        if (!Mod.Instance.Config.ShowNotifications)
             return;
 
         if (__result.State is ItemDropAttemptResultState.Success && rule is CommonDrop drop)
