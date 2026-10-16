@@ -26,7 +26,7 @@ Enable the deterministic item drop system for NPCs.
 
 When this option is enabled, kills count towards the progress of each item, and item drops are handled by the mod. When this setting is disabled, the vanilla system is used, effectively "pausing" the mod. You can't "miss" NPC drops due to this option being disabled.
 
-### Enable Deterministic Treasure Bag Drops
+### Enable Deterministic Treasure Bags
 
 Enable the deterministic item drop system for treasure bags.
 
