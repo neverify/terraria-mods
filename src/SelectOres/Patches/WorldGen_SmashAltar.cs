@@ -12,7 +12,7 @@ internal static class SmashAltarPatch
 
     private static void Prefix()
     {
-        if (!Mod.Instance.Config.OverrideGeneration)
+        if (!Mod.Instance.Config.OverrideAltarSmashingOres)
             return;
 
         SetOreTier(ref WorldGen.SavedOreTiers.Cobalt, Mod.Instance.Config.HardmodeTier1Ore);

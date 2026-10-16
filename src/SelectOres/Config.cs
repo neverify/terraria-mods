@@ -1,19 +1,18 @@
+using System.Collections.Generic;
 using TerrariaModder.Core.Config;
 
 namespace SelectOres;
 
 public class Config : ModConfig
 {
-    public override int Version => 1;
+    public override int Version => 2;
 
     [
         Client,
-        Label("Override Generation"),
-        Description(
-            "Whether the selected ores are enforced during world generation and when smashing altars."
-        )
+        Label("Override World Generation Ores"),
+        Description("Whether the selected ores are enforced during world generation.")
     ]
-    public bool OverrideGeneration { get; set; } = true;
+    public bool OverrideWorldGenerationOres { get; set; } = true;
 
     [
         Client,
@@ -49,6 +48,13 @@ public class Config : ModConfig
 
     [
         Client,
+        Label("Override Altar Smashing Ores"),
+        Description("Whether the selected ores are enforced when smashing altars.")
+    ]
+    public bool OverrideAltarSmashingOres { get; set; } = true;
+
+    [
+        Client,
         Label("Tier 1 Hardmode Ore"),
         Description("Which hardmode tier 1 ore to generate."),
         Options("Cobalt", "Palladium")
@@ -70,4 +76,20 @@ public class Config : ModConfig
         Options("Adamantite", "Titanium")
     ]
     public string HardmodeTier3Ore { get; set; } = "Adamantite";
+
+    protected override void Migrate(Dictionary<string, object> raw, int fromVersion)
+    {
+        switch (fromVersion)
+        {
+            case 1:
+                if (raw.TryGetValue("OverrideGeneration", out var overrideGeneration))
+                {
+                    OverrideWorldGenerationOres = (bool)overrideGeneration;
+                    OverrideAltarSmashingOres = (bool)overrideGeneration;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

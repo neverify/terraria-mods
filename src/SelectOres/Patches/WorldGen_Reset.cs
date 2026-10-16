@@ -13,7 +13,7 @@ internal static class ResetPatch
 
     private static void Postfix()
     {
-        if (!Mod.Instance.Config.OverrideGeneration)
+        if (!Mod.Instance.Config.OverrideWorldGenerationOres)
             return;
 
         GenVars.copper = s_oreNameToTileId[Mod.Instance.Config.Tier1Ore];
