@@ -14,9 +14,9 @@ The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**.
 
 ## Configuration
 
-### Override Generation
+### Override World Generation Ores
 
-Whether the selected ores are enforced during world generation and when smashing altars.
+Whether the selected ores are enforced during world generation.
 
 ### Tier 1 Ore
 
@@ -33,6 +33,10 @@ Which tier 3 ore to generate. Possible values: `Silver`, `Tungsten`.
 ### Tier 4 Ore
 
 Which tier 4 ore to generate. Possible values: `Gold`, `Platinum`.
+
+### Override Altar Smashing Ores
+
+Whether the selected ores are enforced when smashing altars.
 
 ### Tier 1 Hardmode Ore
 
