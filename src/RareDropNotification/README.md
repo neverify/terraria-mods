@@ -80,7 +80,7 @@ The result is then passed on to the notification handler.
 
 The `DropNotification` class handles displaying the chat messages.
 
-The message format is parsed with Regex. The hex colors are parsed manually and converted to `Color`-objects, which are then linearly interpolated to obtain the final color based on the drop chance.
+The message is formatted with the shared `PlaceholderFormatter` class. The hex colors are parsed manually and converted to `Color`-objects, which are then linearly interpolated to obtain the final color based on the drop chance.
 
 ## Credits
 

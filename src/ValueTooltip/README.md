@@ -35,3 +35,7 @@ public static void MouseText_DrawItemTooltip_GetLinesInfo(Item item, ref int yoy
 This method is responsible for building the tooltip for items. The method is just a long list of conditions of all of the possible tooltip entries, so it is not shown here. The important part is the signature of the method.
 
 The mod applies a postfix patch to this method to add the sell value of the item to the tooltip. The tooltips are stored in the `toolTipLine` string array, and the `numLines` variable keeps track of the number of lines in the tooltip. The value tooltip is simply placed at the end of the `toolTipLine` array, and the `numLines` variable is incremented by one.
+
+### Creating the Tooltip
+
+The value string is constructed manually from the `Item.value` property. The tooltip is formatted with the shared `PlaceholderFormatter` class.
