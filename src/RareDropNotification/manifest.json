@@ -1,7 +1,7 @@
 {
   "id": "rare-drop-notification",
   "name": "Rare Drop Notification",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "neverify",
   "description": "Show a configurable chat message when a rare item is dropped.",
 
