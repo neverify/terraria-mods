@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-16
+
+### Changed
+
+- Separated world generation and altar smashing override configuration options
+
 ## [1.0.4] - 2026-09-18
 
 ### Changed
