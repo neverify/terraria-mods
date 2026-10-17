@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Utils;
+using ValueTooltip.Features;
 
 namespace ValueTooltip.Patches;
 
@@ -25,8 +26,8 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
         if (item.value <= 0 || Main.npcShop > 0 || ItemID.Sets.CommonCoin[item.type])
             return;
 
-        int sellValue = item.value / 5;
-        int totalSellValue = sellValue * item.stack;
+        long sellValue = item.value / 5;
+        long totalSellValue = sellValue * item.stack;
 
         if (sellValue == 0 || numLines >= toolTipLine.Length)
             return;
@@ -36,7 +37,7 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
         numLines++;
     }
 
-    private static string CreateValueTooltip(int sellValue, int stack)
+    private static string CreateValueTooltip(long sellValue, int stack)
     {
         string value = GetValueText(sellValue);
         string totalValue = GetValueText(sellValue * stack);
@@ -49,38 +50,28 @@ internal static class MouseText_DrawItemTooltip_GetLinesInfoPatch
         return PlaceholderFormatter.Format(format, ("value", value), ("totalValue", totalValue));
     }
 
-    private static string GetValueText(int value)
+    public static string GetValueText(long value)
     {
-        var coins = new[]
-        {
-            (Amount: value / CoinValues.Platinum, Name: "Platinum"),
-            (Amount: value % CoinValues.Platinum / CoinValues.Gold, Name: "Gold"),
-            (Amount: value % CoinValues.Gold / CoinValues.Silver, Name: "Silver"),
-            (Amount: value % CoinValues.Silver, Name: "Copper"),
-        };
+        var coinAmounts = Coins.FromValue(value);
+        string[] coinNames = ["Platinum", "Gold", "Silver", "Copper"];
 
         return string.Join(
             " ",
-            coins.Where(coin => coin.Amount > 0).Select(coin => $"{coin.Amount} {coin.Name}")
+            coinAmounts
+                .Select((coin, index) => new { coin, name = coinNames[index] })
+                .Where(entry => entry.coin > 0)
+                .Select(entry => $"{entry.coin} {entry.name}")
         );
     }
 
-    private static Color GetValueColor(int value)
+    private static Color GetValueColor(long value)
     {
         return value switch
         {
-            int v when v >= CoinValues.Platinum => Colors.CoinPlatinum,
-            int v when v >= CoinValues.Gold => Colors.CoinGold,
-            int v when v >= CoinValues.Silver => Colors.CoinSilver,
+            long v when v >= Coins.Platinum => Colors.CoinPlatinum,
+            long v when v >= Coins.Gold => Colors.CoinGold,
+            long v when v >= Coins.Silver => Colors.CoinSilver,
             _ => Colors.CoinCopper,
         };
-    }
-
-    private static class CoinValues
-    {
-        public const int Platinum = 1000000;
-        public const int Gold = 10000;
-        public const int Silver = 100;
-        public const int Copper = 1;
     }
 }
