@@ -66,7 +66,7 @@ def get_description_sections(tokens: Sequence[Token]) -> list[list[Token]]:
 
     for index, token in enumerate(tokens):
         if token.type == "heading_open" and heading_level(token) == 2:
-            if heading_text(tokens[index + 1]) == "Development":
+            if heading_text(tokens[index + 1]) == "Technical Overview":
                 break
             current = [token]
             sections.append(current)
