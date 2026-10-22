@@ -13,12 +13,7 @@ public class Config : ModConfig
     ]
     public bool BrightnessOverride { get; set; } = true;
 
-    [
-        Client,
-        Label("Brightness"),
-        Description("The brightness at which to render tiles at."),
-        Range(0f, 1f)
-    ]
+    [Client, Label("Brightness"), Description("The brightness to render tiles at."), Range(0f, 1f)]
     public float Brightness { get; set; } = 0.5f;
 
     [Client, Label("Disable Light Smoothing"), Description("Disable vanilla light smoothing.")]
