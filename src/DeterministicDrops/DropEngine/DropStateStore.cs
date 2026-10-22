@@ -47,7 +47,7 @@ internal sealed class DropStateStore(string savePath)
             _dropStates.Add(pair.Key, pair.Value);
         }
 
-        Mod.Instance.Log.Info($"Loaded drop states for world: {fileName}");
+        Mod.Instance.Log.Info($"Loaded drop states for world: {Main.worldName}");
     }
 
     public void Save()
@@ -62,7 +62,7 @@ internal sealed class DropStateStore(string savePath)
 
         File.WriteAllText(path, json);
 
-        Mod.Instance.Log.Info($"Saved drop states for world: {fileName}");
+        Mod.Instance.Log.Info($"Saved drop states for world: {Main.worldName}");
     }
 }
 
