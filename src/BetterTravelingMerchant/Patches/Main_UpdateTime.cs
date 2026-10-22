@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using HarmonyLib;
 using Terraria;
-using Utils;
+using Terraria.ID;
 
 namespace BetterTravelingMerchant.Patches;
 
@@ -19,11 +19,9 @@ internal static class UpdateTimePatch
             return;
 
         double chance =
-            Math.Max(Main.dayRate, 1)
-            * Math.Max(Mod.Instance.Config.SpawnChanceMultiplier, 0.0f)
-            / BaseSpawnChanceDenominator;
+            Main.dayRate * Mod.Instance.Config.SpawnChanceMultiplier / BaseSpawnChanceDenominator;
 
-        if (Main.rand.NextDouble() < Math.Clamp(chance, 0.0, 1.0))
+        if (Main.rand.NextDouble() < chance)
         {
             SpawnTravelNPC();
             NPC.travelNPC = true;
@@ -36,7 +34,11 @@ internal static class UpdateTimePatch
 
         bool npcCondition = (
             from npc in Main.npc
-            where npc.active && npc.townNPC && npc.type != 37 && npc.type != 453
+            where
+                npc.active
+                && npc.townNPC
+                && npc.type != NPCID.OldMan
+                && npc.type != NPCID.SkeletonMerchant
             select npc
         )
             .Skip(1)
