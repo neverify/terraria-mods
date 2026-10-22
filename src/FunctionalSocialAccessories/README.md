@@ -14,90 +14,16 @@ The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**.
 
 Make accessories in social slots function the same as in normal slots.
 
-## Development
+## Technical Overview
 
-### Harmony Patches
+### Accessory Effects
 
-#### `Terraria.Player.ApplyEquipFunctional()`
+The effects of accessories are applied in the `Player.UpdateEquips()` method. This method calls the following three methods for each accessory in normal slots: `Player.GrantPrefixBenefits()`, `Player.GrantArmorBenefits()` and `ApplyEquipFunctional()`. It then additionally applies some effects by itself according to flags set in those methods.
 
-```cs
-private void ApplyEquipFunctional(int itemSlot, Item currentItem)
-```
+The mod patches `ApplyEquipFunctional()` to call those three methods for the accessory in the corresponding social slot. Social slots use IDs 13-19 and normal slots use IDs 3-9, so the corresponding social slot index is found with an offset of 10. The social slot is processed first in order for the normal slot to retain priority in case of overlapping effects, which is particularly important for wings.
 
-This method handles applying the effects of accessories. The code is not included here, because it is not relevant to the patch. The method is basically a huge switch statement for every type of accessory in the game. Some of the cases apply direct modifications to player stats, such as damage and critical strike chance, but most of them simply turn on a switch. These switches are then handled in the `UpdateEquips()` method.
+### Social Slot Tooltip
 
-```cs
-public void UpdateEquips(int i)
-{
-    // ...
+The vanilla method `Main.MouseText_DrawItemTooltip_GetLinesInfo()` constructs the tooltips of items. If the `social` property of the item is `true`, a line will be added to the tooltip informing that the item has no effect in a social slot.
 
-    // Apply accessory prefix effects (warding, menacing, lucky etc.).
-    // Apply armor stats (defense, damage boosts etc.).
-    for (int k = 0; k < 10; k++)
-    {
-        Item effectiveArmor = GetEffectiveArmor(k);
-        if (!effectiveArmor.IsAir && IsItemSlotUnlockedAndUsable(k) && (!effectiveArmor.expertOnly || Main.expertMode) && UpdateEquips_CanItemGrantBenefits(k, effectiveArmor))
-        {
-            if (effectiveArmor.accessory)
-            {
-                GrantPrefixBenefits(effectiveArmor);
-            }
-            GrantArmorBenefits(effectiveArmor);
-        }
-    }
-
-    // ...
-
-    // Apply the effects of accessories in normal accessory slots (3-9).
-    for (int m = 3; m < 10; m++)
-    {
-        if (IsItemSlotUnlockedAndUsable(m))
-        {
-            ApplyEquipFunctional(m, GetEffectiveArmor(m));
-        }
-    }
-
-    // Apply the effects of some accessories based on the flags set by `ApplyEquipFunctional()`.
-
-    // Apply the vanity effects of accessories in social slots (13-19).
-    for (int n = 13; n < 20; n++)
-    {
-        if (IsItemSlotUnlockedAndUsable(n))
-        {
-            ApplyEquipVanity(n, GetEffectiveArmor(n));
-        }
-    }
-
-    // Apply the rest of the accessory effects based on the flags set by `ApplyEquipFunctional()`.
-}
-```
-
-This method handles the application of stat boosts and other effects of both armor and accessories. The method first applies the stat boosts of prefixes and armor-specific effects of both armor and accessories. It then enumerates the other effects of the equipped accessories using the `ApplyEquipFunctional()` method. After that some accessories have their effects applied, based on the flags set by `ApplyEquipFunctional()`. Notably the items that have their effects applied at this point is only a subset of all items, and I have no idea why they are handled at this point. After those few items are handled, the vanity effects of accessories in social slots are handled. Only then are the rest of the flag-based effects applied.
-
-Because of this weird order in which the effects are applied, patching the `ApplyEquipVanity()` would mean those few accessories that are handled before the vanity effects of accessories in the social slots are handled wouldn't be handled properly. This is why the `ApplyEquipFunctional()` method is patched instead.
-
-The mod applies a prefix patch to the `ApplyEquipFunctional()` method to apply the functional effects of the accessory in the social counterpart of each normal slot. The patch first checks if the item in the corresponding social slot fulfills the necessary conditions, after which the `GrantPrefixBenefits()`, `GrantArmorBenefits()` and `ApplyEquipFunctional()` methods are invoked for it. Because the patch is a prefix, the `ApplyEquipFunctional()` method of the normal accessory slot is called after the social slot. This allows wings to retain their normal logic of the stats of the wings in the normal slot being used.
-
-The `ApplyEquipFunctional()` method uses the `itemSlot` parameter to determine if the accessory equipped in that slot is currently hidden. This is done via the `hideVisibleAccessory` array, which is a boolean array of size 10, covering the armor slots and the normal accessory slots. Passing the slot ID of the social slot would cause an `IndexOutOfRangeException`, since the slot IDs of social accessory slots extend beyond the array. This is why the `ìtemSlot` parameter of the normal slot is passed instead. Because the `ApplyEquipVanity()` method is ran after the functional effects have been added, the effects of that flag get overridden anyway.
-
-Since the `ApplyEquipFunctional()`, `GrantPrefixBenefits()` and `GrantArmorBenefits()` methods are `private`, the mod uses a reverse harmony patch to access them. This allows the invocations to incur no performance penalties, which the naive implementation of using reflection would have. This is especially important because the `ApplyEquipVanity()` method is called every frame. This is the recommended pattern for calling private methods in harmony patches.
-
-#### `Terraria.Main.MouseText_DrawItemTooltip_GetLinesInfo()`
-
-```cs
-public static void MouseText_DrawItemTooltip_GetLinesInfo(Item item, ref int yoyoLogo, float oldKB, ref int numLines, string[] toolTipLine, Color[] lineColors)
-{
-    // ...
-
-    // Add the "Not Functional in Social Slot" tooltip
-    if (item.social && !item.vanity && !item.hasVanityEffects)
-    {
-        toolTipLine[numLines] = Lang.tip[61].Value;
-        numLines++;
-    }
-}
-```
-
-This method handles building the tooltips of items. When an item is in a social slot but not a vanity item, it adds a tooltip indicating that it is not functional in that slot. Because the mod changes this behavior, that tooltip is inaccurate.
-
-The mod applies a prefix and postfix patch to the method to prevent this tooltip line from being added. This is achieved by making the condition to add that line never pass. To do that, the `item.social` property is set `false` in the prefix. Because object instances are always passed as references in C#, forgoing cleanup would alter the item in-game. This is why a postfix patch is implemented to revert the value of the property after the method has ran. To do this the prefix patch stores and passes the original value of the property using the harmony `__state` parameter. Because the method does not use the `item.social` property anywhere else, the patches have no side-effects.
+The mod sets this property to `false` for the duration of the method. This prevents the inaccurate warning from being shown.

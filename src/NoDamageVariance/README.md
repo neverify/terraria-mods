@@ -14,10 +14,8 @@ The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**.
 
 Disable the ±15% damage variance for all sources of damage.
 
-## Development
+## Technical Overview
 
-This mod is extremely simple. Damage variance for all sources of damage is calculated using a single method `Terraria.Main.DamageVar()`. Thus applying a simple harmony prefix patch to conditionally skip the method (return the original value) would be all that is needed.
+Damage variance for all sources of damage is applied with the method `Main.DamageVar()`.
 
-However, there is an even simpler and more idiomatic way to achieve this. The `Terraria.Testing.DebugOptions` class contains a selection of toggles used by the developers for testing. One of these toggles is `NoDamageVar`, which does exactly what it states. The `DamageVar()` method has an early return for this toggle baked-in. The properties in `DebugOptions` are `public`, so no reflection is needed to set them.
-
-The mod simply sets this value according to the config in the `Initialize()` method and when the config is changed.
+There exists a debug option `Testing.DebugOptions.NoDamageVar`, which bypasses the method entirely. The mod simply toggles this option according to the config.

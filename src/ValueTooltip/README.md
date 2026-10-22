@@ -48,16 +48,16 @@ The X position of the chest value display.
 
 The Y position of the chest value display.
 
-## Technical Explanation
+## Technical Overview
 
-### Creating the Tooltip
+### Tooltip
 
-The vanilla method responsible for building the tooltip of items is `Main.MouseText_DrawItemTooltip_GetLinesInfo()`. The method collects each line of the tooltip into an array `toolTipLine`. This allows the mod to simply apply a postfix patch to this method to add the sell value of the item as the last line of the tooltip.
+The method `Main.MouseText_DrawItemTooltip_GetLinesInfo()` constructs the tooltips of items. The method collects each line of the tooltip into the `toolTipLine` array. The mod simply appends the sell value of the item to the end of the array.
 
 The value string is constructed manually from the `Item.value` property. The tooltip is formatted according to the configured template with the shared `PlaceholderFormatter` class.
 
-### Drawing the Value Displays
+### Inventory & Chest Value Display
 
-In vanilla, the "Savings" display is drawn with the `Terraria.UI.ItemSlot.DrawSavings()` method. This method internally uses `Terraria.UI.ItemSlot.DrawMoney()` to draw the actual values. The mod applies a postfix patch to the `Main.DrawInventory()` method, which handles drawing the inventory, to draw the value displays using the `DrawMoney()` method.
+The "Savings" display is drawn with the `UI.ItemSlot.DrawSavings()` method. This method internally uses `UI.ItemSlot.DrawMoney()` to draw the actual values. The mod patches the `Main.DrawInventory()` method, which handles drawing the inventory, to draw the value displays using the `DrawMoney()` method.
 
 The inventory value is calculated from the player's inventory slots, while the chest value is calculated from the items in the open chest.

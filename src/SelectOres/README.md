@@ -50,115 +50,16 @@ Which tier 2 hardmode ore to generate. Possible values: `Mythril`, `Orichalcum`.
 
 Which tier 3 hardmode ore to generate. Possible values: `Adamantite`, `Titanium`.
 
-## Development
+## Technical Overview
 
-### Harmony Patches
+### Pre-Hardmode Ores
 
-#### `Terraria.WorldGen.Reset()`
+The method `WorldGen.Reset()` randomizes the ores that will be used in world generation.
 
-```cs
-public static void Reset()
-{
-    // ...
+The mod overrides these randomized ores with the configured ones. The `Reset()` method is the only place where this randomization occurs, so it is sufficient to simply overwrite it once.
 
-    // Set the default ore IDs.
-    GenVars.copper = 7;
-    GenVars.iron = 6;
-    GenVars.silver = 9;
-    GenVars.gold = 8;
+### Hardmode Ores
 
-    // ...
+Hardmode ore tiers are randomized by the `WorldGen.SmashAltar()` method. The randomization only takes place when the `WorldGen.SavedOreTiers` value for the current tier is unset.
 
-    // Set the default bar IDs.
-    WorldGen.SavedOreTiers.Copper = 7;
-    WorldGen.SavedOreTiers.Iron = 6;
-    WorldGen.SavedOreTiers.Silver = 9;
-    WorldGen.SavedOreTiers.Gold = 8;
-    GenVars.copperBar = 20;
-    GenVars.ironBar = 22;
-    GenVars.silverBar = 21;
-    GenVars.goldBar = 19;
-
-    // ...
-
-    // Randomly switch to the alternative ores.
-    if (WorldGen.genRand.Next(2) == 0)
-    {
-        GenVars.copper = 166;
-        GenVars.copperBar = 703;
-        WorldGen.SavedOreTiers.Copper = 166;
-    }
-    if ((!WorldGen.dontStarveWorldGen || WorldGen.drunkWorldGen) && WorldGen.genRand.Next(2) == 0)
-    {
-        GenVars.iron = 167;
-        GenVars.ironBar = 704;
-        WorldGen.SavedOreTiers.Iron = 167;
-    }
-    if (WorldGen.genRand.Next(2) == 0)
-    {
-        GenVars.silver = 168;
-        GenVars.silverBar = 705;
-        WorldGen.SavedOreTiers.Silver = 168;
-    }
-    if ((!WorldGen.dontStarveWorldGen || WorldGen.drunkWorldGen) && WorldGen.genRand.Next(2) == 0)
-    {
-        GenVars.gold = 169;
-        GenVars.goldBar = 706;
-        WorldGen.SavedOreTiers.Gold = 169;
-    }
-
-    // ...
-}
-```
-
-This method resets the state of the worldgen engine. It first sets the generated ores to their original ids, then randomly assigns the new ores in their place.
-
-The mod applies a postfix patch to this method to override the `GenVars` and `WorldGen.SavedOreTiers` values to the configured ones. Since the method is called before world generation, the configured ores are automatically applied for it.
-
-#### `Terraria.WorldGen.SmashAltar()`
-
-```cs
-public static void SmashAltar(int i, int j) {
-    // ...
-
-    // Randomize the first tier if unset.
-    if (WorldGen.SavedOreTiers.Cobalt == -1)
-    {
-        WorldGen.SavedOreTiers.Cobalt = 107;
-        if (WorldGen.genRand.Next(2) == 0)
-        {
-            WorldGen.SavedOreTiers.Cobalt = 221;
-        }
-    }
-
-    // ...
-
-    // Randomize the second tier if unset.
-    if (WorldGen.SavedOreTiers.Mythril == -1)
-    {
-        WorldGen.SavedOreTiers.Mythril = 108;
-        if (WorldGen.genRand.Next(2) == 0)
-        {
-            WorldGen.SavedOreTiers.Mythril = 222;
-        }
-    }
-
-    // ...
-
-    // Randomize the third tier if unset.
-    if (WorldGen.SavedOreTiers.Adamantite == -1)
-    {
-        WorldGen.SavedOreTiers.Adamantite = 111;
-        if (WorldGen.genRand.Next(2) == 0)
-        {
-            WorldGen.SavedOreTiers.Adamantite = 223;
-        }
-    }
-
-    // ...
-}
-```
-
-This method handles smashing altars. It excecutes the different conditional paths based on the total number of altars smashed. When a given tier is selected, the method first checks if the relevant `WorldGen.SavedOreTiers` property is -1. That would indicate it is the first altar of that tier, in which case that tier is randomized.
-
-The mod applies a prefix patch to this method that overrides the `WorldGen.SavedOreTiers` property values. This prevents the aformentioned check from succeeding, skipping the randomization.
+The mod prevents this randomization from occurring by setting the `SavedOreTiers` values to the configured ores before the method is run.

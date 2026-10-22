@@ -30,43 +30,16 @@ Always sell the Shellphone ingredients.
 
 These include the DPS Meter, Lifeform Analyzer and Stopwatch.
 
-## Development
+## Technical Overview
 
-### Harmony Patches
+### Spawn Chance Multiplier
 
-#### `Terraria.Main.UpdateTime()`
+The method `WorldGen.SpawnTravelNPC()` spawns the Traveling Merchant. `Main.UpdateTime()` rolls a 1/108000 chance each tick if the required conditions are met (i.e. time and NPC count), in which it calls the `SpawnTravelNPC()` method.
 
-```cs
-private static void UpdateTime()
-{
-    // ...
+The mod patches the `UpdateTime()` method to roll the chance again with configurable odds. However, adding a second roll introduces a new distribution, resulting in a small error between the configured multiplier and true probability. This error is very small though (<1%), so it is not relevant.
 
-    // Conditions for the spawn
-    else if (!IsFastForwardingTime() && dayTime && time < 27000.0)
-    {
-        // ...
+### Additional Items
 
-        // 1/108000
-        int num7 = (int)(27000.0 / (double)num6);
-        num7 *= 4;
-        if (rand.Next(num7) == 0)
-        {
-            // ...
+The method `Chest.SetupTravelShop()` selects the items sold by the Traveling Merchant. The method appends the selected items' IDs to the `Main.travelShop` array, which defines the items sold in the shop.
 
-            WorldGen.SpawnTravelNPC();
-
-            // ...
-        }
-    }
-}
-```
-
-This method handles spawning the Traveling Merchant. The spawn is attempted each tick with a 1 in 108000 chance.
-
-The mod applies a postfix patch to this method to roll the chance again with configurable odds. Since the `UpdateTime()` method is massive, it is not feasible to prevent the original chance from being rolled. Adding a second roll introduces a new distribution. Since the sum of two binomial distributions does not equal the distribution produced by increasing the original chance, there is a slight error between the configured multiplier and the actual probability. However, since the base chance is so low, this error is negligible (<1%). The error could be accounted for, but I decided against it to reduce the complexity of the patch.
-
-#### `Terraria.Chest.SetupTravelShop()`
-
-This method handles selecting the items sold by the Traveling Merchant. The implementation is quite long and frankly irrelevant, so it is not included here. The important part is that the method modifies the `Main.travelShop` array. This array contains the IDs of all the sold items in the order in which they appear in the shop.
-
-The mod applies a postfix patch to this method to add the configured items into the shop. The patch first identifies the first open slot by looking for the first occurence of `0` in the array. It then loops through the configured items and adds them to sequential slots.
+The mod patches this method to add the configured items to the end of the array. The patch first identifies the first open slot by looking for the first occurrence of `0` in the array. It then loops through the configured items and adds them to sequential slots.

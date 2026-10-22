@@ -18,6 +18,8 @@ Force the configured minimap mode when loading into a world.
 
 The mode to set the minimap to when loading into a world. Possible values: `Hidden`, `Minimap`, `Overlay`.
 
-## Development
+## Technical Overview
 
-The mode of the minimap is controlled by the `public` property `Main.mapStyle`. The mod sets this property in the `OnWorldLoad()` lifecycle method.
+The current map style is stored in the `Main.mapStyle` property, which does not persist between game launches.
+
+The mod simply sets this property to the configured style in the `OnWorldLoad()` lifecycle method when the option is enabled.

@@ -14,6 +14,8 @@ You can also use an inventory editor such as [Terrasavr](https://yal.cc/r/terras
 
 The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
-## Development
+## Technical Overview
 
-This mod is very simple. It clears the `ItemID.Sets.Deprecated` and `ItemID.Sets.ItemsThatShouldNotBeInInventory` arrays during initialization. These arrays are used in the many methods that Terraria uses to scan for deprecated items. The arrays are cleared instead of replaced with new arrays in case the array instances are cached somewhere.
+The arrays `ID.ItemID.Sets.Deprecated` and `ID.ItemID.Sets.ItemsThatShouldNotBeInInventory` are used to scan for items that the game will remove from the world.
+
+The mod clears both arrays during initialization. The existing array instances are cleared rather than replaced so any vanilla code that already holds a reference to them observes the change.

@@ -30,51 +30,13 @@ Color of low rarity drops. Hex color code (`#RRGGBB`).
 
 Color of high rarity drops. Hex color code (`#RRGGBB`).
 
-## Development
+## Technical Overview
 
-### Harmony patches
+### Detecting Drops
 
-#### `Terraria.GameContent.ItemDropRules.ItemDropResolver.ResolveRule()`
+NPC drops implement the `GameContent.ItemDropRules.IItemDropRule` interface. The implementation used by simple 1/x drops is `GameContent.ItemDropRules.CommonDrop`. The method `GameContent.ItemDropRules.ItemDropResolver.ResolveRule()` evaluates all drop rules, returning the result of the drop.
 
-```cs
-private ItemDropAttemptResult ResolveRule(IItemDropRule rule, DropAttemptInfo info)
-{
-    // Check if the drop fills its conditions.
-    if (!rule.CanDrop(info))
-    {
-        ItemDropAttemptResult itemDropAttemptResult = new ItemDropAttemptResult
-        {
-            State = ItemDropAttemptResultState.DoesntFillConditions
-        };
-        this.ResolveRuleChains(rule, info, itemDropAttemptResult);
-        return itemDropAttemptResult;
-    }
-
-    INestedItemDropRule nestedItemDropRule = rule as INestedItemDropRule;
-    ItemDropAttemptResult itemDropAttemptResult2;
-
-    // Evaluate the rule.
-    if (nestedItemDropRule != null)
-    {
-        itemDropAttemptResult2 = nestedItemDropRule.TryDroppingItem(info, new ItemDropRuleResolveAction(this.ResolveRule));
-    }
-    else
-    {
-        itemDropAttemptResult2 = rule.TryDroppingItem(info);
-    }
-
-    this.ResolveRuleChains(rule, info, itemDropAttemptResult2);
-
-    // Return the drop attempt result.
-    return itemDropAttemptResult2;
-}
-```
-
-This method resolves and evaluates an item drop rule and returns the result of the drop attempt.
-
-The mod applies a postfix patch to this method in order to obtain the result of the drop attempt. The patch qualifies drop attempts that were succesful and that are of the type `CommonDrop`. Drops of that type include the most common types of drops in the game.
-
-The result is then passed on to the notification handler.
+The mod listens for successful drop results of `CommonDrop` drops from the `ResolveRule()` method, passing them to the notification handler.
 
 ### Displaying Notifications
 

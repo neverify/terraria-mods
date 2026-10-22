@@ -8,26 +8,16 @@ This mod makes the visibility toggle on each normal accessory slot also control 
 
 The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works in multiplayer.
 
-## Development
+## Technical Overview
 
-### Harmony Patches
+### Vanity Effects
 
-#### `Terraria.Player.ApplyEquipVanity()`
+Some visual effects of accessories are applied with the `Player.ApplyEquipVanity()` method. These include the Werewolf and Merman transformations, boot effects, etc.
 
-```cs
-private void ApplyEquipVanity(int itemSlot, Item currentItem)
-```
+The mod skips `ApplyEquipVanity()` for social slots when the corresponding normal slot has been hidden. The visibility of normal accessory slots is controlled by the `hideVisibleAccessory` array. Social slots use IDs 13-19 and normal slots use IDs 3-9, so the corresponding normal slot index is found with an offset of -10.
 
-This method handles applying some vanity effects of accessories in social slots. The code is not included here because it is not relevant for the patch. Only effects that affect the entire player model, or are external to it are applied in this method. These include the Werewolf and Merman transformations, boot particle effects etc.
+### Player Model Changes
 
-The mod applies a prefix patch to this method to conditionally skip it. The method is skipped if the corresponding normal accessory slot is hidden. That information is stored in the `hideVisibleAccessory` array. The normal accessory slots have the IDs 3–9, whereas the social accessory slots have the IDs 13–19. Thus we obtain the visibility of the corresponding normal accessory slot with an offset of -10.
+The method `Player.UpdateVisibleAccessory()` applies the player model changes of an accessory.
 
-#### `Terraria.Player.UpdateVisibleAccessory()`
-
-```cs
-private void UpdateVisibleAccessory(int itemSlot, Item item)
-```
-
-This method updates the player model with the effects of the item passed as the parameter. The code is not included here because it is not relevant for the patch.
-
-The mod applies a prefix patch to this method to conditionally skip it. The logic is otherwise the exact same as the other patch, except that because this method handles both normal and social accessory slots, applying the -10 offset blindly would result in trying to access negative indexes for the normal accessory slots, causing an `IndexOutOfRangeException`. This is why an additional condition is applied, which only passes for the slots 13–19.
+The mod applies the same visibility check here, but only for social slots. This avoids applying the offset to normal slots, which would produce invalid indexes.

@@ -22,16 +22,16 @@ If you use the keybind to access the menu, the button becomes useless.
 
 Toggle the settings menu. Default: `Escape`.
 
-## Development
+## Technical Overview
 
-### Harmony Patches
+### Settings Button
 
-#### `Main.DrawInterface_29_SettingsButton()`
+The inventory settings button is drawn by the method `Main.DrawInterface_29_SettingsButton()`.
 
-This method handles drawing the settings button when the inventory is open. The implementation of the method is not relevant, so it is not shown here.
+The mod simply conditionally skips this method according to the config.
 
-The mod applies a prefix patch to this method to conditionally skip it based on the config setting.
+### Settings Keybind
 
-### Keybinds
+The state of the settings menu is stored in the property `Main.ingameOptionsWindow`, and it is opened and closed with the `IngameOptions.Open()` and `IngameOptions.Close()` methods.
 
-The property `Main.ingameOptionsWindow` determines whether the settings menu is open. The methods `IngameOptions.Open()` and `IngameOptions.Close()` are used to toggle the settings menu when the keybind is pressed.
+The mod uses those methods to toggle the menu when the configured keybind is pressed.
