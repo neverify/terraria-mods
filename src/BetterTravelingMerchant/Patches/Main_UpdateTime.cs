@@ -6,7 +6,7 @@ namespace BetterTravelingMerchant.Patches;
 
 [SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(Main), "UpdateTime")]
-internal static class MainPatch
+internal static class UpdateTimePatch
 {
     private const int BaseSpawnChanceDenominator = 108000;
 

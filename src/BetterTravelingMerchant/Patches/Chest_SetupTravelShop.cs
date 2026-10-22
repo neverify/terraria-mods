@@ -8,7 +8,7 @@ using Terraria.ID;
 namespace BetterTravelingMerchant.Patches;
 
 [HarmonyPatch(typeof(Chest), nameof(Chest.SetupTravelShop))]
-internal static class ChestPatch
+internal static class SetupTravelShopPatch
 {
     private static bool Prepare() => Mod.Instance is not null;
 
