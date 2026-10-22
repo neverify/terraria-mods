@@ -9,7 +9,7 @@ public class Config : ModConfig
     [
         Client,
         Label("Spawn Chance Multiplier"),
-        Description("Multiply the chance of the traveling merchant spawning each tick."),
+        Description("Multiply the chance of the Traveling Merchant spawning each tick."),
         Range(0.0f, 1000.0f)
     ]
     public float SpawnChanceMultiplier { get; set; } = 1.0f;
