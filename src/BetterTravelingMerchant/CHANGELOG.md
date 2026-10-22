@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Expanded spawn chance multiplier config range to 0-1000x.
+
+### Fixed
+
+- A Very small statistical error in the configured probability.
+
 ## [1.0.4] - 2026-09-18
 
 ### Changed

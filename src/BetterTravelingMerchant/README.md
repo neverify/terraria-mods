@@ -12,7 +12,7 @@ The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**.
 
 ### Spawn Chance Multiplier
 
-Multiply the chance of the traveling merchant spawning each tick. Decimal number between `1.0` and `100.0` (e.g. `2.0` = 2x).
+Multiply the chance of the traveling merchant spawning each tick. Decimal number between `0.0` and `100.0` (e.g. `2.0` = 2x).
 
 ### Additional Items
 
@@ -34,9 +34,9 @@ These include the DPS Meter, Lifeform Analyzer and Stopwatch.
 
 ### Spawn Chance Multiplier
 
-The method `WorldGen.SpawnTravelNPC()` spawns the Traveling Merchant. `Main.UpdateTime()` rolls a 1/108000 chance each tick if the required conditions are met (i.e. time and NPC count), in which it calls the `SpawnTravelNPC()` method.
+The method `WorldGen.SpawnTravelNPC()` spawns the Traveling Merchant. The `Main.UpdateTime()` method rolls a 1/108000 chance each tick, and if the required conditions are met (time and NPC count), it calls the `SpawnTravelNPC()` method.
 
-The mod patches the `UpdateTime()` method to roll the chance again with configurable odds. However, adding a second roll introduces a new distribution, resulting in a small error between the configured multiplier and true probability. This error is very small though (<1%), so it is not relevant.
+The mod suppresses the original `SpawnTravelNPC()` method, taking over the spawning process. The mod patches the `UpdateTime()` method to roll the chance itself with the configured multiplier.
 
 ### Additional Items
 

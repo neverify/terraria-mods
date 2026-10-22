@@ -1,10 +1,11 @@
-using System.Diagnostics.CodeAnalysis;
+using System;
+using System.Linq;
 using HarmonyLib;
 using Terraria;
+using Utils;
 
 namespace BetterTravelingMerchant.Patches;
 
-[SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(Main), "UpdateTime")]
 internal static class UpdateTimePatch
 {
@@ -14,17 +15,37 @@ internal static class UpdateTimePatch
 
     private static void Postfix()
     {
-        if (Mod.Instance.Config.SpawnChanceMultiplier == 1.0f)
+        if (!CanSpawn())
             return;
 
-        if (!(!Main.IsFastForwardingTime() && Main.dayTime && Main.time < 27000.0))
-            return;
+        double chance =
+            Math.Max(Main.dayRate, 1)
+            * Math.Max(Mod.Instance.Config.SpawnChanceMultiplier, 0.0f)
+            / BaseSpawnChanceDenominator;
 
-        int spawnChanceDenominator = (int)(
-            BaseSpawnChanceDenominator / (Mod.Instance.Config.SpawnChanceMultiplier - 1.0f)
-        );
-
-        if (Main.rand.Next(spawnChanceDenominator) == 0)
-            WorldGen.SpawnTravelNPC();
+        if (Main.rand.NextDouble() < Math.Clamp(chance, 0.0, 1.0))
+        {
+            SpawnTravelNPC();
+            NPC.travelNPC = true;
+        }
     }
+
+    private static bool CanSpawn()
+    {
+        bool timeCondition = !Main.IsFastForwardingTime() && Main.dayTime && Main.time < 27000.0;
+
+        bool npcCondition = (
+            from npc in Main.npc
+            where npc.active && npc.townNPC && npc.type != 37 && npc.type != 453
+            select npc
+        )
+            .Skip(1)
+            .Any();
+
+        return timeCondition && npcCondition;
+    }
+
+    [HarmonyReversePatch]
+    [HarmonyPatch(typeof(WorldGen), nameof(WorldGen.SpawnTravelNPC))]
+    private static void SpawnTravelNPC() => throw new NotImplementedException();
 }

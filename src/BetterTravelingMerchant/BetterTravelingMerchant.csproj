@@ -4,4 +4,8 @@
     <ModId>better-traveling-merchant</ModId>
     <RootNamespace>BetterTravelingMerchant</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\shared\MathExtension.cs" />
+  </ItemGroup>
 </Project>
