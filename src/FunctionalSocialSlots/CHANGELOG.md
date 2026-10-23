@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Renamed config option "Functional Social Slots" to "Functional Social Accessory Slots"
+- Renamed mod to "Functional Social Slots".
+- Renamed config option "Functional Social Slots" to "Functional Social Accessory Slots".
 
 ## [1.0.4] - 2026-09-18
 
