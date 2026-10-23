@@ -2,9 +2,9 @@
 
 Make accessories and armor in social slots functional.
 
-This mod makes accessories and armor in social slots work just like in normal slots, effectively doubling the accessory capacity and allowing for a second set of armor. The visual effects of both accessories and armor are not affected.
+This mod makes accessories and armor in social slots function just like in normal slots, effectively doubling the accessory capacity and allowing for a second set of armor. The visual effects of both accessories and armor are not affected.
 
-The functionality of accessories and armor can be toggled independently.
+The functionality of social accessory slots and social armor slots can be toggled independently.
 
 The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod works in multiplayer.
 
