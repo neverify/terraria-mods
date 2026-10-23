@@ -155,7 +155,16 @@ def show_status(mods: list[ReleaseMod]) -> None:
 
 
 def build_mod(mod: Mod) -> None:
-    run(["dotnet", "build", str(mod.directory), "-c", "Release"])
+    run(
+        [
+            "dotnet",
+            "build",
+            str(mod.directory),
+            "-c",
+            "Release",
+            "-p:DeployAbsent=true",
+        ]
+    )
 
 
 def create_zip(mod: Mod) -> Path:
