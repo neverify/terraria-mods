@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Terraria;
@@ -14,7 +13,7 @@ internal static class ApplyEquipFunctionalPatch
     [HarmonyPatch("ApplyEquipFunctional")]
     private static void Prefix(Player __instance, int itemSlot)
     {
-        if (!Mod.Instance.Config.FunctionalSocialSlots)
+        if (!Mod.Instance.Config.FunctionalSocialAccessorySlots)
             return;
 
         int socialSlot = itemSlot + 10;
@@ -23,24 +22,9 @@ internal static class ApplyEquipFunctionalPatch
 
         if (!socialEffectiveArmor.IsAir && !(socialEffectiveArmor.expertOnly && !Main.expertMode))
         {
-            GrantPrefixBenefits(__instance, socialEffectiveArmor);
-            GrantArmorBenefits(__instance, socialEffectiveArmor);
-            ApplyEquipFunctional(__instance, itemSlot, socialEffectiveArmor);
+            ReversePatches.GrantPrefixBenefits(__instance, socialEffectiveArmor);
+            ReversePatches.GrantArmorBenefits(__instance, socialEffectiveArmor);
+            ReversePatches.ApplyEquipFunctional(__instance, itemSlot, socialEffectiveArmor);
         }
     }
-
-    [HarmonyReversePatch]
-    [HarmonyPatch("ApplyEquipFunctional")]
-    private static void ApplyEquipFunctional(Player instance, int itemSlot, Item currentItem) =>
-        throw new NotImplementedException();
-
-    [HarmonyReversePatch]
-    [HarmonyPatch("GrantPrefixBenefits")]
-    private static void GrantPrefixBenefits(Player instance, Item item) =>
-        throw new NotImplementedException();
-
-    [HarmonyReversePatch]
-    [HarmonyPatch("GrantArmorBenefits")]
-    private static void GrantArmorBenefits(Player instance, Item item) =>
-        throw new NotImplementedException();
 }
