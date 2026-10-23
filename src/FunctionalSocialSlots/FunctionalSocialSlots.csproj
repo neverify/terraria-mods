@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>FunctionalSocialSlots</AssemblyName>
+    <ModId>functional-social-slots</ModId>
+    <RootNamespace>FunctionalSocialSlots</RootNamespace>
+  </PropertyGroup>
+</Project>

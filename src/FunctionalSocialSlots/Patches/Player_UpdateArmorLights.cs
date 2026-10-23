@@ -1,7 +1,7 @@
 using HarmonyLib;
 using Terraria;
 
-namespace FunctionalSocialAccessories.Patches;
+namespace FunctionalSocialSlots.Patches;
 
 [HarmonyPatch(typeof(Player), nameof(Player.UpdateArmorLights))]
 internal static class UpdateArmorLightsPatch

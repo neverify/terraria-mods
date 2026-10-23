@@ -1,6 +1,6 @@
 using Utils;
 
-namespace FunctionalSocialAccessories;
+namespace FunctionalSocialSlots;
 
 public class Mod : ModBase<Mod, Config>
 {

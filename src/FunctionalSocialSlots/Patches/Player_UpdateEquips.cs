@@ -2,7 +2,7 @@ using HarmonyLib;
 using Terraria;
 using Terraria.UI;
 
-namespace FunctionalSocialAccessories.Patches;
+namespace FunctionalSocialSlots.Patches;
 
 [HarmonyPatch(typeof(Player), nameof(Player.UpdateEquips))]
 internal static class UpdateEquipsPatch

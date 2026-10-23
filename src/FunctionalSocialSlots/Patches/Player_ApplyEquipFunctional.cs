@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Terraria;
 
-namespace FunctionalSocialAccessories.Patches;
+namespace FunctionalSocialSlots.Patches;
 
 [SuppressMessage("Style", "IDE0051: Remove unused private members")]
 [HarmonyPatch(typeof(Player))]

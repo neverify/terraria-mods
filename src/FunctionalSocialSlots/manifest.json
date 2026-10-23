@@ -1,0 +1,11 @@
+{
+  "id": "functional-social-slots",
+  "name": "Functional Social Slots",
+  "version": "1.0.4",
+  "author": "neverify",
+  "description": "Make accessories and armor in social slots functional.",
+
+  "entry_dll": "FunctionalSocialSlots.dll",
+  "framework_version": "^0.4.1",
+  "terraria_version": "=1.4.5"
+}

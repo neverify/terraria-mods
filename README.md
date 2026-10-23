@@ -8,20 +8,20 @@ None of the mods have explicit multiplayer support, but might still work at leas
 
 ## Mods
 
-|                                                                  |                                                                                                                                                                     |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="src/BetterTravelingMerchant/icon.png" width="100">     | [**Better Traveling Merchant**](src/BetterTravelingMerchant/) <br><br> Increase the spawn rate of the Traveling Merchant and force certain items to always be sold. |
-| <img src="src/DeterministicDrops/icon.png"  width="100">         | [**Deterministic Drops**](src/DeterministicDrops/) <br><br> Reduce variance in item drops while preserving vanilla drop rates.                                      |
-| <img src="src/FullBright/icon.png" width="100">                  | [**Fullbright**](src/FullBright/) <br><br> Force all tiles to render at a configured brightness.                                                                    |
-| <img src="src/FunctionalSocialAccessories/icon.png" width="100"> | [**Functional Social Accessories**](src/FunctionalSocialAccessories/) <br><br> Make accessories in social slots functional.                                         |
-| <img src="src/HideSocialAccessories/icon.png" width="100">       | [**Hide Social Accessories**](src/HideSocialAccessories/) <br><br> Hide accessories in social slots on the player.                                                  |
-| <img src="src/MinimapMode/icon.png" width="100">                 | [**Minimap Mode**](src/MinimapMode/) <br><br> Automatically set the minimap to the configured mode when loading into a world.                                       |
-| <img src="src/NoDamageVariance/icon.png" width="100">            | [**No Damage Variance**](src/NoDamageVariance/) <br><br> Disable the ±15% damage variance for all sources of damage.                                                |
-| <img src="src/RareDropNotification/icon.png" width="100">        | [**Rare Drop Notification**](src/RareDropNotification/) <br><br> Show a configurable chat message when a rare item is dropped.                                      |
-| <img src="src/SelectOres/icon.png" width="100">                  | [**Select Ores**](src/SelectOres/) <br><br> Select which ores are generated in your world during worldgen and when smashing altars.                                 |
-| <img src="src/SettingsKeybind/icon.png" width="100">             | [**Settings Keybind**](src/SettingsKeybind/) <br><br> Add a configurable keybind to toggle the settings menu.                                                       |
-| <img src="src/Undeprecate/icon.png" width="100">                 | [**Undeprecate**](src/Undeprecate/) <br><br> Prevent Terraria from removing deprecated items.                                                                       |
-| <img src="src/ValueTooltip/icon.png" width="100">                | [**Value Tooltip**](src/ValueTooltip/) <br><br> Display the sell value of items in their tooltip even outside of shops.                                             |
+|                                                              |                                                                                                                                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="src/BetterTravelingMerchant/icon.png" width="100"> | [**Better Traveling Merchant**](src/BetterTravelingMerchant/) <br><br> Increase the spawn rate of the Traveling Merchant and force certain items to always be sold. |
+| <img src="src/DeterministicDrops/icon.png"  width="100">     | [**Deterministic Drops**](src/DeterministicDrops/) <br><br> Reduce variance in item drops while preserving vanilla drop rates.                                      |
+| <img src="src/FullBright/icon.png" width="100">              | [**Fullbright**](src/FullBright/) <br><br> Force all tiles to render at a configured brightness.                                                                    |
+| <img src="src/FunctionalSocialSlots/icon.png" width="100">   | [**Functional Social Slots**](src/FunctionalSocialSlots/) <br><br> Make accessories in social slots functional.                                                     |
+| <img src="src/HideSocialAccessories/icon.png" width="100">   | [**Hide Social Accessories**](src/HideSocialAccessories/) <br><br> Hide accessories in social slots on the player.                                                  |
+| <img src="src/MinimapMode/icon.png" width="100">             | [**Minimap Mode**](src/MinimapMode/) <br><br> Automatically set the minimap to the configured mode when loading into a world.                                       |
+| <img src="src/NoDamageVariance/icon.png" width="100">        | [**No Damage Variance**](src/NoDamageVariance/) <br><br> Disable the ±15% damage variance for all sources of damage.                                                |
+| <img src="src/RareDropNotification/icon.png" width="100">    | [**Rare Drop Notification**](src/RareDropNotification/) <br><br> Show a configurable chat message when a rare item is dropped.                                      |
+| <img src="src/SelectOres/icon.png" width="100">              | [**Select Ores**](src/SelectOres/) <br><br> Select which ores are generated in your world during worldgen and when smashing altars.                                 |
+| <img src="src/SettingsKeybind/icon.png" width="100">         | [**Settings Keybind**](src/SettingsKeybind/) <br><br> Add a configurable keybind to toggle the settings menu.                                                       |
+| <img src="src/Undeprecate/icon.png" width="100">             | [**Undeprecate**](src/Undeprecate/) <br><br> Prevent Terraria from removing deprecated items.                                                                       |
+| <img src="src/ValueTooltip/icon.png" width="100">            | [**Value Tooltip**](src/ValueTooltip/) <br><br> Display the sell value of items in their tooltip even outside of shops.                                             |
 
 ## Installation
 

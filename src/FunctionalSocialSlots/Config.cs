@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TerrariaModder.Core.Config;
 
-namespace FunctionalSocialAccessories;
+namespace FunctionalSocialSlots;
 
 public class Config : ModConfig
 {

@@ -2,7 +2,7 @@ using HarmonyLib;
 using Terraria;
 using Terraria.UI;
 
-namespace FunctionalSocialAccessories.Patches;
+namespace FunctionalSocialSlots.Patches;
 
 [HarmonyPatch(
     typeof(ItemSlot),

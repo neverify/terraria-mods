@@ -2,7 +2,7 @@ using System;
 using HarmonyLib;
 using Terraria;
 
-namespace FunctionalSocialAccessories.Patches;
+namespace FunctionalSocialSlots.Patches;
 
 [HarmonyPatch(typeof(Player))]
 internal static class ReversePatches

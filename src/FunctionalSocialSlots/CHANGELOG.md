@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for social armor slots.
+- Config option for social armor slots.
+
+### Changed
+
+- Renamed config option "Functional Social Slots" to "Functional Social Accessory Slots"
+
 ## [1.0.4] - 2026-09-18
 
 ### Changed
