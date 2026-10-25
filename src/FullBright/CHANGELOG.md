@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Two commands: /map and /clearmap.
+
 ### Changed
 
-- Simplify "Brightness" config option description.
+- Simplified "Brightness" config option description.
 
 ## [1.2.0] - 2026-10-15
 
