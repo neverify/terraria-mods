@@ -16,6 +16,13 @@ public class Config : ModConfig
     [Client, Label("Brightness"), Description("The brightness to render tiles at."), Range(0f, 1f)]
     public float Brightness { get; set; } = 0.5f;
 
+    [
+        Client,
+        Label("Lighting Area Size Offset"),
+        Description("The offset to apply to the lighting area size.")
+    ]
+    public int LightingAreaSizeOffset { get; set; } = 0;
+
     [Client, Label("Disable Light Smoothing"), Description("Disable vanilla light smoothing.")]
     public bool DisableLightSmoothing { get; set; } = true;
 

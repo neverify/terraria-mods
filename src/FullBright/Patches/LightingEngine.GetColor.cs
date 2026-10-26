@@ -16,8 +16,7 @@ internal static class GetColorPatch
         if (!Mod.Instance.Config.BrightnessOverride)
             return true;
 
-        // Don't override color outside the active processed area.
-        __result = ProcessScanPatch.CachedActiveProcessedArea.Contains(x, y)
+        __result = ProcessAreaPatch.Area.Contains(x, y)
             ? new Vector3(Mod.Instance.Config.Brightness)
             : Vector3.Zero;
 
