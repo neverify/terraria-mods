@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Config option for offsetting the size of the lighting area.
+
+### Changed
+
+- Slightly improved performance by default.
+
 ## [1.3.0] - 2026-10-25
 
 ### Added
