@@ -1,4 +1,5 @@
 using System;
+using Utils;
 
 namespace FullBright;
 
@@ -38,10 +39,7 @@ internal static class Keybinds
     private static void DecreaseBrightness() => ChangeBrightness(-0.1f);
 
     private static void ChangeBrightness(float amount) =>
-        Mod.Instance.Config.Brightness = Math.Max(
-            0,
-            Math.Min(1, Mod.Instance.Config.Brightness + amount)
-        );
+        Mod.Instance.Config.Brightness = Math.Clamp(Mod.Instance.Config.Brightness + amount, 0, 1);
 
     private static void ToggleFullBright() =>
         Mod.Instance.Config.BrightnessOverride = !Mod.Instance.Config.BrightnessOverride;

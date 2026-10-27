@@ -4,4 +4,8 @@
     <ModId>full-bright</ModId>
     <RootNamespace>FullBright</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\shared\MathExtension.cs" />
+  </ItemGroup>
 </Project>
