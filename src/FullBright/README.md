@@ -22,7 +22,7 @@ The brightness to render tiles at. Decimal number between `0` and `1` (e.g. `0.1
 
 ### Lighting Area Size Offset
 
-An offset to decrease the size of the lighting area by.
+An offset to decrease the size of the lighting area by. Integer between `-100` and `0`.
 
 A value of `0` is equivalent to vanilla. Lower values improve performance, but can result in black bars appearing at the edges of the screen when moving fast enough. The default value of `-20` is a good starting point, but it can be increased if you run into side-effects.
 
