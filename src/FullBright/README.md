@@ -18,7 +18,13 @@ Enable the brightness override. Only works with the "color" lighting mode.
 
 ### Brightness
 
-The brightness at which to render tiles at. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
+The brightness to render tiles at. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
+
+### Lighting Area Size Offset
+
+An offset to decrease the size of the lighting area by.
+
+A value of `0` is equivalent to vanilla. Lower values improve performance, but can result in black bars appearing at the edges of the screen when moving fast enough. The default value of `-20` is a good starting point, but it can be increased if you run into side-effects.
 
 ### Disable Light Smoothing
 
@@ -62,9 +68,13 @@ Reset the map completely.
 
 ### Tile Lighting
 
-The lighting engine obtains the colors of tiles from the `Graphics.Light.LightingEngine.GetColor()` method. It returns black for tiles that are outside the `_activeProcessedArea` rectangle, and otherwise reads their color from the `_activeLightMap` value. The `Graphics.Light.LightingEngine.ProcessScan()` method updates `_activeProcessedArea` as the camera moves.
+Terraria has two separate lighting engines that implement the `Graphics.Light.ILightingEngine` interface: `LightingEngine` (color) and `LegacyLighting` (white, retro, trippy). The `Lighting` class holds an instance of both of the engines, handles swapping between them, and calls the methods of the active engine. The mod patches the `LightingEngine` (color) class.
 
-The mod replaces the tile color lookup with the configured brightness. Because the `GetColor()` method does not distinguish between tiles that are outside `_activeProcessedArea` and just unlit ones (both are returned as black), simply overriding this color would result in the rendering engine rendering tiles outside the camera viewport, resulting in a performance decrease. This is why the mod runs that check again manually. The value of `_activeProcessedArea` is cached after each update, so the check does not require reflection on every tile query.
+The interface method used to obtain tile colors is `ILightingEngine.GetColor()`. Its implementation in the `LightingEngine` class first checks if the given coordinates are inside the `_activeProcessedArea` rectangle. If they are not, it returns black (`Vector3.Zero`). Otherwise the method reads the color from the `_activeLightMap` value. The `_activeProcessedArea` rectangle is updated by the `Present()` method, which swaps it with the `_workingProcessedArea` rectangle. That value is updated in the `ProcessScan()` method, which itself is invoked by the interface method `ProcessArea()`. However, `ProcessArea()` is only called by the engine every second lighting update, resulting in the `_workingProcessedArea` rectangle, and subsequently the `_activeProcessedArea` rectangle lagging behind the camera position. To combat this, the lighting engine inflates the rectangles by `28` tiles in each direction. However, this results in lower performance, as the rendering engine determines which tiles to render by their color, causing it to potentially render off-screen tiles.
+
+The mod forgoes this update logic, and instead directly captures the `area` parameter of the `ProcessArea()` method. The area is inflated by `28` tiles by default, but then deflated by the value of the "Lighting Area Size Offset" config option, to optionally reduce the padding. As the `ProcessArea()` method isn't called every frame, the lighting area still lags behind by a few frames, so some padding is required. The amount of padding depends on the movement speed of the camera, and `8` seems to be enough for normal gameplay. Thus `-20` is the default offset.
+
+The mod patches the `GetColor()` method with an implementation that checks the queried tile against the cached `Area` property. If the tile is inside the area a brightness value according to the "Brightness" config option is returned, otherwise black is returned.
 
 ### Light Smoothing
 

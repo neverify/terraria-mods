@@ -19,9 +19,10 @@ public class Config : ModConfig
     [
         Client,
         Label("Lighting Area Size Offset"),
-        Description("The offset to apply to the lighting area size.")
+        Description("An offset to decrease the size of the lighting area by."),
+        Range(-100, 0)
     ]
-    public int LightingAreaSizeOffset { get; set; } = 0;
+    public int LightingAreaSizeOffset { get; set; } = -20;
 
     [Client, Label("Disable Light Smoothing"), Description("Disable vanilla light smoothing.")]
     public bool DisableLightSmoothing { get; set; } = true;
