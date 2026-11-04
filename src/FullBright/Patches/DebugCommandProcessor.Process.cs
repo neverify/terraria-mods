@@ -11,7 +11,7 @@ namespace FullBright.Patches;
 )]
 internal static class ProcessPatch
 {
-    private static bool Prepare => Mod.Instance is not null;
+    private static bool Prepare() => Mod.Instance is not null;
 
     private static void Prefix(DebugMessage message, out bool __state)
     {

@@ -12,13 +12,15 @@ internal static class UpdateLightingPatch
 
     private static bool Prefix(int x, int y, WorldMap __instance)
     {
-        if (!Mod.Instance.Config.MapLightingOverride)
+        if (!Mod.Instance.Config.UpdateMapLighting)
+            return false;
+
+        if (!Mod.Instance.Config.BrightnessOverride)
             return true;
 
-        byte brightness = (byte)(Mod.Instance.Config.MapLightingBrightness * byte.MaxValue);
+        byte brightness = (byte)(Mod.Instance.Config.MapBrightness * byte.MaxValue);
 
         var mapTile = MapHelper.CreateMapTile(x, y, brightness);
-
         __instance.SetTile(x, y, ref mapTile);
 
         return false;

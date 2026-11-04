@@ -1,4 +1,4 @@
-using FullBright.Features;
+using FullBright.CustomLighting;
 using Utils;
 
 namespace FullBright;
@@ -8,8 +8,12 @@ public class Mod : ModBase<Mod, Config>
     protected override void OnInitialize()
     {
         Keybinds.Register();
-        LightingQuality.Update();
+        LightSmoothing.Update();
     }
 
-    public void OnConfigChanged() => LightingQuality.Update();
+    public void OnConfigChanged()
+    {
+        LightSmoothing.Update();
+        LightingController.Refresh();
+    }
 }
