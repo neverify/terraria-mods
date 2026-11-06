@@ -2,11 +2,9 @@
 
 Force all tiles to render at a configured brightness.
 
-This mod is a performant implementation of fullbright. The vanilla rendering engine can't normally handle rendering all the tiles at full brightness at 60fps. This is why most naive fullbright implementations lag the game considerably. This mod implements performance optimizations to minimize the impact of rendering more tiles than intended. You should be able to retain 60fps even on weaker hardware.
+This mod is a performant implementation of fullbright. The mod completely disables the vanilla lighting engine and implements several performance optimizations.
 
-The mod also allows overriding the brightness of the map, so it will actually reflect what you see in-game. There are also commands for manipulating the brightness of the entire map.
-
-The mod modifies the lighting engine of the "Color" lighting mode, so other lighting modes are unaffected by the "Brightness Override" config option.
+The mod overrides the lighting of the map, making it reflect what you see in-game. There are also commands for revealing and hiding the entire map.
 
 The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**. The mod should work in multiplayer.
 
@@ -14,31 +12,27 @@ The mod is built for **Terraria 1.4.5.8** and requires **TerrariaModder 0.4.1**.
 
 ### Brightness Override
 
-Enable the brightness override. Only works with the "color" lighting mode.
+Enable the brightness override.
 
 ### Brightness
 
 The brightness to render tiles at. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
 
-### Lighting Area Size Offset
+### Lighting Padding
 
-An offset to decrease the size of the lighting area by. Integer between `-100` and `0`.
+How much extra space to light around the viewport. Integer between `0` and `50`.
 
-A value of `0` is equivalent to vanilla. Lower values improve performance, but can result in black bars appearing at the edges of the screen when moving fast enough. The default value of `-20` is a good starting point, but it can be increased if you run into side-effects.
+Lower values improve performance, but results in the edges of the viewport flashing black when moving fast enough. The default value of `8` should be fine for most cases. Increase the value if you run into side-effects.
 
-### Disable Light Smoothing
+### Update Map Lighting
 
-Disable vanilla light smoothing.
+Whether to update map lighting.
 
-Recommended with brightness override to improve performance. This option has no visual impact with brightness override on, since all tiles are the same brightness.
+With this option toggled off, map lighting is not updated at all. If you don't want an existing map being updated, or you have used the /map command to reveal the entire map, this option should be disabled.
 
-### Map Lighting Override
+### Map Brightness
 
-Override the brightness of map lighting.
-
-### Map Lighting Brightness
-
-The brightness to set map tiles to. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
+The brightness of the map. Decimal number between `0` and `1` (e.g. `0.1` = 10%).
 
 ## Keybinds
 
@@ -58,7 +52,7 @@ Decrease fullbright brightness. Default: N/A.
 
 ### `/map`
 
-Set the brightness of all map tiles to the value of the config option "Map Lighting Brightness".
+Set the brightness of the entire map to the value of the config option "Map Brightness".
 
 ### `/clearmap`
 
@@ -68,13 +62,19 @@ Reset the map completely.
 
 ### Tile Lighting
 
-Terraria has two separate lighting engines that implement the `Graphics.Light.ILightingEngine` interface: `LightingEngine` (color) and `LegacyLighting` (white, retro, trippy). The `Lighting` class holds an instance of both of the engines, handles swapping between them, and calls the methods of the active engine. The mod patches the `LightingEngine` (color) class.
+Terraria has two separate lighting engines that implement the `Graphics.Light.ILightingEngine` interface: `LightingEngine` (color) and `LegacyLighting` (white, retro, trippy). The `Lighting` class holds an instance of both of the engines, handles swapping between them, and calls the methods of the active engine.
 
-The interface method used to obtain tile colors is `ILightingEngine.GetColor()`. Its implementation in the `LightingEngine` class first checks if the given coordinates are inside the `_activeProcessedArea` rectangle. If they are not, it returns black (`Vector3.Zero`). Otherwise the method reads the color from the `_activeLightMap` value. The `_activeProcessedArea` rectangle is updated by the `Present()` method, which swaps it with the `_workingProcessedArea` rectangle. That value is updated in the `ProcessScan()` method, which itself is invoked by the interface method `ProcessArea()`. However, `ProcessArea()` is only called by the engine every second lighting update, resulting in the `_workingProcessedArea` rectangle, and subsequently the `_activeProcessedArea` rectangle lagging behind the camera position. To combat this, the lighting engine inflates the rectangles by `28` tiles in each direction. However, this results in lower performance, as the rendering engine determines which tiles to render by their color, causing it to potentially render off-screen tiles.
+The mod implements a custom lighting engine `FullBrightLightingEngine`, which acts as a stub. The `ILightingEngine` interface has only one method with a return value: `GetColor()`, which returns the lighting color of a queried tile. However, the rendering engine queries tile colors in an area way larger than the viewport, but only renders tiles which are not black. That is why the vanilla lighting engine keeps track of a smaller area around the viewport, outside of which all tiles are considered black. This area is updated only every four lighting updates though, which results in it lagging behind the player position. That is why it is inflated past the viewport size, but that causes the rendering engine to render more tiles, reducing performance. The custom lighting engine instead updates this area on every call to the interface method `ProcessArea()`, which allows reducing the padding, improving performance considerably.
 
-The mod forgoes this update logic, and instead directly captures the `area` parameter of the `ProcessArea()` method. The area is inflated by `28` tiles by default, but then deflated by the value of the "Lighting Area Size Offset" config option, to optionally reduce the padding. As the `ProcessArea()` method isn't called every frame, the lighting area still lags behind by a few frames, so some padding is required. The amount of padding depends on the movement speed of the camera, and `8` seems to be enough for normal gameplay. Thus `-20` is the default offset.
+The active lighting engine is stored in the `_activeEngine` field, which is updated by the setter of the `Mode` property, which stores the selected lighting mode. The mod patches the setter, forcing `_activeEngine` to `FullBrightLightingEngine`, and `Mode` to `LightMode.Color`, in order for the `Lighting` class to act as if the "Color" lighting engine was selected.
 
-The mod patches the `GetColor()` method with an implementation that checks the queried tile against the cached `Area` property. If the tile is inside the area a brightness value according to the "Brightness" config option is returned, otherwise black is returned.
+### Render Scheduling
+
+The method `Main.RenderToTargets()` draws different render targets in a four-frame cycle controlled by the `Main.renderCount` field, which is controlled by the lighting engine. However, the lighting engine only updates the lighting area every four cycles, which is why the lighting area is inflated by 28 tiles, reducing performance.
+
+The mod replaces this method with a load-balanced version. Instead of the render targets being grouped by category, they are grouped by performance. This reduces the longest render pass time and shrinks the render cycle to 3 frames. Furthermore the patched method updates the lighting area before each pass instead of after it, which allows shrinking the lighting padding a bit more, improving performance even more.
+
+The vanilla lighting engine is also responsible for updating the minimap, and running `Main.UpdateSceneMetrics()`. These are moved to the patched `Main.RenderToTargets()` method, which runs them in the third cycle, which has the most overhead. The minimap update is implemented as a simple nested loop, which calls the patched `Map.WorldMap.UpdateLighting()` method for each tile in the lighting area around the player.
 
 ### Light Smoothing
 

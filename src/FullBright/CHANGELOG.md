@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Config option for suppressing map lighting updates.
+
+### Changed
+
+- Improved performance by disabling the vanilla lighting engine completely.
+- Improved performance by implementing load balancing in the rendering engine.
+- Automatically disable light smoothing when "Brightness Override" config option is enabled.
+- Automatically lock lighting mode to "Color" when "Brightness Override" config option is enabled.
+- Replaced config option "Lighting Area Size Offset" with "Lighting Padding".
+- Renamed config option "Map Lighting Override" to "Update Map Lighting".
+
+### Removed
+
+- Ability to have "Brightness Override" config option enabled while retaining normal map lighting.
+- Config option "Disable Light Smoothing".
+
 ## [1.4.0] - 2026-10-27
 
 ### Added
@@ -68,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Renamed configuration option `UseLowQualityLightSmoothing` to `DisableLightSmoothing`.
+- Renamed config option "UseLowQualityLightSmoothing" to "DisableLightSmoothing".
 
 ## [1.0.0] - 2026-07-11
 

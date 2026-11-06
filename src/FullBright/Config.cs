@@ -22,11 +22,7 @@ public class Config : ModConfig
     ]
     public int LightingPadding { get; set; } = 8;
 
-    [
-        Client,
-        Label("Update Map Lighting"),
-        Description("Whether to update the map lighting at all.")
-    ]
+    [Client, Label("Update Map Lighting"), Description("Whether to update map lighting.")]
     public bool UpdateMapLighting { get; set; } = true;
 
     [Client, Label("Map Brightness"), Description("The brightness of the map."), Range(0f, 1f)]
