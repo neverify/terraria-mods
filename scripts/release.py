@@ -269,6 +269,8 @@ def create_github_release(mod: ReleaseMod, archive: Path, publish: bool) -> None
     ]
     if not publish:
         command.append("--draft")
+    if mod.version.prerelease is not None:
+        command.append("--prerelease")
     run(command)
 
 
