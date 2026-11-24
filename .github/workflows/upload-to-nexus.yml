@@ -2,22 +2,14 @@ name: Upload release to Nexus Mods
 
 on:
   release:
-    types: [published, edited]
+    types: [published]
 
 permissions:
   contents: read
 
 jobs:
   upload:
-    if: >-
-      github.event.release.prerelease == false &&
-      (
-        github.event.action == 'published' ||
-        (
-          github.event.action == 'edited' &&
-          github.event.changes.prerelease.from == true
-        )
-      )
+    if: github.event.release.prerelease == false
     runs-on: ubuntu-latest
     steps:
       - name: Check out release source
